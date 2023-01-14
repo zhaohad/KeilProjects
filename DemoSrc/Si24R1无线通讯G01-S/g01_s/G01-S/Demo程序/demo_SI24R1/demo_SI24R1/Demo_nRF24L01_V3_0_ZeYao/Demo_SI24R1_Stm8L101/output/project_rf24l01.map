@@ -1,0 +1,801 @@
+
+Map of ..\output\project_rf24l01.sm8 from link file ..\output\project_rf24l01.lkf - Tue Nov 19 10:45:57 2019
+
+
+                               --------
+                               Segments
+                               --------
+
+start 00008080 end 000080b3 length    51 segment .const
+start 00008145 end 00009147 length  4098 segment .text
+start 00000000 end 0000008a length   138 segment .bsct, initialized
+start 000080bb end 00008145 length   138 segment .bsct, from
+start 0000008a end 00000094 length    10 segment .ubsct
+start 00000094 end 00000094 length     0 segment .bit
+start 00000094 end 00000094 length     0 segment .share
+start 00000100 end 00000100 length     0 segment .data
+start 00000100 end 00000100 length     0 segment .bss
+start 00000000 end 000046ec length 18156 segment .debug
+start 00008000 end 00008080 length   128 segment .const
+start 000080b3 end 000080bb length     8 segment .init
+
+
+                               -------
+                               Modules
+                               -------
+
+C:\Program Files (x86)\COSMIC\CXSTM8\Lib\crtsi0.sm8:
+start 00008145 end 00008190 length    75 section .text
+start 00000100 end 00000100 length     0 section .bss
+start 0000008a end 0000008a length     0 section .ubsct
+
+..\output\main.o:
+start 00008190 end 00008251 length   193 section .text
+start 00000000 end 00000088 length   136 section .bsct
+start 00000000 end 00000184 length   388 section .debug
+start 00008080 end 00008087 length     7 section .const
+
+..\output\drv_button.o:
+start 00008251 end 00008280 length    47 section .text
+start 00000184 end 00000285 length   257 section .debug
+
+..\output\drv_delay.o:
+start 00008280 end 000082d0 length    80 section .text
+start 00000285 end 000003ce length   329 section .debug
+
+..\output\drv_led.o:
+start 000082d0 end 0000832f length    95 section .text
+start 000003ce end 000005f6 length   552 section .debug
+
+..\output\drv_spi.o:
+start 0000832f end 0000840a length   219 section .text
+start 000005f6 end 00000808 length   530 section .debug
+
+..\output\drv_uart.o:
+start 0000840a end 000084ac length   162 section .text
+start 00000808 end 00000a1b length   531 section .debug
+
+..\output\drv_rf24l01.o:
+start 000084ac end 00008aba length  1550 section .text
+start 00000088 end 0000008a length     2 section .bsct
+start 00000a1b end 00001994 length  3961 section .debug
+start 00008087 end 000080af length    40 section .const
+
+..\output\stm8l10x_clk.o:
+start 00008aba end 00008b67 length   173 section .text
+start 00001994 end 00001fb1 length  1565 section .debug
+start 000080af end 000080b3 length     4 section .const
+
+..\output\stm8l10x_gpio.o:
+start 00008b67 end 00008c4b length   228 section .text
+start 00001fb1 end 00002af2 length  2881 section .debug
+
+..\output\stm8l10x_spi.o:
+start 00008c4b end 00008d5e length   275 section .text
+start 00002af2 end 0000374b length  3161 section .debug
+
+..\output\stm8l10x_usart.o:
+start 00008d5e end 00008fb4 length   598 section .text
+start 0000374b end 00004581 length  3638 section .debug
+
+(C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)lgsbc.o:
+start 00008fb4 end 00008fca length    22 section .text
+
+(C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)lreg.o:
+start 0000008a end 0000008e length     4 section .ubsct
+
+(C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)lrzmp.o:
+start 00008fca end 00008fdd length    19 section .text
+
+(C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)ltor.o:
+start 00008fdd end 00008fef length    18 section .text
+
+(C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)ludiv.o:
+start 00008fef end 00009003 length    20 section .text
+
+(C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)ldiv.o:
+start 00009003 end 000090ee length   235 section .text
+
+(C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)lgneg.o:
+start 000090ee end 00009101 length    19 section .text
+
+(C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)lneg.o:
+start 00009101 end 00009116 length    21 section .text
+
+(C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)lursh.o:
+start 00009116 end 00009125 length    15 section .text
+
+(C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)rtol.o:
+start 00009125 end 00009137 length    18 section .text
+
+(C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)xreg.o:
+start 0000008e end 00000091 length     3 section .ubsct
+
+(C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)xymvx.o:
+start 00009137 end 00009146 length    15 section .text
+
+(C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)yreg.o:
+start 00000091 end 00000094 length     3 section .ubsct
+
+..\output\stm8_interrupt_vector.o:
+start 00009146 end 00009147 length     1 section .text
+start 00004581 end 000046ec length   363 section .debug
+start 00008000 end 00008080 length   128 section .const
+
+
+                             -----------
+                             Stack usage
+                             -----------
+
+..\output\drv_button.o:
+_drv_button_check                     16   (2)
+_drv_button_init                       8   (2)
+
+..\output\drv_delay.o:
+L3_drv_delay_1ms                      10   (8)
+_drv_delay_ms                         14   (4)
+
+..\output\drv_led.o:
+_drv_led_flashing                      7   (2)
+_drv_led_init                          8   (2)
+_drv_led_off                           7   (2)
+_drv_led_on                       >    7   (2)
+
+..\output\drv_rf24l01.o:
+_NRF24L01_Clear_IRQ_Flag              16   (4)
+_NRF24L01_Flush_Rx_Fifo               11   (2)
+_NRF24L01_Flush_Tx_Fifo               11   (2)
+_NRF24L01_Gpio_Init                    8   (2)
+_NRF24L01_Nop                     >   11   (2)
+_NRF24L01_Read_Buf                    16   (7)
+_NRF24L01_Read_Reg                    13   (4)
+_NRF24L01_Read_Rx_Payload         >   19   (6)
+_NRF24L01_Read_Status_Register        12   (3)
+_NRF24L01_Read_Top_Fifo_Width         12   (3)
+_NRF24L01_Reuse_Tx_Payload        >   11   (2)
+_NRF24L01_RxPacket                >   34   (5)
+_NRF24L01_Set_Power               >   17   (4)
+_NRF24L01_Set_RxAddr                  22   (6)
+_NRF24L01_Set_Speed               >   17   (4)
+_NRF24L01_Set_TxAddr                  21   (5)
+_NRF24L01_TxPacket                    37   (8)
+_NRF24L01_Write_Buf                   16   (7)
+_NRF24L01_Write_Reg                   13   (4)
+_NRF24L01_Write_Tx_Payload_Ack    >   18   (7)
+_NRF24L01_Write_Tx_Payload_InAck  >   15   (6)
+_NRF24L01_Write_Tx_Payload_NoAck  >   14   (5)
+_NRF24L01_check                       30   (14)
+_RF24L01_Init                         29   (7)
+_RF24L01_Read_IRQ_Status          >   14   (2)
+_RF24L01_Set_Mode                     17   (4)
+_RF24LL01_Write_Hopping_Point     >   15   (2)
+
+..\output\drv_spi.o:
+_drv_spi_init                         11   (2)
+_drv_spi_read_write_byte               9   (6)
+_drv_spi_read_write_string        >   17   (8)
+
+..\output\drv_uart.o:
+_drv_uart_init                        45   (6)
+_drv_uart_rx_bytes                    12   (7)
+_drv_uart_tx_bytes                    10   (5)
+
+..\output\main.o:
+_main                             >   48   (3)
+
+..\output\stm8_interrupt_vector.o:
+f_NonHandledInterrupt             >    5   (5)
+
+..\output\stm8l10x_clk.o:
+_CLK_CCOCmd                       >    2   (2)
+_CLK_CCOConfig                    >    3   (3)
+_CLK_DeInit                       >    2   (2)
+_CLK_GetClockFreq                     25   (11)
+_CLK_MasterPrescalerConfig        >    3   (3)
+_CLK_PeripheralClockConfig             4   (4)
+
+..\output\stm8l10x_gpio.o:
+_GPIO_DeInit                      >    2   (2)
+_GPIO_ExternalPullUpConfig        >    6   (6)
+_GPIO_Init                             6   (6)
+_GPIO_ReadInputData                    2   (2)
+_GPIO_ReadInputDataBit            >    5   (5)
+_GPIO_ReadOutputData              >    2   (2)
+_GPIO_ReadOutputDataBit           >    5   (5)
+_GPIO_ResetBits                        5   (5)
+_GPIO_SetBits                          5   (5)
+_GPIO_ToggleBits                       5   (5)
+_GPIO_Write                       >    5   (5)
+_GPIO_WriteBit                    >    6   (6)
+
+..\output\stm8l10x_spi.o:
+_SPI_BiDirectionalLineConfig      >    2   (2)
+_SPI_ClearFlag                    >    2   (2)
+_SPI_ClearITPendingBit            >    2   (2)
+_SPI_Cmd                               2   (2)
+_SPI_DeInit                            2   (2)
+_SPI_GetFlagStatus                     3   (3)
+_SPI_GetITStatus                  >    5   (5)
+_SPI_ITConfig                     >    5   (5)
+_SPI_Init                              9   (9)
+_SPI_NSSInternalSoftwareCmd       >    2   (2)
+_SPI_ReceiveData                       2   (2)
+_SPI_SendData                          2   (2)
+
+..\output\stm8l10x_usart.o:
+_USART_ClearFlag                  >    2   (2)
+_USART_ClearITPendingBit          >    2   (2)
+_USART_ClockInit                  >    6   (6)
+_USART_Cmd                             2   (2)
+_USART_DeInit                          2   (2)
+_USART_GetFlagStatus                   5   (5)
+_USART_GetITStatus                >    6   (6)
+_USART_ITConfig                   >    7   (7)
+_USART_Init                           39   (14)
+_USART_ReceiveData8                    2   (2)
+_USART_ReceiveData9               >    4   (4)
+_USART_ReceiverWakeUpCmd          >    2   (2)
+_USART_SendBreak                  >    2   (2)
+_USART_SendData8                       2   (2)
+_USART_SendData9                  >    4   (4)
+_USART_SetAddress                 >    3   (3)
+_USART_WakeUpConfig               >    2   (2)
+
+Stack size: 53
+
+
+                              ---------
+                              Call tree
+                              ---------
+   1 > _CLK_CCOCmd: (2)
+
+   2 > _CLK_CCOConfig: (3)
+
+   3 > _CLK_DeInit: (2)
+
+   4 > _CLK_MasterPrescalerConfig: (3)
+
+   5 > _GPIO_DeInit: (2)
+
+   6 > _GPIO_ExternalPullUpConfig: (6)
+
+   7 > _GPIO_ReadInputDataBit: (5)
+
+   8 > _GPIO_ReadOutputData: (2)
+
+   9 > _GPIO_ReadOutputDataBit: (5)
+
+  10 > _GPIO_Write: (5)
+
+  11 > _GPIO_WriteBit: (6)
+
+  12 > _NRF24L01_Nop: (2)
+  13      + _GPIO_ResetBits: (5)
+  14      + _GPIO_SetBits: (5)
+  15      + _drv_spi_read_write_byte: (6)
+  16      |    + _SPI_GetFlagStatus: (3)
+  17      |    + _SPI_ReceiveData: (2)
+  18      |    + _SPI_SendData: (2)
+          | 
+       
+  19 > _NRF24L01_Read_Rx_Payload: (6)
+  20      + _GPIO_ResetBits --> 13
+  21      + _GPIO_SetBits --> 14
+  22      + _NRF24L01_Flush_Rx_Fifo: (2)
+  23      |    + _GPIO_ResetBits --> 13
+  24      |    + _GPIO_SetBits --> 14
+  25      |    + _drv_spi_read_write_byte --> 15
+          | 
+  26      + _NRF24L01_Read_Reg: (4)
+  27      |    + _GPIO_ResetBits --> 13
+  28      |    + _GPIO_SetBits --> 14
+  29      |    + _drv_spi_read_write_byte --> 15
+          | 
+  30      + _NRF24L01_Read_Top_Fifo_Width: (3)
+  31      |    + _GPIO_ResetBits --> 13
+  32      |    + _GPIO_SetBits --> 14
+  33      |    + _drv_spi_read_write_byte --> 15
+          | 
+  34      + _drv_spi_read_write_byte --> 15
+       
+  35 > _NRF24L01_Reuse_Tx_Payload: (2)
+  36      + _GPIO_ResetBits --> 13
+  37      + _GPIO_SetBits --> 14
+  38      + _drv_spi_read_write_byte --> 15
+       
+  39 > _NRF24L01_RxPacket: (5)
+  40      + _GPIO_ResetBits --> 13
+  41      + _GPIO_SetBits --> 14
+  42      + _NRF24L01_Gpio_Init: (2)
+  43      |    + _GPIO_Init: (6)
+  44      |    + _GPIO_ResetBits --> 13
+  45      |    + _GPIO_SetBits --> 14
+          | 
+  46      + _NRF24L01_Read_Buf: (7)
+  47      |    + _GPIO_ResetBits --> 13
+  48      |    + _GPIO_SetBits --> 14
+  49      |    + _drv_spi_read_write_byte --> 15
+          | 
+  50      + _NRF24L01_Read_Reg --> 26
+  51      + _NRF24L01_Write_Reg: (4)
+  52      |    + _GPIO_ResetBits --> 13
+  53      |    + _GPIO_SetBits --> 14
+  54      |    + _drv_spi_read_write_byte --> 15
+          | 
+  55      + _RF24L01_Init: (7)
+  56      |    + _GPIO_SetBits --> 14
+  57      |    + _NRF24L01_Clear_IRQ_Flag: (4)
+  58      |    |    + _GPIO_ResetBits --> 13
+  59      |    |    + _GPIO_SetBits --> 14
+  60      |    |    + _NRF24L01_Read_Status_Register: (3)
+  61      |    |    |    + _GPIO_ResetBits --> 13
+  62      |    |    |    + _GPIO_SetBits --> 14
+  63      |    |    |    + _drv_spi_read_write_byte --> 15
+          |    |    | 
+  64      |    |    + _drv_spi_read_write_byte --> 15
+          |    | 
+  65      |    + _NRF24L01_Read_Reg --> 26
+  66      |    + _NRF24L01_Set_RxAddr: (6)
+  67      |    |    + _NRF24L01_Write_Buf: (7)
+  68      |    |    |    + _GPIO_ResetBits --> 13
+  69      |    |    |    + _GPIO_SetBits --> 14
+  70      |    |    |    + _drv_spi_read_write_byte --> 15
+          |    |    | 
+          |    | 
+  71      |    + _NRF24L01_Set_TxAddr: (5)
+  72      |    |    + _NRF24L01_Write_Buf --> 67
+          |    | 
+  73      |    + _NRF24L01_Write_Reg --> 51
+          | 
+  74      + _RF24L01_Set_Mode: (4)
+  75      |    + _NRF24L01_Read_Reg --> 26
+  76      |    + _NRF24L01_Write_Reg --> 51
+          | 
+  77      + _drv_delay_ms: (4)
+  78      |    + L3_drv_delay_1ms: (8)
+          | 
+  79      + _drv_spi_read_write_byte --> 15
+       
+  80 > _NRF24L01_Set_Power: (4)
+  81      + _NRF24L01_Read_Reg --> 26
+  82      + _NRF24L01_Write_Reg --> 51
+       
+  83 > _NRF24L01_Set_Speed: (4)
+  84      + _NRF24L01_Read_Reg --> 26
+  85      + _NRF24L01_Write_Reg --> 51
+       
+  86 > _NRF24L01_Write_Tx_Payload_Ack: (7)
+  87      + _GPIO_ResetBits --> 13
+  88      + _GPIO_SetBits --> 14
+  89      + _NRF24L01_Flush_Tx_Fifo: (2)
+  90      |    + _GPIO_ResetBits --> 13
+  91      |    + _GPIO_SetBits --> 14
+  92      |    + _drv_spi_read_write_byte --> 15
+          | 
+  93      + _drv_spi_read_write_byte --> 15
+       
+  94 > _NRF24L01_Write_Tx_Payload_InAck: (6)
+  95      + _GPIO_ResetBits --> 13
+  96      + _GPIO_SetBits --> 14
+  97      + _drv_spi_read_write_byte --> 15
+       
+  98 > _NRF24L01_Write_Tx_Payload_NoAck: (5)
+  99      + _GPIO_ResetBits --> 13
+ 100      + _GPIO_SetBits --> 14
+ 101      + _drv_spi_read_write_byte --> 15
+       
+ 102 > _RF24L01_Read_IRQ_Status: (2)
+ 103      + _NRF24L01_Read_Status_Register --> 60
+       
+ 104 > _RF24LL01_Write_Hopping_Point: (2)
+ 105      + _NRF24L01_Write_Reg --> 51
+       
+ 106 > _SPI_BiDirectionalLineConfig: (2)
+
+ 107 > _SPI_ClearFlag: (2)
+
+ 108 > _SPI_ClearITPendingBit: (2)
+
+ 109 > _SPI_GetITStatus: (5)
+
+ 110 > _SPI_ITConfig: (5)
+
+ 111 > _SPI_NSSInternalSoftwareCmd: (2)
+
+ 112 > _USART_ClearFlag: (2)
+
+ 113 > _USART_ClearITPendingBit: (2)
+
+ 114 > _USART_ClockInit: (6)
+
+ 115 > _USART_GetITStatus: (6)
+
+ 116 > _USART_ITConfig: (7)
+
+ 117 > _USART_ReceiveData9: (4)
+
+ 118 > _USART_ReceiverWakeUpCmd: (2)
+
+ 119 > _USART_SendBreak: (2)
+
+ 120 > _USART_SendData9: (4)
+
+ 121 > _USART_SetAddress: (3)
+
+ 122 > _USART_WakeUpConfig: (2)
+
+ 123 > __stext: (0)
+
+ 124 > _drv_led_on: (2)
+ 125      + _GPIO_SetBits --> 14
+       
+ 126 > _drv_spi_read_write_string: (8)
+ 127      + _GPIO_ResetBits --> 13
+ 128      + _GPIO_SetBits --> 14
+ 129      + _drv_spi_read_write_byte --> 15
+       
+ 130 > _main: (3)
+ 131      + _NRF24L01_Gpio_Init --> 42
+ 132      + _NRF24L01_TxPacket: (8)
+ 133      |    + _GPIO_ResetBits --> 13
+ 134      |    + _GPIO_SetBits --> 14
+ 135      |    + _NRF24L01_Gpio_Init --> 42
+ 136      |    + _NRF24L01_Read_Reg --> 26
+ 137      |    + _NRF24L01_Write_Buf --> 67
+ 138      |    + _NRF24L01_Write_Reg --> 51
+ 139      |    + _RF24L01_Init --> 55
+ 140      |    + _RF24L01_Set_Mode --> 74
+ 141      |    + _drv_delay_ms --> 77
+ 142      |    + _drv_spi_read_write_byte --> 15
+          | 
+ 143      + _NRF24L01_check: (14)
+ 144      |    + _NRF24L01_Read_Buf --> 46
+ 145      |    + _NRF24L01_Write_Buf --> 67
+ 146      |    + _drv_delay_ms --> 77
+ 147      |    + _drv_uart_tx_bytes: (5)
+ 148      |    |    + _USART_GetFlagStatus: (5)
+ 149      |    |    + _USART_SendData8: (2)
+          |    | 
+          | 
+ 150      + _RF24L01_Init --> 55
+ 151      + _RF24L01_Set_Mode --> 74
+ 152      + _drv_button_check: (2)
+ 153      |    + _GPIO_ReadInputData: (2)
+ 154      |    + _drv_delay_ms --> 77
+          | 
+ 155      + _drv_button_init: (2)
+ 156      |    + _GPIO_Init --> 43
+          | 
+ 157      + _drv_delay_ms --> 77
+ 158      + _drv_led_flashing: (2)
+ 159      |    + _GPIO_ToggleBits: (5)
+          | 
+ 160      + _drv_led_init: (2)
+ 161      |    + _GPIO_Init --> 43
+          | 
+ 162      + _drv_led_off: (2)
+ 163      |    + _GPIO_ResetBits --> 13
+          | 
+ 164      + _drv_spi_init: (2)
+ 165      |    + _CLK_PeripheralClockConfig: (4)
+ 166      |    + _GPIO_Init --> 43
+ 167      |    + _SPI_Cmd: (2)
+ 168      |    + _SPI_DeInit: (2)
+ 169      |    + _SPI_Init: (9)
+          | 
+ 170      + _drv_uart_init: (6)
+ 171      |    + _CLK_PeripheralClockConfig --> 165
+ 172      |    + _GPIO_Init --> 43
+ 173      |    + _USART_Cmd: (2)
+ 174      |    + _USART_DeInit: (2)
+ 175      |    + _USART_Init: (14)
+ 176      |    |    + _CLK_GetClockFreq: (11)
+          |    | 
+          | 
+ 177      + _drv_uart_rx_bytes: (7)
+ 178      |    + _USART_GetFlagStatus --> 148
+ 179      |    + _USART_ReceiveData8: (2)
+          | 
+       
+ 180 > f_NonHandledInterrupt: (5)
+
+ 181   L3_drv_delay_1ms --> 78
+
+ 182   _CLK_GetClockFreq --> 176
+
+ 183   _CLK_PeripheralClockConfig --> 165
+
+ 184   _GPIO_Init --> 43
+
+ 185   _GPIO_ReadInputData --> 153
+
+ 186   _GPIO_ResetBits --> 13
+
+ 187   _GPIO_SetBits --> 14
+
+ 188   _GPIO_ToggleBits --> 159
+
+ 189   _NRF24L01_Clear_IRQ_Flag --> 57
+
+ 190   _NRF24L01_Flush_Rx_Fifo --> 22
+
+ 191   _NRF24L01_Flush_Tx_Fifo --> 89
+
+ 192   _NRF24L01_Gpio_Init --> 42
+
+ 193   _NRF24L01_Read_Buf --> 46
+
+ 194   _NRF24L01_Read_Reg --> 26
+
+ 195   _NRF24L01_Read_Status_Register --> 60
+
+ 196   _NRF24L01_Read_Top_Fifo_Width --> 30
+
+ 197   _NRF24L01_Set_RxAddr --> 66
+
+ 198   _NRF24L01_Set_TxAddr --> 71
+
+ 199   _NRF24L01_TxPacket --> 132
+
+ 200   _NRF24L01_Write_Buf --> 67
+
+ 201   _NRF24L01_Write_Reg --> 51
+
+ 202   _NRF24L01_check --> 143
+
+ 203   _RF24L01_Init --> 55
+
+ 204   _RF24L01_Set_Mode --> 74
+
+ 205   _SPI_Cmd --> 167
+
+ 206   _SPI_DeInit --> 168
+
+ 207   _SPI_GetFlagStatus --> 16
+
+ 208   _SPI_Init --> 169
+
+ 209   _SPI_ReceiveData --> 17
+
+ 210   _SPI_SendData --> 18
+
+ 211   _USART_Cmd --> 173
+
+ 212   _USART_DeInit --> 174
+
+ 213   _USART_GetFlagStatus --> 148
+
+ 214   _USART_Init --> 175
+
+ 215   _USART_ReceiveData8 --> 179
+
+ 216   _USART_SendData8 --> 149
+
+ 217   _drv_button_check --> 152
+
+ 218   _drv_button_init --> 155
+
+ 219   _drv_delay_ms --> 77
+
+ 220   _drv_led_flashing --> 158
+
+ 221   _drv_led_init --> 160
+
+ 222   _drv_led_off --> 162
+
+ 223   _drv_spi_init --> 164
+
+ 224   _drv_spi_read_write_byte --> 15
+
+ 225   _drv_uart_init --> 170
+
+ 226   _drv_uart_rx_bytes --> 177
+
+ 227   _drv_uart_tx_bytes --> 147
+
+
+
+                               -------
+                               Symbols
+                               -------
+
+_CLK_CCOCmd                        00008ac7   defined in ..\output\stm8l10x_clk.o section .text
+_CLK_CCOConfig                     00008afe   defined in ..\output\stm8l10x_clk.o section .text
+_CLK_DeInit                        00008aba   defined in ..\output\stm8l10x_clk.o section .text
+_CLK_GetClockFreq                  00008b15   defined in ..\output\stm8l10x_clk.o section .text
+                                              used in ..\output\stm8l10x_usart.o
+_CLK_MasterPrescalerConfig         00008aee   defined in ..\output\stm8l10x_clk.o section .text
+_CLK_PeripheralClockConfig         00008ad5   defined in ..\output\stm8l10x_clk.o section .text
+                                              used in ..\output\drv_spi.o
+                                                      ..\output\drv_uart.o
+_GPIO_DeInit                       00008b67   defined in ..\output\stm8l10x_gpio.o section .text
+_GPIO_ExternalPullUpConfig         00008c33   defined in ..\output\stm8l10x_gpio.o section .text
+_GPIO_Init                         00008b6f   defined in ..\output\stm8l10x_gpio.o section .text
+                                              used in ..\output\drv_button.o
+                                                      ..\output\drv_led.o
+                                                      ..\output\drv_spi.o
+                                                      ..\output\drv_uart.o
+                                                      ..\output\drv_rf24l01.o
+_GPIO_ReadInputData                00008c21   defined in ..\output\stm8l10x_gpio.o section .text
+                                              used in ..\output\drv_button.o
+_GPIO_ReadInputDataBit             00008c26   defined in ..\output\stm8l10x_gpio.o section .text
+_GPIO_ReadOutputData               00008c24   defined in ..\output\stm8l10x_gpio.o section .text
+_GPIO_ReadOutputDataBit            00008c2d   defined in ..\output\stm8l10x_gpio.o section .text
+_GPIO_ResetBits                    00008c12   defined in ..\output\stm8l10x_gpio.o section .text
+                                              used in ..\output\drv_led.o
+                                                      ..\output\drv_spi.o
+                                                      ..\output\drv_rf24l01.o
+_GPIO_SetBits                      00008c0b   defined in ..\output\stm8l10x_gpio.o section .text
+                                              used in ..\output\drv_led.o
+                                                      ..\output\drv_spi.o
+                                                      ..\output\drv_rf24l01.o
+_GPIO_ToggleBits                   00008c1a   defined in ..\output\stm8l10x_gpio.o section .text
+                                              used in ..\output\drv_led.o
+_GPIO_Write                        00008bd0   defined in ..\output\stm8l10x_gpio.o section .text
+_GPIO_WriteBit                     00008bd8   defined in ..\output\stm8l10x_gpio.o section .text
+_HSIDivFactor                      000080af   defined in ..\output\stm8l10x_clk.o section .const
+_NRF24L01_Clear_IRQ_Flag           000085e2   defined in ..\output\drv_rf24l01.o section .text
+_NRF24L01_Flush_Rx_Fifo            0000857b   defined in ..\output\drv_rf24l01.o section .text
+_NRF24L01_Flush_Tx_Fifo            00008563   defined in ..\output\drv_rf24l01.o section .text
+_NRF24L01_Gpio_Init                00008a00   defined in ..\output\drv_rf24l01.o section .text
+                                              used in ..\output\main.o
+_NRF24L01_Nop                      000085ab   defined in ..\output\drv_rf24l01.o section .text
+_NRF24L01_Read_Buf                 000084d0   defined in ..\output\drv_rf24l01.o section .text
+_NRF24L01_Read_Reg                 000084ac   defined in ..\output\drv_rf24l01.o section .text
+_NRF24L01_Read_Rx_Payload          0000863b   defined in ..\output\drv_rf24l01.o section .text
+_NRF24L01_Read_Status_Register     000085c3   defined in ..\output\drv_rf24l01.o section .text
+_NRF24L01_Read_Top_Fifo_Width      00008617   defined in ..\output\drv_rf24l01.o section .text
+_NRF24L01_Reuse_Tx_Payload         00008593   defined in ..\output\drv_rf24l01.o section .text
+_NRF24L01_RxPacket                 00008977   defined in ..\output\drv_rf24l01.o section .text
+_NRF24L01_Set_Power                000087df   defined in ..\output\drv_rf24l01.o section .text
+_NRF24L01_Set_RxAddr               0000876f   defined in ..\output\drv_rf24l01.o section .text
+_NRF24L01_Set_Speed                0000879d   defined in ..\output\drv_rf24l01.o section .text
+_NRF24L01_Set_TxAddr               00008753   defined in ..\output\drv_rf24l01.o section .text
+_NRF24L01_TxPacket                 000088d1   defined in ..\output\drv_rf24l01.o section .text
+                                              used in ..\output\main.o
+_NRF24L01_Write_Buf                0000852b   defined in ..\output\drv_rf24l01.o section .text
+_NRF24L01_Write_Reg                0000850a   defined in ..\output\drv_rf24l01.o section .text
+_NRF24L01_Write_Tx_Payload_Ack     0000868a   defined in ..\output\drv_rf24l01.o section .text
+_NRF24L01_Write_Tx_Payload_InAck   0000870e   defined in ..\output\drv_rf24l01.o section .text
+_NRF24L01_Write_Tx_Payload_NoAck   000086d2   defined in ..\output\drv_rf24l01.o section .text
+_NRF24L01_check                    0000882a   defined in ..\output\drv_rf24l01.o section .text
+                                              used in ..\output\main.o
+_RF24L01_Init                      00008a29   defined in ..\output\drv_rf24l01.o section .text
+                                              used in ..\output\main.o
+_RF24L01_Read_IRQ_Status           00008612   defined in ..\output\drv_rf24l01.o section .text
+_RF24L01_Set_Mode                  000088a5   defined in ..\output\drv_rf24l01.o section .text
+                                              used in ..\output\main.o
+_RF24LL01_Write_Hopping_Point      00008820   defined in ..\output\drv_rf24l01.o section .text
+_SPI_BiDirectionalLineConfig       00008cda   defined in ..\output\stm8l10x_spi.o section .text
+_SPI_ClearFlag                     00008cfd   defined in ..\output\stm8l10x_spi.o section .text
+_SPI_ClearITPendingBit             00008d59   defined in ..\output\stm8l10x_spi.o section .text
+_SPI_Cmd                           00008c88   defined in ..\output\stm8l10x_spi.o section .text
+                                              used in ..\output\drv_spi.o
+_SPI_DeInit                        00008c4b   defined in ..\output\stm8l10x_spi.o section .text
+                                              used in ..\output\drv_spi.o
+_SPI_GetFlagStatus                 00008ce8   defined in ..\output\stm8l10x_spi.o section .text
+                                              used in ..\output\drv_spi.o
+_SPI_GetITStatus                   00008d02   defined in ..\output\stm8l10x_spi.o section .text
+_SPI_ITConfig                      00008c96   defined in ..\output\stm8l10x_spi.o section .text
+_SPI_Init                          00008c5c   defined in ..\output\stm8l10x_spi.o section .text
+                                              used in ..\output\drv_spi.o
+_SPI_NSSInternalSoftwareCmd        00008ccc   defined in ..\output\stm8l10x_spi.o section .text
+_SPI_ReceiveData                   00008cc8   defined in ..\output\stm8l10x_spi.o section .text
+                                              used in ..\output\drv_spi.o
+_SPI_SendData                      00008cc4   defined in ..\output\stm8l10x_spi.o section .text
+                                              used in ..\output\drv_spi.o
+_USART_ClearFlag                   00008f30   defined in ..\output\stm8l10x_usart.o section .text
+_USART_ClearITPendingBit           00008faf   defined in ..\output\stm8l10x_usart.o section .text
+_USART_ClockInit                   00008e07   defined in ..\output\stm8l10x_usart.o section .text
+_USART_Cmd                         00008e2b   defined in ..\output\stm8l10x_usart.o section .text
+                                              used in ..\output\drv_uart.o
+_USART_DeInit                      00008d5e   defined in ..\output\stm8l10x_usart.o section .text
+                                              used in ..\output\drv_uart.o
+_USART_GetFlagStatus               00008f03   defined in ..\output\stm8l10x_usart.o section .text
+                                              used in ..\output\drv_uart.o
+_USART_GetITStatus                 00008f35   defined in ..\output\stm8l10x_usart.o section .text
+_USART_ITConfig                    00008e39   defined in ..\output\stm8l10x_usart.o section .text
+_USART_Init                        00008d7f   defined in ..\output\stm8l10x_usart.o section .text
+                                              used in ..\output\drv_uart.o
+_USART_ReceiveData8                00008e8e   defined in ..\output\stm8l10x_usart.o section .text
+                                              used in ..\output\drv_uart.o
+_USART_ReceiveData9                00008e92   defined in ..\output\stm8l10x_usart.o section .text
+_USART_ReceiverWakeUpCmd           00008eb7   defined in ..\output\stm8l10x_usart.o section .text
+_USART_SendBreak                   00008ec5   defined in ..\output\stm8l10x_usart.o section .text
+_USART_SendData8                   00008eca   defined in ..\output\stm8l10x_usart.o section .text
+                                              used in ..\output\drv_uart.o
+_USART_SendData9                   00008ece   defined in ..\output\stm8l10x_usart.o section .text
+_USART_SetAddress                  00008ee5   defined in ..\output\stm8l10x_usart.o section .text
+_USART_WakeUpConfig                00008ef8   defined in ..\output\stm8l10x_usart.o section .text
+__endmem                           000003fe   defined in command file
+                                              *** not used ***
+__endzp                            00000094   defined in command file section .ubsct
+                                              used in C:\Program Files (x86)\COSMIC\CXSTM8\Lib\crtsi0.sm8
+__idesc__                          000080b3   defined in linker section .init
+                                              used in C:\Program Files (x86)\COSMIC\CXSTM8\Lib\crtsi0.sm8
+__memory                           00000100   defined in command file section .bss
+                                              used in C:\Program Files (x86)\COSMIC\CXSTM8\Lib\crtsi0.sm8
+__stack                            000005ff   defined in command file
+                                              used in C:\Program Files (x86)\COSMIC\CXSTM8\Lib\crtsi0.sm8
+__startmem                         00000100   defined in command file section .bss
+                                              *** not used ***
+__stext                            00008145   defined in C:\Program Files (x86)\COSMIC\CXSTM8\Lib\crtsi0.sm8 section .text
+                                              used in ..\output\stm8_interrupt_vector.o
+__vectab                           00008000   defined in ..\output\stm8_interrupt_vector.o section .const
+_drv_button_check                  0000825d   defined in ..\output\drv_button.o section .text
+                                              used in ..\output\main.o
+_drv_button_init                   00008251   defined in ..\output\drv_button.o section .text
+                                              used in ..\output\main.o
+_drv_delay_ms                      000082ba   defined in ..\output\drv_delay.o section .text
+                                              used in ..\output\main.o
+                                                      ..\output\drv_button.o
+                                                      ..\output\drv_rf24l01.o
+_drv_led_flashing                  00008317   defined in ..\output\drv_led.o section .text
+                                              used in ..\output\main.o
+_drv_led_init                      000082d0   defined in ..\output\drv_led.o section .text
+                                              used in ..\output\main.o
+_drv_led_off                       000082ff   defined in ..\output\drv_led.o section .text
+                                              used in ..\output\main.o
+_drv_led_on                        000082e7   defined in ..\output\drv_led.o section .text
+_drv_spi_init                      0000832f   defined in ..\output\drv_spi.o section .text
+                                              used in ..\output\main.o
+_drv_spi_read_write_byte           00008381   defined in ..\output\drv_spi.o section .text
+                                              used in ..\output\drv_rf24l01.o
+_drv_spi_read_write_string         000083ce   defined in ..\output\drv_spi.o section .text
+_drv_uart_init                     0000840a   defined in ..\output\drv_uart.o section .text
+                                              used in ..\output\main.o
+_drv_uart_rx_bytes                 00008467   defined in ..\output\drv_uart.o section .text
+                                              used in ..\output\main.o
+_drv_uart_tx_bytes                 00008445   defined in ..\output\drv_uart.o section .text
+                                              used in ..\output\drv_rf24l01.o
+_exit                              0000818e   defined in C:\Program Files (x86)\COSMIC\CXSTM8\Lib\crtsi0.sm8 section .text
+_g_Ashining                        00000000   defined in ..\output\main.o section .bsct, initialized
+_g_ErrorString                     00000088   defined in ..\output\drv_rf24l01.o section .bsct, initialized
+_g_RF24L01RxBuffer                 00000068   defined in ..\output\main.o section .bsct, initialized
+_g_TxMode                          00000002   defined in ..\output\main.o section .bsct, initialized
+_g_UartRxBuffer                    00000004   defined in ..\output\main.o section .bsct, initialized
+_g_UartRxFlag                      00000003   defined in ..\output\main.o section .bsct, initialized
+_main                              00008190   defined in ..\output\main.o section .text
+                                              used in C:\Program Files (x86)\COSMIC\CXSTM8\Lib\crtsi0.sm8
+c_divsl                            00009003   defined in (C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)ldiv.o section .text
+                                              *** not used ***
+c_divul                            0000901a   defined in (C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)ldiv.o section .text
+                                              used in (C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)ludiv.o
+c_lgneg                            000090ee   defined in (C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)lgneg.o section .text
+                                              used in (C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)ldiv.o
+c_lgsbc                            00008fb4   defined in (C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)lgsbc.o section .text
+                                              used in ..\output\drv_delay.o
+c_lneg                             00009101   defined in (C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)lneg.o section .text
+                                              used in (C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)ldiv.o
+c_lreg                             0000008a   defined in (C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)lreg.o section .ubsct
+                                              used in ..\output\stm8l10x_clk.o
+                                                      ..\output\stm8l10x_usart.o
+                                                      (C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)lrzmp.o
+                                                      (C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)ltor.o
+                                                      (C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)ldiv.o
+                                                      (C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)lneg.o
+                                                      (C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)lursh.o
+                                                      (C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)rtol.o
+c_lrzmp                            00008fca   defined in (C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)lrzmp.o section .text
+                                              used in ..\output\drv_delay.o
+c_ltor                             00008fdd   defined in (C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)ltor.o section .text
+                                              used in ..\output\drv_delay.o
+                                                      ..\output\stm8l10x_clk.o
+                                                      ..\output\stm8l10x_usart.o
+c_ludv                             00008fef   defined in (C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)ludiv.o section .text
+                                              used in ..\output\stm8l10x_clk.o
+                                                      ..\output\stm8l10x_usart.o
+c_lursh                            00009116   defined in (C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)lursh.o section .text
+                                              used in ..\output\stm8l10x_usart.o
+c_rtol                             00009125   defined in (C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)rtol.o section .text
+                                              used in ..\output\stm8l10x_clk.o
+                                                      ..\output\stm8l10x_usart.o
+c_x                                0000008e   defined in (C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)xreg.o section .ubsct
+                                              used in C:\Program Files (x86)\COSMIC\CXSTM8\Lib\crtsi0.sm8
+                                                      (C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)ldiv.o
+                                                      (C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)xymvx.o
+c_xymvx                            00009137   defined in (C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)xymvx.o section .text
+                                              used in ..\output\drv_rf24l01.o
+c_y                                00000091   defined in (C:\Program Files (x86)\COSMIC\CXSTM8\Lib\libm0.sm8)yreg.o section .ubsct
+                                              used in C:\Program Files (x86)\COSMIC\CXSTM8\Lib\crtsi0.sm8
+f_NonHandledInterrupt              00009146   defined in ..\output\stm8_interrupt_vector.o section .text

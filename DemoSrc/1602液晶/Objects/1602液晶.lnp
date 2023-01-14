@@ -1,0 +1,7 @@
+".\Objects\STARTUP.obj",
+".\Objects\main.obj",
+".\Objects\1602.obj",
+".\Objects\delay.obj" 
+TO ".\Objects\1602Òº¾§" 
+PRINT(".\Listings\1602Òº¾§.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

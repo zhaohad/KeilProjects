@@ -1,0 +1,6 @@
+".\Objects\STARTUP.obj",
+".\Objects\main.obj",
+".\Objects\DigitalDisplay_8.obj" 
+TO ".\Objects\8DigitalDisplay" 
+PRINT(".\Listings\8DigitalDisplay.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

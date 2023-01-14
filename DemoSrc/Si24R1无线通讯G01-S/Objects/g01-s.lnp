@@ -1,0 +1,8 @@
+".\Objects\STARTUP.obj",
+".\Objects\main.obj",
+".\Objects\G01_S.obj",
+".\Objects\spi.obj",
+".\Objects\delay.obj" 
+TO ".\Objects\g01-s" 
+PRINT(".\Listings\g01-s.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

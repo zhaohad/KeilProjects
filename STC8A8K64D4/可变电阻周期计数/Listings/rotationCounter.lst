@@ -1,0 +1,60 @@
+C51 COMPILER V9.60.0.0   ROTATIONCOUNTER                                                   01/08/2023 12:11:55 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE ROTATIONCOUNTER
+OBJECT MODULE PLACED IN .\Objects\rotationCounter.obj
+COMPILER INVOKED BY: d:\Keil_v5\C51\BIN\C51.EXE src\rotationCounter.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(
+                    -.\Listings\rotationCounter.lst) TABS(2) OBJECT(.\Objects\rotationCounter.obj)
+
+line level    source
+
+   1          #include "rotationCounter.h"
+   2          
+   3          xdata int __rotation_count__ = 0;
+   4          xdata unsigned char __rotation_counter_current_state = ROTATION_COUNTER_STATE_RAGION_INVALID;
+   5          xdata unsigned char __rotation_counter_last_state = ROTATION_COUNTER_STATE_RAGION_INVALID;
+   6          xdata unsigned char __rotation_counter_last_state2 = ROTATION_COUNTER_STATE_RAGION_INVALID;
+   7          
+   8          int getRotationCount() {
+   9   1        return __rotation_count__;
+  10   1      }
+  11          
+  12          void countRotation(unsigned char ragionvalue) {
+  13   1        if (ragionvalue > RAGION_VALUE_L_L && ragionvalue < RAGION_VALUE_L_H) {
+  14   2          __rotation_counter_current_state = ROTATION_COUNTER_STATE_RAGION_L;
+  15   2        } else if (ragionvalue > RAGION_VALUE_M_L && ragionvalue < RAGION_VALUE_M_H) {
+  16   2          __rotation_counter_current_state = ROTATION_COUNTER_STATE_RAGION_M;
+  17   2        } else if (ragionvalue > RAGION_VALUE_H_L && ragionvalue < RAGION_VALUE_H_H) {
+  18   2          __rotation_counter_current_state = ROTATION_COUNTER_STATE_RAGION_H;
+  19   2        }
+  20   1        
+  21   1        if (__rotation_counter_current_state == ROTATION_COUNTER_STATE_RAGION_L) {
+  22   2          if (__rotation_counter_last_state == ROTATION_COUNTER_STATE_RAGION_M &&
+  23   2            __rotation_counter_last_state2 == ROTATION_COUNTER_STATE_RAGION_H) {
+  24   3              --__rotation_count__;
+  25   3            }
+  26   2        } else if (__rotation_counter_current_state == ROTATION_COUNTER_STATE_RAGION_H) {
+  27   2          if (__rotation_counter_last_state == ROTATION_COUNTER_STATE_RAGION_M &&
+  28   2            __rotation_counter_last_state2 == ROTATION_COUNTER_STATE_RAGION_L) {
+  29   3              ++__rotation_count__;
+  30   3          }
+  31   2        }
+  32   1        if (__rotation_counter_current_state != __rotation_counter_last_state) {
+  33   2          __rotation_counter_last_state2 = __rotation_counter_last_state;
+  34   2          __rotation_counter_last_state = __rotation_counter_current_state;
+  35   2        }
+  36   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    192    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      5    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

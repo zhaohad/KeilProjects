@@ -1,0 +1,9 @@
+".\Objects\STARTUP.obj",
+".\Objects\DigitalDisplay_8.obj",
+".\Objects\I2CBus.obj",
+".\Objects\main.obj",
+".\Objects\SteeringSG90.obj",
+".\Objects\HandleControl.obj" 
+TO ".\Objects\手柄控转向舵" 
+PRINT(".\Listings\手柄控转向舵.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

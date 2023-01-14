@@ -1,0 +1,11 @@
+".\Objects\STARTUP.obj",
+".\Objects\main.obj",
+".\Objects\STC8A_GPIO.obj",
+".\Objects\uart.obj",
+".\Objects\oled12864.obj",
+".\Objects\delay.obj",
+".\Objects\mpu6500.obj",
+".\Objects\I2CBus.obj" 
+TO ".\Objects\mpu6500" 
+PRINT(".\Listings\mpu6500.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

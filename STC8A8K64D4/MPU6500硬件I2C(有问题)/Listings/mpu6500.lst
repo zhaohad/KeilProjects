@@ -1,0 +1,71 @@
+C51 COMPILER V9.60.0.0   MPU6500                                                           08/01/2022 01:38:25 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MPU6500
+OBJECT MODULE PLACED IN .\Objects\mpu6500.obj
+COMPILER INVOKED BY: d:\Keil_v5\C51\BIN\C51.EXE src\mpu6500\mpu6500.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\src) DEBUG OBJEC
+                    -TEXTEND PRINT(.\Listings\mpu6500.lst) TABS(2) OBJECT(.\Objects\mpu6500.obj)
+
+line level    source
+
+   1          #include "mpu6500.h"
+*** ERROR C129 IN LINE 10 OF \hw\KeilProjects\STC8A8K64D4\MPU6500硬件I2C\src\stc/stc8a8k64d4.H: missing ';' before 'sfr'
+   2          
+   3          void Single_WriteI2C(u8 REG_Address,uchar REG_data) {
+   4              I2CBus_Start();                  //起始信号
+   5              I2CBus_Write(MPU_ADDR);   //发送设备地址+写信号
+   6              I2CBus_Write(REG_Address);    //内部寄存器地址，
+   7              I2CBus_Write(REG_data);       //内部寄存器数据，
+   8              I2CBus_Stop();                   //发送停止信号
+   9          }
+  10          
+  11          void InitMPU6500() {
+  12            Single_WriteI2C(PWR_MGMT_1, 0x00);  //解除休眠状态
+  13            Single_WriteI2C(SMPLRT_DIV, 0x07);
+  14            Single_WriteI2C(CONFIG, 0x06);
+  15            Single_WriteI2C(GYRO_CONFIG, 0x18);
+  16            Single_WriteI2C(ACCEL_CONFIG, 0x01);
+  17          }
+  18          
+  19          /*void MPU6500_Init() {
+  20            u8 p[1] = {0x00};
+  21            I2C_writeNbyte_DAddr(MPU_ADDR, PWR_MGMT_1, p, 1);
+  22            p[0] = 0x07;
+  23            I2C_writeNbyte_DAddr(MPU_ADDR, SMPLRT_DIV, p, 1);
+  24            p[0] = 0x06;
+  25            I2C_writeNbyte_DAddr(MPU_ADDR, CONFIG, p, 1);
+  26            p[0] = 0x18;
+  27            I2C_writeNbyte_DAddr(MPU_ADDR, GYRO_CONFIG, p, 1);
+  28            p[0] = 0x01;
+  29            I2C_writeNbyte_DAddr(MPU_ADDR, ACCEL_CONFIG, p, 1);
+  30          }*/
+  31          
+  32          uchar Single_ReadI2C(uchar REG_Address) {
+  33            uchar REG_data;
+  34            I2CBus_Start();                   //起始信号
+  35            I2CBus_Write(MPU_ADDR);    //发送设备地址+写信号
+  36            I2CBus_Write(REG_Address);     //发送存储单元地址，从0开始  
+  37            I2CBus_Start();                   //起始信号
+  38            I2CBus_Write(MPU_ADDR + 1);  //发送设备地址+读信号
+  39            REG_data = I2CBus_Read(1);       //读出寄存器数据
+  40            I2CBus_Stop();                    //停止信号
+  41            return REG_data;
+  42          }
+  43          
+  44          int GetData(uchar REG_Address) {
+  45            uchar H,L;
+  46            H = Single_ReadI2C(REG_Address);
+  47            L = Single_ReadI2C(REG_Address + 1);
+  48            return ((H << 8) + L);   //合成数据
+  49          }
+  50          
+  51          /*int MPU6500_GetData(uchar REG_Address) {
+  52            uchar H, L;
+  53            I2C_ReadNbyte_DAddr(MPU_ADDR, REG_Address, &H, 1);
+C51 COMPILER V9.60.0.0   MPU6500                                                           08/01/2022 01:38:25 PAGE 2   
+
+  54            I2C_ReadNbyte_DAddr(MPU_ADDR, REG_Address, &L, 1);
+  55            return ((H << 8) + L);
+  56          }*/
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  1 ERROR(S)

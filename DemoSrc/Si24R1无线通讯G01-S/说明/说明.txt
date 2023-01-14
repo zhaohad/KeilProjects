@@ -1,0 +1,15 @@
+G01-S_0:
+CE -> P0.0
+CSN -> P0.1
+SCK -> P0.2
+MOSI -> P0.3
+MISO -> P0.4
+IRQ -> P0.5
+
+G01-S_1:
+CE -> P2.7
+CSN -> P2.6
+SCK -> P2.5
+MOSI -> P2.4
+MISO -> P2.3
+IRQ -> P2.2

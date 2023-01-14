@@ -1,0 +1,10 @@
+"..\output\main.obj",
+"..\output\drv_RF24L01.obj",
+"..\output\drv_button.obj",
+"..\output\drv_delay.obj",
+"..\output\drv_led.obj",
+"..\output\drv_spi.obj",
+"..\output\drv_uart.obj" 
+TO "..\output\RF24L01_89C52" 
+PRINT("..\output\RF24L01_89C52.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

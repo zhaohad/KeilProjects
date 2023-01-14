@@ -1,0 +1,9 @@
+".\Objects\STARTUP.obj",
+".\Objects\main.obj",
+".\Objects\STC8A_GPIO.obj",
+".\Objects\STC8A_PWM15bit.obj",
+".\Objects\STC8A_PWM15bit_Isr.obj",
+".\Objects\delay.obj" 
+TO ".\Objects\pwm" 
+PRINT(".\Listings\pwm.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

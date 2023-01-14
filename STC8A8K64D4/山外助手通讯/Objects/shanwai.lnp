@@ -1,0 +1,11 @@
+".\Objects\STARTUP.obj",
+".\Objects\main.obj",
+".\Objects\STC8A_NVIC.obj",
+".\Objects\STC8A_UART.obj",
+".\Objects\STC8A_GPIO.obj",
+".\Objects\STC8A_UART_Isr.obj",
+".\Objects\uart.obj",
+".\Objects\shanwai.obj" 
+TO ".\Objects\shanwai" 
+PRINT(".\Listings\shanwai.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

@@ -1,0 +1,533 @@
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    05/11/2022  22:59:18  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
+D:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\STARTUP.obj, .\Objects\DigitalDisplay_8.obj, .\Objects\I2CBus.obj, .\Objects\main.
+>> obj, .\Objects\SteeringSG90.obj, .\Objects\HandleControl.obj TO .\Objects\手柄控转向舵 PRINT (.\Listings\手柄控转向舵
+>> .m51) RAMSIZE (256) DISABLEWARNING (16)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\STARTUP.obj (?C_STARTUP)
+  .\Objects\DigitalDisplay_8.obj (DIGITALDISPLAY_8)
+  .\Objects\I2CBus.obj (I2CBUS)
+  .\Objects\main.obj (MAIN)
+  .\Objects\SteeringSG90.obj (STEERINGSG90)
+  .\Objects\HandleControl.obj (HANDLECONTROL)
+  D:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+  D:\KEIL_V5\C51\LIB\C51S.LIB (?C?CLDOPTR)
+  D:\KEIL_V5\C51\LIB\C51S.LIB (?C?IMUL)
+  D:\KEIL_V5\C51\LIB\C51S.LIB (?C?UIDIV)
+
+
+LINK MAP OF MODULE:  .\Objects\手柄控转向舵 (?C_STARTUP)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     000CH     UNIT         ?DT?MAIN
+            DATA    0014H     0004H     UNIT         ?DT?_DIGITALDISPLAY_8_SET?DIGITALDISPLAY_8
+            DATA    0018H     0004H     UNIT         _DATA_GROUP_
+            DATA    001CH     0002H     UNIT         ?DT?STEERINGSG90
+                    001EH     0002H                  *** GAP ***
+            BIT     0020H.0   0000H.1   UNIT         _BIT_GROUP_
+                    0020H.1   0000H.7                *** GAP ***
+            DATA    0021H     0022H     UNIT         ?DT?DIGITALDISPLAY_8
+            IDATA   0043H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     0018H                  *** GAP ***
+            CODE    001BH     0003H     ABSOLUTE     
+                    001EH     07E2H                  *** GAP ***
+            CODE    0800H     00BFH     UNIT         ?PR?_I2CBUS_WRITE?I2CBUS
+            CODE    08BFH     00BEH     UNIT         ?PR?I2CBUS_READ?I2CBUS
+            CODE    097DH     00BBH     UNIT         ?PR?MAIN?MAIN
+            CODE    0A38H     0094H     UNIT         ?C?LIB_CODE
+            CODE    0ACCH     008CH     UNIT         ?C_C51STARTUP
+            CODE    0B58H     004BH     UNIT         ?PR?_DIGITALDISPLAY_8_DISPLAY?DIGITALDISPLAY_8
+            CODE    0BA3H     0047H     UNIT         ?PR?_CALCULATESTEERINGDEGREE?HANDLECONTROL
+            CODE    0BEAH     0042H     UNIT         ?PR?_DIGITALDISPLAY_8_SET?DIGITALDISPLAY_8
+            CODE    0C2CH     003BH     UNIT         ?PR?TM1_ISR?MAIN
+            CODE    0C67H     002DH     UNIT         ?C_INITSEG
+            CODE    0C94H     001EH     UNIT         ?PR?STEERINGPWMTIMERINTERRUPTION?STEERINGSG90
+            CODE    0CB2H     0018H     UNIT         ?PR?DISPLAY_ANALOG?MAIN
+            CODE    0CCAH     0018H     UNIT         ?PR?INITSTEERINGPWMTIMER?STEERINGSG90
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/11/2022  22:59:18  PAGE 2
+
+
+            CODE    0CE2H     0016H     UNIT         ?PR?_SETSTEERINGDEGREE?STEERINGSG90
+            CODE    0CF8H     0013H     UNIT         ?PR?I2CBUS_START?I2CBUS
+            CODE    0D0BH     0013H     UNIT         ?PR?I2CBUS_STOP?I2CBUS
+            CODE    0D1EH     000BH     UNIT         ?PR?DIGITALDISPLAY_8_LOOP?DIGITALDISPLAY_8
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\手柄控转向舵 (?C_STARTUP)
+
+
+SEGMENT                                             BIT_GROUP          DATA_GROUP 
+  +--> CALLED SEGMENT                            START    LENGTH     START    LENGTH
+------------------------------------------------------------------------------------
+?C_C51STARTUP                                    -----    -----      -----    -----
+  +--> ?PR?MAIN?MAIN
+  +--> ?C_INITSEG
+
+?PR?MAIN?MAIN                                    -----    -----      -----    -----
+  +--> ?PR?INITSTEERINGPWMTIMER?STEERINGSG90
+  +--> ?PR?I2CBUS_START?I2CBUS
+  +--> ?PR?_I2CBUS_WRITE?I2CBUS
+  +--> ?PR?I2CBUS_STOP?I2CBUS
+  +--> ?PR?I2CBUS_READ?I2CBUS
+  +--> ?PR?_CALCULATESTEERINGDEGREE?HANDLECO...
+  +--> ?PR?_SETSTEERINGDEGREE?STEERINGSG90
+  +--> ?PR?_DIGITALDISPLAY_8_DISPLAY?DIGITAL...
+
+?PR?_I2CBUS_WRITE?I2CBUS                         0020H.0  0000H.1    -----    -----
+
+?PR?I2CBUS_READ?I2CBUS                           0020H.0  0000H.1    -----    -----
+
+?PR?_DIGITALDISPLAY_8_DISPLAY?DIGITAL...         -----    -----      0018H    0004H
+
+*** NEW ROOT ***************************************************
+
+?PR?TM1_ISR?MAIN                                 -----    -----      -----    -----
+  +--> ?PR?STEERINGPWMTIMERINTERRUPTION?STEE...
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\手柄控转向舵 (?C_STARTUP)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        ?C_STARTUP
+  C:0ACCH         SEGMENT       ?C_C51STARTUP
+  I:0043H         SEGMENT       ?STACK
+  C:0000H         PUBLIC        ?C_STARTUP
+  D:00E0H         SYMBOL        ACC
+  D:00F0H         SYMBOL        B
+  D:0083H         SYMBOL        DPH
+  D:0082H         SYMBOL        DPL
+  N:0000H         SYMBOL        IBPSTACK
+  N:0100H         SYMBOL        IBPSTACKTOP
+  N:0080H         SYMBOL        IDATALEN
+  C:0ACFH         SYMBOL        IDATALOOP
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/11/2022  22:59:18  PAGE 3
+
+
+  N:0000H         SYMBOL        PBPSTACK
+  N:0100H         SYMBOL        PBPSTACKTOP
+  N:0000H         SYMBOL        PDATALEN
+  N:0000H         SYMBOL        PDATASTART
+  N:0000H         SYMBOL        PPAGE
+  N:0000H         SYMBOL        PPAGEENABLE
+  D:00A0H         SYMBOL        PPAGE_SFR
+  D:0081H         SYMBOL        SP
+  C:0ACCH         SYMBOL        STARTUP1
+  N:0000H         SYMBOL        XBPSTACK
+  N:0000H         SYMBOL        XBPSTACKTOP
+  N:0000H         SYMBOL        XDATALEN
+  N:0000H         SYMBOL        XDATASTART
+  C:0000H         LINE#         126
+  C:0ACCH         LINE#         133
+  C:0ACEH         LINE#         134
+  C:0ACFH         LINE#         135
+  C:0AD0H         LINE#         136
+  C:0AD2H         LINE#         185
+  C:0AD5H         LINE#         196
+  -------         ENDMOD        ?C_STARTUP
+
+  -------         MODULE        DIGITALDISPLAY_8
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:0021H         PUBLIC        g_cnt
+  B:00A0H.7       PUBLIC        latch_frag
+  B:00A0H.6       PUBLIC        latch_bit
+  C:0D1EH         PUBLIC        DigitalDisplay_8_Loop
+  C:0BEAH         PUBLIC        _DigitalDisplay_8_Set
+  D:0022H         PUBLIC        g_numbers
+  D:002AH         PUBLIC        BIT_CODE
+  C:0B58H         PUBLIC        _DigitalDisplay_8_Display
+  D:0032H         PUBLIC        DIGITAL_CODE
+  -------         PROC          DIGITALDISPLAY_8_LOOP
+  C:0D1EH         LINE#         18
+  C:0D1EH         LINE#         19
+  -------         ENDPROC       DIGITALDISPLAY_8_LOOP
+  -------         PROC          _DIGITALDISPLAY_8_SET
+  D:0014H         SYMBOL        nums
+  D:0017H         SYMBOL        cnt
+  -------         DO            
+  D:0006H         SYMBOL        i
+  -------         ENDDO         
+  C:0BEAH         LINE#         22
+  C:0BF2H         LINE#         23
+  C:0BF5H         LINE#         24
+  C:0BFFH         LINE#         25
+  C:0C02H         LINE#         26
+  C:0C02H         LINE#         28
+  C:0C05H         LINE#         29
+  C:0C10H         LINE#         30
+  C:0C24H         LINE#         31
+  C:0C2BH         LINE#         32
+  -------         ENDPROC       _DIGITALDISPLAY_8_SET
+  -------         PROC          _DIGITALDISPLAY_8_DISPLAY
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/11/2022  22:59:18  PAGE 4
+
+
+  D:0018H         SYMBOL        nums
+  D:001BH         SYMBOL        cnt
+  -------         DO            
+  D:0006H         SYMBOL        i
+  -------         ENDDO         
+  C:0B58H         LINE#         34
+  C:0B60H         LINE#         35
+  C:0B63H         LINE#         36
+  C:0B65H         LINE#         37
+  C:0B67H         LINE#         38
+  C:0B72H         LINE#         39
+  C:0B75H         LINE#         40
+  C:0B77H         LINE#         41
+  C:0B79H         LINE#         43
+  C:0B80H         LINE#         44
+  C:0B82H         LINE#         45
+  C:0B84H         LINE#         47
+  C:0B97H         LINE#         48
+  C:0B99H         LINE#         49
+  C:0B9BH         LINE#         50
+  C:0BA2H         LINE#         51
+  -------         ENDPROC       _DIGITALDISPLAY_8_DISPLAY
+  -------         ENDMOD        DIGITALDISPLAY_8
+
+  -------         MODULE        I2CBUS
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:00A0H         PUBLIC        P2
+  B:00A0H.5       PUBLIC        PIN_SDA
+  B:00A0H.4       PUBLIC        PIN_SCL
+  C:08BFH         PUBLIC        I2CBus_Read
+  C:0800H         PUBLIC        _I2CBus_Write
+  C:0CF8H         PUBLIC        I2CBus_Start
+  C:0D0BH         PUBLIC        I2CBus_Stop
+  -------         PROC          I2CBUS_START
+  C:0CF8H         LINE#         14
+  C:0CF8H         LINE#         15
+  C:0CFAH         LINE#         16
+  C:0CFCH         LINE#         17
+  C:0D01H         LINE#         18
+  C:0D03H         LINE#         19
+  C:0D08H         LINE#         20
+  C:0D0AH         LINE#         21
+  -------         ENDPROC       I2CBUS_START
+  -------         PROC          I2CBUS_STOP
+  C:0D0BH         LINE#         23
+  C:0D0BH         LINE#         24
+  C:0D0DH         LINE#         25
+  C:0D0FH         LINE#         26
+  C:0D14H         LINE#         27
+  C:0D16H         LINE#         28
+  C:0D1BH         LINE#         29
+  C:0D1DH         LINE#         30
+  -------         ENDPROC       I2CBUS_STOP
+  -------         PROC          _I2CBUS_WRITE
+  D:0007H         SYMBOL        d
+  -------         DO            
+  B:0020H.0       SYMBOL        s
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/11/2022  22:59:18  PAGE 5
+
+
+  -------         ENDDO         
+  C:0800H         LINE#         32
+  C:0800H         LINE#         35
+  C:0802H         LINE#         36
+  C:080CH         LINE#         37
+  C:0810H         LINE#         38
+  C:0812H         LINE#         39
+  C:0817H         LINE#         41
+  C:0819H         LINE#         42
+  C:0822H         LINE#         43
+  C:0826H         LINE#         44
+  C:0828H         LINE#         45
+  C:082DH         LINE#         47
+  C:082FH         LINE#         48
+  C:0837H         LINE#         49
+  C:083BH         LINE#         50
+  C:083DH         LINE#         51
+  C:0842H         LINE#         53
+  C:0844H         LINE#         54
+  C:084BH         LINE#         55
+  C:084FH         LINE#         56
+  C:0851H         LINE#         57
+  C:0856H         LINE#         59
+  C:0858H         LINE#         60
+  C:0861H         LINE#         61
+  C:0865H         LINE#         62
+  C:0867H         LINE#         63
+  C:086CH         LINE#         65
+  C:086EH         LINE#         66
+  C:0876H         LINE#         67
+  C:087AH         LINE#         68
+  C:087CH         LINE#         69
+  C:0881H         LINE#         71
+  C:0883H         LINE#         72
+  C:0889H         LINE#         73
+  C:088DH         LINE#         74
+  C:088FH         LINE#         75
+  C:0894H         LINE#         77
+  C:0896H         LINE#         78
+  C:089AH         LINE#         79
+  C:089BH         LINE#         80
+  C:089FH         LINE#         81
+  C:08A1H         LINE#         82
+  C:08A6H         LINE#         84
+  C:08A8H         LINE#         85
+  C:08ADH         LINE#         86
+  C:08AFH         LINE#         87
+  C:08B1H         LINE#         88
+  C:08B6H         LINE#         91
+  C:08BAH         LINE#         92
+  C:08BCH         LINE#         93
+  C:08BEH         LINE#         94
+  -------         ENDPROC       _I2CBUS_WRITE
+  -------         PROC          I2CBUS_READ
+  B:0020H.0       SYMBOL        fi
+  -------         DO            
+  D:0007H         SYMBOL        d
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/11/2022  22:59:18  PAGE 6
+
+
+  -------         ENDDO         
+  C:08BFH         LINE#         96
+  C:08BFH         LINE#         99
+  C:08C1H         LINE#         100
+  C:08C2H         LINE#         101
+  C:08C5H         LINE#         102
+  C:08C7H         LINE#         103
+  C:08CCH         LINE#         104
+  C:08CFH         LINE#         106
+  C:08D1H         LINE#         107
+  C:08D4H         LINE#         108
+  C:08D7H         LINE#         109
+  C:08D9H         LINE#         110
+  C:08DEH         LINE#         111
+  C:08E4H         LINE#         113
+  C:08E6H         LINE#         114
+  C:08EAH         LINE#         115
+  C:08EDH         LINE#         116
+  C:08EFH         LINE#         117
+  C:08F4H         LINE#         118
+  C:08FAH         LINE#         120
+  C:08FCH         LINE#         121
+  C:0900H         LINE#         122
+  C:0903H         LINE#         123
+  C:0905H         LINE#         124
+  C:090AH         LINE#         125
+  C:0910H         LINE#         127
+  C:0912H         LINE#         128
+  C:0916H         LINE#         129
+  C:0919H         LINE#         130
+  C:091BH         LINE#         131
+  C:0920H         LINE#         132
+  C:0926H         LINE#         134
+  C:0928H         LINE#         135
+  C:092CH         LINE#         136
+  C:092FH         LINE#         137
+  C:0931H         LINE#         138
+  C:0936H         LINE#         139
+  C:093CH         LINE#         141
+  C:093EH         LINE#         142
+  C:0942H         LINE#         143
+  C:0945H         LINE#         144
+  C:0947H         LINE#         145
+  C:094CH         LINE#         146
+  C:0952H         LINE#         148
+  C:0954H         LINE#         149
+  C:0958H         LINE#         150
+  C:095BH         LINE#         151
+  C:095DH         LINE#         152
+  C:0962H         LINE#         153
+  C:0968H         LINE#         155
+  C:096AH         LINE#         156
+  C:096FH         LINE#         157
+  C:0973H         LINE#         158
+  C:0975H         LINE#         159
+  C:097AH         LINE#         160
+  C:097CH         LINE#         162
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/11/2022  22:59:18  PAGE 7
+
+
+  C:097CH         LINE#         163
+  -------         ENDPROC       I2CBUS_READ
+  -------         ENDMOD        I2CBUS
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:00A0H         PUBLIC        P2
+  C:0CB2H         PUBLIC        Display_Analog
+  C:097DH         PUBLIC        main
+  D:0008H         PUBLIC        analog1
+  D:0009H         PUBLIC        analog2
+  D:000AH         PUBLIC        lastAnalog1
+  D:000BH         PUBLIC        lastAnalog2
+  C:0C2CH         PUBLIC        tm1_isr
+  D:000CH         PUBLIC        nums
+  B:00A0H.3       PUBLIC        lastAck
+  B:00A0H.2       PUBLIC        err
+  -------         PROC          MAIN
+  C:097DH         LINE#         20
+  C:097DH         LINE#         21
+  C:097FH         LINE#         23
+  C:0982H         LINE#         24
+  C:0982H         LINE#         25
+  C:0985H         LINE#         26
+  C:098CH         LINE#         27
+  C:0992H         LINE#         28
+  C:0999H         LINE#         29
+  C:099FH         LINE#         30
+  C:09A2H         LINE#         31
+  C:09A5H         LINE#         32
+  C:09ACH         LINE#         33
+  C:09B2H         LINE#         34
+  C:09B9H         LINE#         35
+  C:09BCH         LINE#         37
+  C:09BFH         LINE#         38
+  C:09C6H         LINE#         39
+  C:09CCH         LINE#         40
+  C:09D3H         LINE#         41
+  C:09D9H         LINE#         42
+  C:09DCH         LINE#         43
+  C:09DFH         LINE#         44
+  C:09E6H         LINE#         45
+  C:09ECH         LINE#         46
+  C:09F3H         LINE#         47
+  C:09F6H         LINE#         49
+  C:09FCH         LINE#         50
+  C:09FFH         LINE#         52
+  C:0A05H         LINE#         53
+  C:0A0CH         LINE#         54
+  C:0A0CH         LINE#         55
+  C:0A12H         LINE#         56
+  C:0A15H         LINE#         57
+  C:0A1DH         LINE#         59
+  C:0A23H         LINE#         60
+  C:0A2AH         LINE#         61
+  C:0A2AH         LINE#         62
+  C:0A35H         LINE#         63
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/11/2022  22:59:18  PAGE 8
+
+
+  -------         ENDPROC       MAIN
+  -------         PROC          DISPLAY_ANALOG
+  C:0CB2H         LINE#         66
+  C:0CB2H         LINE#         67
+  C:0CB8H         LINE#         68
+  C:0CBFH         LINE#         69
+  -------         ENDPROC       DISPLAY_ANALOG
+  -------         PROC          TM1_ISR
+  C:0C2CH         LINE#         72
+  C:0C49H         LINE#         73
+  C:0C4CH         LINE#         74
+  -------         ENDPROC       TM1_ISR
+  -------         ENDMOD        MAIN
+
+  -------         MODULE        STEERINGSG90
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  B:00A8H.7       PUBLIC        EA
+  B:0080H.0       PUBLIC        P_PWM
+  D:001CH         PUBLIC        g_timercnt
+  D:0089H         PUBLIC        TMOD
+  B:00A8H.3       PUBLIC        ET1
+  B:0088H.7       PUBLIC        TF1
+  D:008DH         PUBLIC        TH1
+  D:008BH         PUBLIC        TL1
+  D:001DH         PUBLIC        g_cntH
+  B:0088H.6       PUBLIC        TR1
+  C:0C94H         PUBLIC        SteeringPWMTimerInterruption
+  C:0CE2H         PUBLIC        _setSteeringDegree
+  C:0CCAH         PUBLIC        initSteeringPWMTimer
+  -------         PROC          INITSTEERINGPWMTIMER
+  C:0CCAH         LINE#         19
+  C:0CCAH         LINE#         20
+  C:0CCDH         LINE#         21
+  C:0CD0H         LINE#         22
+  C:0CD3H         LINE#         23
+  C:0CD6H         LINE#         24
+  C:0CD8H         LINE#         25
+  C:0CDAH         LINE#         26
+  C:0CDCH         LINE#         27
+  C:0CDEH         LINE#         28
+  C:0CE1H         LINE#         29
+  -------         ENDPROC       INITSTEERINGPWMTIMER
+  -------         PROC          _SETSTEERINGDEGREE
+  D:0007H         SYMBOL        d
+  C:0CE2H         LINE#         31
+  C:0CE2H         LINE#         32
+  C:0CECH         LINE#         33
+  C:0CEEH         LINE#         34
+  C:0CEEH         LINE#         35
+  C:0CF7H         LINE#         36
+  -------         ENDPROC       _SETSTEERINGDEGREE
+  -------         PROC          STEERINGPWMTIMERINTERRUPTION
+  C:0C94H         LINE#         40
+  C:0C94H         LINE#         41
+  C:0C96H         LINE#         42
+  C:0C9DH         LINE#         43
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/11/2022  22:59:18  PAGE 9
+
+
+  C:0C9FH         LINE#         44
+  C:0CA1H         LINE#         45
+  C:0CA3H         LINE#         46
+  C:0CA3H         LINE#         48
+  C:0CAEH         LINE#         49
+  C:0CB1H         LINE#         50
+  C:0CB1H         LINE#         51
+  -------         ENDPROC       STEERINGPWMTIMERINTERRUPTION
+  -------         ENDMOD        STEERINGSG90
+
+  -------         MODULE        HANDLECONTROL
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:0BA3H         PUBLIC        _calculateSteeringDegree
+  -------         PROC          _CALCULATESTEERINGDEGREE
+  D:0007H         SYMBOL        analog
+  -------         DO            
+  D:0003H         SYMBOL        d
+  -------         ENDDO         
+  C:0BA3H         LINE#         6
+  C:0BA3H         LINE#         8
+  C:0BADH         LINE#         9
+  C:0BBEH         LINE#         10
+  C:0BCDH         LINE#         11
+  C:0BE3H         LINE#         12
+  C:0BE5H         LINE#         13
+  C:0BE7H         LINE#         14
+  C:0BE7H         LINE#         16
+  C:0BE9H         LINE#         17
+  -------         ENDPROC       _CALCULATESTEERINGDEGREE
+  -------         ENDMOD        HANDLECONTROL
+
+  -------         MODULE        ?C?CLDOPTR
+  C:0A38H         PUBLIC        ?C?CLDOPTR
+  -------         ENDMOD        ?C?CLDOPTR
+
+  -------         MODULE        ?C?IMUL
+  C:0A65H         PUBLIC        ?C?IMUL
+  -------         ENDMOD        ?C?IMUL
+
+  -------         MODULE        ?C?UIDIV
+  C:0A77H         PUBLIC        ?C?UIDIV
+  -------         ENDMOD        ?C?UIDIV
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 041AH BYTE (51%) *
+******************************************************************************
+
+Program Size: data=65.1 xdata=0 code=1327
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

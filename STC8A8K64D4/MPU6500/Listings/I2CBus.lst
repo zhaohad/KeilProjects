@@ -1,0 +1,184 @@
+C51 COMPILER V9.60.0.0   I2CBUS                                                            08/01/2022 13:58:03 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE I2CBUS
+OBJECT MODULE PLACED IN .\Objects\I2CBus.obj
+COMPILER INVOKED BY: d:\Keil_v5\C51\BIN\C51.EXE src\I2CBus\I2CBus.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\src) DEBUG OBJECTE
+                    -XTEND PRINT(.\Listings\I2CBus.lst) TABS(2) OBJECT(.\Objects\I2CBus.obj)
+
+line level    source
+
+   1          #include <reg51.h>
+   2          #include "I2CBus.h"
+   3          #include <intrins.h>
+   4          
+   5          #define PIN_SCL P_MPU6500_SCL
+   6          #define PIN_SDA P_MPU6500_SDA
+   7          
+   8          void I2CBus_Start() {
+   9   1        PIN_SDA = 1;
+  10   1        PIN_SCL = 1;
+  11   1        _nop_();_nop_();_nop_();_nop_();_nop_(); // 5us > 4.7us
+  12   1        PIN_SDA = 0;
+  13   1        _nop_();_nop_();_nop_();_nop_();_nop_(); // 5us > 4us
+  14   1        PIN_SCL = 0;
+  15   1      }
+  16          
+  17          void I2CBus_Stop() {
+  18   1        PIN_SDA = 0;
+  19   1        PIN_SCL = 1;
+  20   1        _nop_();_nop_();_nop_();_nop_();_nop_(); // 5us > 4us
+  21   1        PIN_SDA = 1;
+  22   1        _nop_();_nop_();_nop_();_nop_();_nop_(); // 5us > 4.7us
+  23   1        PIN_SCL = 0;
+  24   1      }
+  25          
+  26          bit I2CBus_Write(unsigned char d) {
+  27   1        bit s;
+  28   1        // 0
+  29   1        PIN_SCL = 0;
+  30   1        s = (d >> 7) & 0x01; // 以上 > 4.7us
+  31   1        PIN_SDA = s;
+  32   1        PIN_SCL = 1;
+  33   1        _nop_();_nop_();_nop_();_nop_();_nop_(); // 5us > 4us
+  34   1        // 1
+  35   1        PIN_SCL = 0;
+  36   1        s = (d >> 6) & 0x01; // 以上 > 4.7us
+  37   1        PIN_SDA = s;
+  38   1        PIN_SCL = 1;
+  39   1        _nop_();_nop_();_nop_();_nop_();_nop_(); // 5us > 4us
+  40   1        // 2
+  41   1        PIN_SCL = 0;
+  42   1        s = (d >> 5) & 0x01; // 以上 > 4.7us
+  43   1        PIN_SDA = s;
+  44   1        PIN_SCL = 1;
+  45   1        _nop_();_nop_();_nop_();_nop_();_nop_(); // 5us > 4us
+  46   1        // 3
+  47   1        PIN_SCL = 0;
+  48   1        s = (d >> 4) & 0x01; // 以上 > 4.7us
+  49   1        PIN_SDA = s;
+  50   1        PIN_SCL = 1;
+  51   1        _nop_();_nop_();_nop_();_nop_();_nop_(); // 5us > 4us
+  52   1        // 4
+  53   1        PIN_SCL = 0;
+  54   1        s = (d >> 3) & 0x01; // 以上 > 4.7us
+C51 COMPILER V9.60.0.0   I2CBUS                                                            08/01/2022 13:58:03 PAGE 2   
+
+  55   1        PIN_SDA = s;
+  56   1        PIN_SCL = 1;
+  57   1        _nop_();_nop_();_nop_();_nop_();_nop_(); // 5us > 4us
+  58   1        // 5
+  59   1        PIN_SCL = 0;
+  60   1        s = (d >> 2) & 0x01; // 以上 > 4.7us
+  61   1        PIN_SDA = s;
+  62   1        PIN_SCL = 1;
+  63   1        _nop_();_nop_();_nop_();_nop_();_nop_(); // 5us > 4us
+  64   1        // 6
+  65   1        PIN_SCL = 0;
+  66   1        s = (d >> 1) & 0x01; // 以上 > 4.7us
+  67   1        PIN_SDA = s;
+  68   1        PIN_SCL = 1;
+  69   1        _nop_();_nop_();_nop_();_nop_();_nop_(); // 5us > 4us
+  70   1        // 7
+  71   1        PIN_SCL = 0;
+  72   1        s = d & 0x01;
+  73   1          _nop_();  // 以上 > 4.7us
+  74   1        PIN_SDA = s;
+  75   1        PIN_SCL = 1;
+  76   1        _nop_();_nop_();_nop_();_nop_();_nop_(); // 5us > 4us
+  77   1      
+  78   1        PIN_SCL = 0;
+  79   1        _nop_();_nop_();_nop_();_nop_();_nop_(); // 5us > 4.7us
+  80   1        PIN_SDA = 1;
+  81   1        PIN_SCL = 1;
+  82   1        _nop_();_nop_();_nop_();_nop_();_nop_(); // 5us > 4us
+  83   1      
+  84   1        s = PIN_SDA;
+  85   1        PIN_SCL = 0;
+  86   1        return s;
+  87   1      }
+  88          
+  89          unsigned char I2CBus_Read(bit fi) {
+  90   1        unsigned char d;
+  91   1        // 0
+  92   1        PIN_SCL = 0;
+  93   1        d = 0x00;
+  94   1        _nop_();_nop_();_nop_(); // 以上5us > 4.7us
+  95   1        PIN_SCL = 1;
+  96   1        _nop_();_nop_();_nop_();_nop_();_nop_(); // 5us > 4us
+  97   1        d |= PIN_SDA;
+  98   1        // 1
+  99   1        PIN_SCL = 0;
+ 100   1        d <<= 1;
+ 101   1        _nop_();_nop_();_nop_(); // 以上5us > 4.7us
+ 102   1        PIN_SCL = 1;
+ 103   1        _nop_();_nop_();_nop_();_nop_();_nop_(); // 5us > 4us
+ 104   1        d |= PIN_SDA;
+ 105   1        // 2
+ 106   1        PIN_SCL = 0;
+ 107   1        d <<= 1;
+ 108   1        _nop_();_nop_();_nop_(); // 以上5us > 4.7us
+ 109   1        PIN_SCL = 1;
+ 110   1        _nop_();_nop_();_nop_();_nop_();_nop_(); // 5us > 4us
+ 111   1        d |= PIN_SDA;
+ 112   1        // 3
+ 113   1        PIN_SCL = 0;
+ 114   1        d <<= 1;
+ 115   1        _nop_();_nop_();_nop_(); // 以上5us > 4.7us
+ 116   1        PIN_SCL = 1;
+C51 COMPILER V9.60.0.0   I2CBUS                                                            08/01/2022 13:58:03 PAGE 3   
+
+ 117   1        _nop_();_nop_();_nop_();_nop_();_nop_(); // 5us > 4us
+ 118   1        d |= PIN_SDA;
+ 119   1        // 4
+ 120   1        PIN_SCL = 0;
+ 121   1        d <<= 1;
+ 122   1        _nop_();_nop_();_nop_(); // 以上5us > 4.7us
+ 123   1        PIN_SCL = 1;
+ 124   1        _nop_();_nop_();_nop_();_nop_();_nop_(); // 5us > 4us
+ 125   1        d |= PIN_SDA;
+ 126   1        // 5
+ 127   1        PIN_SCL = 0;
+ 128   1        d <<= 1;
+ 129   1        _nop_();_nop_();_nop_(); // 以上5us > 4.7us
+ 130   1        PIN_SCL = 1;
+ 131   1        _nop_();_nop_();_nop_();_nop_();_nop_(); // 5us > 4us
+ 132   1        d |= PIN_SDA;
+ 133   1        // 6
+ 134   1        PIN_SCL = 0;
+ 135   1        d <<= 1;
+ 136   1        _nop_();_nop_();_nop_(); // 以上5us > 4.7us
+ 137   1        PIN_SCL = 1;
+ 138   1        _nop_();_nop_();_nop_();_nop_();_nop_(); // 5us > 4us
+ 139   1        d |= PIN_SDA;
+ 140   1        // 7
+ 141   1        PIN_SCL = 0;
+ 142   1        d <<= 1;
+ 143   1        _nop_();_nop_();_nop_(); // 以上5us > 4.7us
+ 144   1        PIN_SCL = 1;
+ 145   1        _nop_();_nop_();_nop_();_nop_();_nop_(); // 5us > 4us
+ 146   1        d |= PIN_SDA;
+ 147   1        
+ 148   1        PIN_SCL = 0;
+ 149   1        _nop_();_nop_();_nop_();_nop_();_nop_(); // 5us > 4.7us
+ 150   1        PIN_SDA = fi; // ACK or NACK
+ 151   1        PIN_SCL = 1;
+ 152   1        _nop_();_nop_();_nop_();_nop_();_nop_(); // 5us > 4us
+ 153   1        PIN_SCL = 0;
+ 154   1        
+ 155   1        return d;
+ 156   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    419    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       2
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

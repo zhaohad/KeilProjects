@@ -1,0 +1,9 @@
+".\Objects\STARTUP.obj",
+".\Objects\GPIO.obj",
+".\Objects\main.obj",
+".\Objects\ADC.obj",
+".\Objects\delay.obj",
+".\Objects\UART.obj" 
+TO ".\Objects\pushrod" 
+PRINT(".\Listings\pushrod.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

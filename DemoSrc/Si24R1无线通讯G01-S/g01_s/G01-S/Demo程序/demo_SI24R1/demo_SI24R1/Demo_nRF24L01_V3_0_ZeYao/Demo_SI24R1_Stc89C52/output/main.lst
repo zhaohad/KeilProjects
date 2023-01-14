@@ -1,0 +1,157 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              05/13/2022 21:57:19 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN ..\output\main.obj
+COMPILER INVOKED BY: d:\Keil_v5\C51\BIN\C51.EXE Source_File\app\src\main.c COMPACT OPTIMIZE(8,SPEED) BROWSE INCDIR(.\Sou
+                    -rce_File\app\inc;.\Source_File\drv_mcu\inc;.\Source_File\drv_periph\inc) DEBUG OBJECTEXTEND PRINT(..\output\main.lst) TA
+                    -BS(2) OBJECT(..\output\main.obj)
+
+line level    source
+
+   1          #include "main.h"
+   2          
+   3          
+   4          const char *g_Ashining = "gisemi";
+   5          uint8_t g_TxMode = 0, g_UartRxFlag = 0;
+   6          uint8_t g_UartRxBuffer[ 32 ] = { 0 };
+   7          uint8_t g_RF24L01RxBuffer[ 32 ] = { 0 }; 
+   8          
+   9          
+  10          /**
+  11            * @brief :主函数 
+  12            * @param :无
+  13            * @note  :无
+  14            * @retval:无
+  15            */ 
+  16          int main( void )
+  17          {   
+  18   1        uint8_t i = 0;
+  19   1      
+  20   1        //串口初始化
+  21   1        drv_uart_init( );
+  22   1        
+  23   1        //LED初始化
+  24   1        drv_led_init( );
+  25   1      
+  26   1        //SPI初始化
+  27   1        drv_spi_init( );
+  28   1        
+  29   1        //RF24L01引脚初始化
+  30   1        NRF24L01_Gpio_Init( );
+  31   1        
+  32   1        //检测nRF24L01
+  33   1        NRF24L01_check( );  
+  34   1        RF24L01_Init( );
+  35   1        
+  36   1        led_red_off( );
+  37   1        led_green_off( );         //LED指示灯默认关闭，便于观察
+  38   1        for( i = 0; i < 6; i++ )
+  39   1        {
+  40   2          led_red_flashing( );
+  41   2          led_green_flashing( );
+  42   2          drv_delay_ms( 500 );      //检测到芯片 闪速3个周期
+  43   2        }
+  44   1          
+  45   1        
+  46   1      #ifdef  __RF24L01_TX_TEST__   
+  47   1      //=========================================================================================// 
+  48   1      //*****************************************************************************************//
+  49   1      //************************************* 发送 **********************************************//
+  50   1      //*****************************************************************************************//
+  51   1      //=========================================================================================// 
+  52   1        
+  53   1        //按键初始化
+C51 COMPILER V9.60.0.0   MAIN                                                              05/13/2022 21:57:19 PAGE 2   
+
+  54   1        drv_button_init( );
+  55   1        
+  56   1        RF24L01_Set_Mode( MODE_TX );    //发送模式
+  57   1        while( 1 )  
+  58   1        {
+  59   2          //模式切换
+  60   2          if( BUTOTN_PRESS_DOWN == drv_button_check( ))
+  61   2          {
+  62   3            g_TxMode = 1 - g_TxMode;    //模式会在 TX_MODE_1( 0 ),TX_MODE_2( 1 )之间切换
+  63   3            
+  64   3            //状态显示清零
+  65   3            led_green_off( );
+  66   3            led_red_off( );
+  67   3            
+  68   3            if( TX_MODE_1 == g_TxMode )
+  69   3            {
+  70   4              for( i = 0; i < 6; i++ )    
+  71   4              {
+  72   5                led_red_flashing( );  //固定发送模式，红灯闪烁3次
+  73   5                drv_delay_ms( 500 );    
+  74   5              }
+  75   4            }
+  76   3            else
+  77   3            {
+  78   4              for( i = 0; i < 6; i++ )
+  79   4              {
+  80   5                led_green_flashing( );  //串口发送模式，绿灯闪烁3次
+  81   5                drv_delay_ms( 500 );
+  82   5              }
+  83   4            }
+  84   3          }
+  85   2          
+  86   2          //发送
+  87   2          if( TX_MODE_1 == g_TxMode )
+  88   2          {
+  89   3            NRF24L01_TxPacket( (uint8_t *)g_Ashining, 8 );    //模式1发送固定字符,1S一包
+  90   3            drv_delay_ms( 500 );  
+  91   3            drv_delay_ms( 500 );  
+  92   3            led_red_flashing( );      
+  93   3          }
+  94   2          else
+  95   2          { 
+  96   3            //查询串口数据
+  97   3            i = drv_uart_rx_bytes( g_UartRxBuffer );
+  98   3            
+  99   3            if( 0 != i )
+ 100   3            {
+ 101   4              NRF24L01_TxPacket( g_UartRxBuffer, i );
+ 102   4              led_red_flashing( );
+ 103   4            }
+ 104   3          }
+ 105   2        }
+ 106   1        
+ 107   1      #else   
+              //=========================================================================================// 
+              //*****************************************************************************************//
+              //************************************* 接收 **********************************************//
+              //*****************************************************************************************//
+              //=========================================================================================// 
+                
+                RF24L01_Set_Mode( MODE_RX );    //接收模式
+                while( 1 )
+C51 COMPILER V9.60.0.0   MAIN                                                              05/13/2022 21:57:19 PAGE 3   
+
+                {
+                  i = NRF24L01_RxPacket( g_RF24L01RxBuffer );   //接收字节
+                  if( 0 != i )
+                  {
+                    led_green_flashing( );
+                    drv_uart_tx_bytes( g_RF24L01RxBuffer,i ); //输入接收到的字节
+                    
+                  }
+                }
+                
+              #endif
+ 127   1        
+ 128   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    260    ----
+   CONSTANT SIZE    =      7    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =     69       1
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,79 @@
+C51 COMPILER V9.60.0.0   DIGITALDISPLAY_8                                                  05/11/2022 22:59:17 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE DIGITALDISPLAY_8
+OBJECT MODULE PLACED IN .\Objects\DigitalDisplay_8.obj
+COMPILER INVOKED BY: d:\Keil_v5\C51\BIN\C51.EXE DigitalDisplay_8.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\L
+                    -istings\DigitalDisplay_8.lst) TABS(2) OBJECT(.\Objects\DigitalDisplay_8.obj)
+
+line level    source
+
+   1          #include "DigitalDisplay_8.h"
+   2          
+   3          #define PIN_OUT_SRF P1
+   4          #define D_NULL_CODE 0x00
+   5          
+   6          sbit latch_bit = P2 ^ 6;
+   7          sbit latch_frag = P2 ^ 7;
+   8          
+   9          #define MAX_CNT 8
+  10          
+  11          unsigned char DIGITAL_CODE[17] = {0x3f, 0x06, 0x5b, 0x4f, 0x66, 0x6d, 0x7d, 0x07, 0x7f, 0x6f, 0x77, 0x7c, 
+             -0x39, 0x5e, 0x79, 0x71, D_NULL_CODE};
+  12          unsigned char BIT_CODE[8] = {0xff ^ 0x80, 0xff ^ 0x40, 0xff ^ 0x20, 0xff ^ 0x10, 0xff ^ 0x08, 0xff ^ 0x04,
+             - 0xff ^ 0x02, 0xff ^ 0x01};
+  13          
+  14          unsigned char g_numbers[8];
+  15          unsigned char g_cnt;
+  16          
+  17          
+  18          void DigitalDisplay_8_Loop() {
+  19   1        DigitalDisplay_8_Display(g_numbers, g_cnt);
+  20   1      }
+  21          
+  22          void DigitalDisplay_8_Set(unsigned char nums[], unsigned char cnt) {
+  23   1        int i = 0;
+  24   1        if (cnt > 8) {
+  25   2          cnt = 8;
+  26   2        }
+  27   1      
+  28   1        g_cnt = cnt;
+  29   1        for (; i < cnt; ++i) {
+  30   2          g_numbers[i] = nums[i];
+  31   2        }
+  32   1      }
+  33          
+  34          void DigitalDisplay_8_Display(unsigned char nums[], unsigned char cnt) {
+  35   1        int i = 0;
+  36   1        latch_frag = 0;
+  37   1        latch_bit = 0;
+  38   1        for (; i < cnt; ++i) {
+  39   2          PIN_OUT_SRF = D_NULL_CODE;
+  40   2          latch_frag = 1;
+  41   2          latch_frag =0;
+  42   2          
+  43   2          PIN_OUT_SRF = BIT_CODE[i];
+  44   2          latch_bit = 1;
+  45   2          latch_bit = 0;
+  46   2      
+  47   2          PIN_OUT_SRF = DIGITAL_CODE[nums[i]];
+  48   2          latch_frag = 1;
+  49   2          latch_frag = 0;
+  50   2        }
+  51   1      }
+
+C51 COMPILER V9.60.0.0   DIGITALDISPLAY_8                                                  05/11/2022 22:59:17 PAGE 2   
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    152    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     34       8
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

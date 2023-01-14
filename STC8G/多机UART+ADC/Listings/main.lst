@@ -1,0 +1,136 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              11/27/2022 16:04:01 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: d:\Keil_v5\C51\BIN\C51.EXE src\main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\
+                    -main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "typedef.h"
+   2          #include "gpio.h"
+   3          #include "uart.h"
+   4          #include "delay.h"
+   5          #include "adc.h"
+   6          
+   7          void Uart_GPIO_Config() {
+   8   1        GPIO_InitTypeDef GPIO_InitStructure;    //结构定义
+   9   1        GPIO_InitStructure.Pin = GPIO_Pin_0 | GPIO_Pin_1;   //指定要初始化的IO, GPIO_Pin_0 ~ GPIO_Pin_7
+  10   1        GPIO_InitStructure.Mode = GPIO_PullUp;  //指定IO的输入或输出方式,GPIO_PullUp,GPIO_HighZ,GPIO_OUT_OD,GPIO_O
+             -UT_PP
+  11   1        GPIO_Inilize(GPIO_P3, &GPIO_InitStructure); //初始化
+  12   1      }
+  13          
+  14          void UART_config() {
+  15   1        COMx_InitDefine COMx_InitStructure;         //结构定义
+  16   1        COMx_InitStructure.UART_Mode = UART_8bit_BRTx;    //模式,       UART_ShiftRight,UART_8bit_BRTx,UART_9bit,UA
+             -RT_9bit_BRTx
+  17   1        COMx_InitStructure.UART_BRT_Use = BRT_Timer1;     //选择波特率发生器,   BRT_Timer1, BRT_Timer2 (注意: 串口2
+             -固定使用BRT_Timer2)
+  18   1        COMx_InitStructure.UART_BaudRate = 115200ul;      //波特率, 一般 110 ~ 115200
+  19   1        COMx_InitStructure.UART_RxEnable = ENABLE;        //接收允许,   ENABLE或DISABLE
+  20   1        COMx_InitStructure.BaudRateDouble = DISABLE;      //波特率加倍, ENABLE或DISABLE
+  21   1        COMx_InitStructure.UART_Interrupt = ENABLE;       //中断允许,   ENABLE或DISABLE
+  22   1        COMx_InitStructure.UART_Priority = Priority_0;      //指定中断优先级(低到高) Priority_0,Priority_1,Priority_
+             -2,Priority_3
+  23   1        COMx_InitStructure.UART_P_SW = UART1_SW_P30_P31;  //切换端口,   UART1_SW_P30_P31,UART1_SW_P36_P37,UART1_SW
+             -_P16_P17,UART1_SW_P43_P44
+  24   1        UART_Configuration(UART1, &COMx_InitStructure);   //初始化串口1 UART1,UART2,UART3,UART4
+  25   1      }
+  26          
+  27          void ADC_GPIO_Config() {
+  28   1        GPIO_InitTypeDef GPIO_InitStructure;    //结构定义
+  29   1        GPIO_InitStructure.Pin = GPIO_Pin_4;    //指定要初始化的IO, GPIO_Pin_0 ~ GPIO_Pin_7
+  30   1        GPIO_InitStructure.Mode = GPIO_HighZ; //指定IO的输入或输出方式,GPIO_PullUp,GPIO_HighZ,GPIO_OUT_OD,GPIO_OU
+             -T_PP
+  31   1        GPIO_Inilize(GPIO_P5, &GPIO_InitStructure); //初始化
+  32   1      }
+  33          
+  34          void ADC_config() {
+  35   1        ADC_InitTypeDef ADC_InitStructure;    //结构定义
+  36   1        ADC_InitStructure.ADC_SMPduty = 31;   //ADC 模拟信号采样时间控制, 0~31（注意： SMPDUTY 一定不能设置小于 10
+             -）
+  37   1        ADC_InitStructure.ADC_CsSetup = 0;    //ADC 通道选择时间控制 0(默认),1
+  38   1        ADC_InitStructure.ADC_CsHold = 1;   //ADC 通道选择保持时间控制 0,1(默认),2,3
+  39   1        ADC_InitStructure.ADC_Speed = ADC_SPEED_2X1T;   //设置 ADC 工作时钟频率 ADC_SPEED_2X1T~ADC_SPEED_2X16T
+  40   1        ADC_InitStructure.ADC_Power = ENABLE;       //ADC功率允许/关闭  ENABLE,DISABLE
+  41   1        ADC_InitStructure.ADC_AdjResult = ADC_RIGHT_JUSTIFIED;  //ADC结果调整,  ADC_LEFT_JUSTIFIED,ADC_RIGHT_JUSTIF
+             -IED
+  42   1        ADC_InitStructure.ADC_Priority = Priority_0;      //指定中断优先级(低到高) Priority_0,Priority_1,Priority_2,
+             -Priority_3
+  43   1        ADC_InitStructure.ADC_Interrupt = DISABLE;      //中断允许  ENABLE,DISABLE
+  44   1        ADC_Inilize(&ADC_InitStructure);          //初始化
+  45   1        ADC_PowerControl(ENABLE);             //单独的ADC电源操作函数, ENABLE或DISABLE
+C51 COMPILER V9.60.0.0   MAIN                                                              11/27/2022 16:04:01 PAGE 2   
+
+  46   1      }
+  47          
+  48          void UART_Init() {
+  49   1        Uart_GPIO_Config();
+  50   1        UART_config();
+  51   1      }
+  52          
+  53          void ADC_Init() {
+  54   1        ADC_GPIO_Config();
+  55   1        ADC_config();
+  56   1      }
+  57          
+  58          bit getUARTData(u8 * outC) {
+  59   1        u8 index;
+  60   1        if (COM1.RX_TimeOut > 0) {
+  61   2          COM1.B_RX_OK = 1; // synchronize receive
+  62   2          COM1.RX_TimeOut = 0;
+  63   2          index = COM1.RX_Cnt;
+  64   2          if (index == 0) {
+  65   3            index = COM_RX1_Lenth;
+  66   3          }
+  67   2          --index;
+  68   2          *outC = RX1_Buffer[index];
+  69   2          COM1.B_RX_OK = 0;
+  70   2          return 1;
+  71   2        }
+  72   1        return 0;
+  73   1      }
+  74          
+  75          void main() {
+  76   1        UART_Init();
+  77   1        ADC_Init();
+  78   1      
+  79   1        EA = 1;
+  80   1        while(1) {
+  81   2          u8 send;
+  82   2          u8 c;
+  83   2          u16 adc;
+  84   2          bit hasUart = getUARTData(&c);
+  85   2          if (hasUart) {
+  86   3            TX1_write2buff(c);
+  87   3          } else {
+  88   3          }
+  89   2      
+  90   2          adc = Get_ADCResult(4);
+  91   2          if (adc == 4096) {
+  92   3            send = 0xff;
+  93   3          } else {
+  94   3            send = adc / 1024.f * 0xff;
+  95   3          }
+  96   2          TX1_write2buff(send);
+  97   2        }
+  98   1        return;
+  99   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    256    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      28
+C51 COMPILER V9.60.0.0   MAIN                                                              11/27/2022 16:04:01 PAGE 3   
+
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

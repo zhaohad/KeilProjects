@@ -1,0 +1,7 @@
+https://zhuanlan.zhihu.com/p/491642595
+https://zhidao.baidu.com/question/422898464.html
+
+SG90 舵机
+P0 -> 黄
+Vcc -> 红
+GND -> 棕

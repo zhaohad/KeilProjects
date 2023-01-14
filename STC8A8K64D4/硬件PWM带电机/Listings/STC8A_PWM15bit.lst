@@ -1,0 +1,189 @@
+C51 COMPILER V9.60.0.0   STC8A_PWM15BIT                                                    08/15/2022 20:21:00 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE STC8A_PWM15BIT
+OBJECT MODULE PLACED IN .\Objects\STC8A_PWM15bit.obj
+COMPILER INVOKED BY: d:\Keil_v5\C51\BIN\C51.EXE src\STC8A_PWM15bit.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.
+                    -\Listings\STC8A_PWM15bit.lst) TABS(2) OBJECT(.\Objects\STC8A_PWM15bit.obj)
+
+line level    source
+
+   1          /*---------------------------------------------------------------------*/
+   2          /* --- STC MCU Limited ------------------------------------------------*/
+   3          /* --- STC 1T Series MCU Demo Programme -------------------------------*/
+   4          /* --- Mobile: (86)13922805190 ----------------------------------------*/
+   5          /* --- Fax: 86-0513-55012956,55012947,55012969 ------------------------*/
+   6          /* --- Tel: 86-0513-55012928,55012929,55012966 ------------------------*/
+   7          /* --- Web: www.STCMCU.com --------------------------------------------*/
+   8          /* --- Web: www.STCMCUDATA.com  ---------------------------------------*/
+   9          /* --- QQ:  800003751 -------------------------------------------------*/
+  10          /* 如果要在程序中使用此代码,请在程序中注明使用了STC的资料及程序            */
+  11          /*---------------------------------------------------------------------*/
+  12          
+  13          #include  "STC8A_PWM15bit.h"
+  14          
+  15          u16 code PWMxCR[8] = {
+  16            0xff14,   /* PWM0CR */
+  17            0xff1c,   /* PWM1CR */
+  18            0xff24,   /* PWM2CR */
+  19            0xff2c,   /* PWM3CR */
+  20            0xff34,   /* PWM4CR */
+  21            0xff3c,   /* PWM5CR */
+  22            0xff44,   /* PWM6CR */
+  23            0xff4c,   /* PWM7CR */
+  24          };
+  25          
+  26          u16 code PWMxT1[8] = {
+  27            0xff10,   /* PWM0T1 */
+  28            0xff18,   /* PWM1T1 */
+  29            0xff20,   /* PWM2T1 */
+  30            0xff28,   /* PWM3T1 */
+  31            0xff30,   /* PWM4T1 */
+  32            0xff38,   /* PWM5T1 */
+  33            0xff40,   /* PWM6T1 */
+  34            0xff48,   /* PWM7T1 */
+  35          };
+  36          
+  37          u16 code PWMxT2[8] = {
+  38            0xff12,   /* PWM0T2 */
+  39            0xff1a,   /* PWM1T2 */
+  40            0xff22,   /* PWM2T2 */
+  41            0xff2a,   /* PWM3T2 */
+  42            0xff32,   /* PWM4T2 */
+  43            0xff3a,   /* PWM5T2 */
+  44            0xff42,   /* PWM6T2 */
+  45            0xff4a,   /* PWM7T2 */
+  46          };
+  47          
+  48          u16 code PWMxHLD[8] = {
+  49            0xff15,   /* PWM0HLD */
+  50            0xff1d,   /* PWM1HLD */
+  51            0xff25,   /* PWM2HLD */
+  52            0xff2d,   /* PWM3HLD */
+  53            0xff35,   /* PWM4HLD */
+  54            0xff3d,   /* PWM5HLD */
+C51 COMPILER V9.60.0.0   STC8A_PWM15BIT                                                    08/15/2022 20:21:00 PAGE 2   
+
+  55            0xff45,   /* PWM6HLD */
+  56            0xff4d,   /* PWM7HLD */
+  57          };
+  58          
+  59          //========================================================================
+  60          // 函数: u8 PWMChannelCtrl(u8 PWM_id, u8 pwm_eno, u8 pwm_ini, u8 pwm_eni, u8 pwm_ent2i, u8 pwm_ent1i)
+  61          // 描述: PWM通道控制寄存器设置. 
+  62          // 参数: PWM_id: PWM通道序号. 取值 0~7
+  63          //       pwm_eno:   pwm输出使能, 0设为GPIO, 1设为PWM输出.
+  64          //       pwm_ini:   pwm输出端的初始电平, 0为低电平, 1为高电平.
+  65          //       pwm_eni:   pwm通道中断使能控制, 0为关闭PWM中断, 1为使能PWM中断.
+  66          //       pwm_ent2i: pwm通道第二个触发点中断使能控制, 0为关闭PWM第二个触发点中断, 1为使能PWM第二个触发点中断.
+  67          //       pwm_ent1i: pwm通道第一个触发点中断使能控制, 0为关闭PWM第一个触发点中断, 1为使能PWM第一个触发点中断.
+  68          // 返回: 成功返回 SUCCESS, 错误返回 FAIL.
+  69          // 版本: V1.0, 2020-09-22
+  70          //========================================================================
+  71          u8  PWMChannelCtrl(u8 PWM_id, u8 pwm_eno, u8 pwm_ini, u8 pwm_eni, u8 pwm_ent2i, u8 pwm_ent1i)
+  72          {
+  73   1        u8  xdata *pPWMxCR;
+  74   1        
+  75   1        if(PWM_id > PWM15_7)  return FAIL;  //id错误
+  76   1        if(pwm_eno > 1) return FAIL;  //输出使能错误
+  77   1        if(pwm_ini > 1) return FAIL;  //输出端的初始电平错误
+  78   1        if(pwm_eni > 1) return FAIL;  //中断使能控制错误
+  79   1        if(pwm_ent2i > 1) return FAIL;  //第二个触发点中断使能控制错误
+  80   1        if(pwm_ent1i > 1) return FAIL;  //第一个触发点中断使能控制错误
+  81   1        
+  82   1        EAXSFR();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展SFR(XSFR) */
+  83   1        pPWMxCR = (u8 *)PWMxCR[PWM_id];
+  84   1        *pPWMxCR = (pwm_eno << 7) | (pwm_ini << 6) | (pwm_eni << 2)| (pwm_ent2i << 1)| pwm_ent1i;
+  85   1        EAXRAM();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展RAM(XRAM) */
+  86   1        return SUCCESS;
+  87   1      }
+  88          
+  89          //========================================================================
+  90          // 函数: u8 PWM15Duty(u8 PWM_id, u16 Period, u16 dutyL, u16 dutyH)
+  91          // 描述: PWM 占空比设置. 
+  92          // 参数: PWM_id:  PWM通道序号. 取值 0~7
+  93          //       dutyL:   pwm输出低电平位置, 取值 0~0x7fff.
+  94          //       dutyH:   pwm输出高电平位置, 取值 0~0x7fff.
+  95          // 返回: 成功返回 SUCCESS, 错误返回 FAIL.
+  96          // 版本: V1.0, 2020-09-22
+  97          //========================================================================
+  98          u8  PWM15Duty(u8 PWM_id, u16 dutyL, u16 dutyH)
+  99          {
+ 100   1        u16 xdata *pPWMxT1;
+ 101   1        u16 xdata *pPWMxT2;
+ 102   1        
+ 103   1        if(PWM_id > PWM15_7)  return FAIL;  //id错误
+ 104   1        if(dutyL > 0x7fff)  return FAIL;  //低电平时间设置错误
+ 105   1        if(dutyH > 0x7fff)  return FAIL;  //高电平时间设置错误
+ 106   1        
+ 107   1        EAXSFR();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展SFR(XSFR) */
+ 108   1        pPWMxT1 = (u16 *)PWMxT1[PWM_id];
+ 109   1        *pPWMxT1 = dutyL & 0x7fff;
+ 110   1      
+ 111   1        pPWMxT2 = (u16 *)PWMxT2[PWM_id];
+ 112   1        *pPWMxT2 = dutyH & 0x7fff;
+ 113   1        EAXRAM();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展RAM(XRAM) */
+ 114   1        return SUCCESS;
+ 115   1      }
+ 116          
+C51 COMPILER V9.60.0.0   STC8A_PWM15BIT                                                    08/15/2022 20:21:00 PAGE 3   
+
+ 117          //========================================================================
+ 118          // 函数: u8 PWMLevelSet(u8 PWM_id, u8 pwm_hldl, u8 pwm_hldh)
+ 119          // 描述: PWM通道控制寄存器设置. 
+ 120          // 参数: PWM_id: PWM通道序号. 取值 0~7
+ 121          //       pwm_hldl:   pwm强制输出低电平控制位, 0正常输出, 1强制输出低电平.
+ 122          //       pwm_hldh:   pwm强制输出高电平控制位, 0正常输出, 1强制输出高电平.
+ 123          // 返回: 成功返回 SUCCESS, 错误返回 FAIL.
+ 124          // 版本: V1.0, 2020-09-22
+ 125          //========================================================================
+ 126          u8  PWMLevelSet(u8 PWM_id, u8 pwm_hldl, u8 pwm_hldh)
+ 127          {
+ 128   1        u8  xdata *pPWMxHLD;
+ 129   1        
+ 130   1        if(PWM_id > PWM15_7)  return FAIL;  //id错误
+ 131   1        if(pwm_hldh > 1)  return FAIL;  //输出使能错误
+ 132   1        if(pwm_hldl > 1)  return FAIL;  //输出端的初始电平错误
+ 133   1        
+ 134   1        EAXSFR();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展SFR(XSFR) */
+ 135   1        pPWMxHLD = (u8 *)PWMxHLD[PWM_id];
+ 136   1        *pPWMxHLD = (pwm_hldh << 1) | pwm_hldl;
+ 137   1        EAXRAM();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展RAM(XRAM) */
+ 138   1        return SUCCESS;
+ 139   1      }
+ 140          
+ 141          //========================================================================
+ 142          // 函数: u8 PWM15_Init(PWM15_InitTypeDef *PWMx)
+ 143          // 描述: 15位增强型PWM初始化程序.
+ 144          // 参数: PWMx: 结构参数,请参考头文件里的定义.
+ 145          // 返回: 成功返回 SUCCESS, 错误返回 FAIL.
+ 146          // 版本: V1.0, 2020-09-22
+ 147          //========================================================================
+ 148          u8  PWM15_Init(PWM15_InitTypeDef *PWMx)
+ 149          {
+ 150   1        EAXSFR();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展SFR(XSFR) */
+ 151   1      
+ 152   1        PWM15_PWM_Set(PWMx->PWM_Enable);  //使能/关闭 PWM0（包括 PWM00~PWM07）
+ 153   1        PWM15_PS_Set(PWMx->PWM_Clock_PS); //系统时钟分频参数,  0~15
+ 154   1        PWM15_Clock_Sel(PWMx->PWM_Clock_Sel); //PWMn时钟源选择
+ 155   1        PWMC = PWMx->PWM_Period & 0x7fff;
+ 156   1        PWM15_CounterInt_Set(PWMx->PWM_CInt); //PWMn计数器归零中断使能设置
+ 157   1        PWM15_Counter_Set(PWMx->PWM_Counter); //PWMn计数器使能设置
+ 158   1        
+ 159   1        EAXRAM();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展RAM(XRAM) */
+ 160   1        return SUCCESS;
+ 161   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    447    ----
+   CONSTANT SIZE    =     64    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

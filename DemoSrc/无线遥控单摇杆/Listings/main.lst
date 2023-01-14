@@ -1,0 +1,210 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              06/12/2022 17:30:45 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: d:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <reg51.h>
+   2          #include <intrins.h>
+   3          #include "G01_S.h"
+   4          #include "delay.h"
+   5          #include "I2CBus.h"
+   6          #include "HandleControl.h"
+   7          #include "SteeringSG90.h"
+   8          
+   9          sbit P10 = P1 ^ 0;
+  10          sbit P11 = P1 ^ 1;
+  11          sbit P12 = P1 ^ 2;
+  12          sbit P17 = P1 ^ 7;
+  13          sbit P16 = P1 ^ 6;
+  14          sbit P15 = P1 ^ 5;
+  15          bit shanshuo = 0;
+  16          
+  17          bit g_TX = 0;
+  18          
+  19          uint8_t g_rece[8];
+  20          
+  21          uint8_t g_adSteering = 0;
+  22          uint8_t g_adGo = 0;
+  23          uint8_t lastAdSteering = 1;
+  24          uint8_t lastAdGo = 1;
+  25          
+  26          uint8_t g_steering;
+  27          
+  28          void updateValue();
+  29          uint8_t sendData();
+  30          
+  31          void main() {
+  32   1        /*P1 = 0xff;
+  33   1        P0 = 0xff;
+  34   1        while(1) {
+  35   1        PIN_MOTOR_A = 0;
+  36   1        PIN_MOTOR_B = 1;
+  37   1        PIN_PWM = 0;
+  38   1          P10 = PIN_MOTOR_A;
+  39   1          P11 = PIN_MOTOR_B;
+  40   1          P12 = PIN_PWM;
+  41   1          P17 = 0;
+  42   1        }*/
+  43   1        bit exist;
+  44   1        P1 = 0xFF;
+  45   1        PIN_MOTOR_A = 0;
+  46   1        PIN_MOTOR_B = 0;
+  47   1      
+  48   1        NRF24L01_Gpio_Init();
+  49   1      
+  50   1        //¼ì²ânRF24L01
+  51   1        exist = NRF24L01_check();
+  52   1      
+  53   1        if (exist) {
+  54   2          P1 = ~0x03;
+C51 COMPILER V9.60.0.0   MAIN                                                              06/12/2022 17:30:45 PAGE 2   
+
+  55   2          RF24L01_Init();
+  56   2          _nop_();_nop_();_nop_();_nop_();_nop_();
+  57   2          
+  58   2          if (g_TX) {
+  59   3            RF24L01_Set_Mode(MODE_TX); //·¢ËÍÄ£Ê½
+  60   3            _nop_();_nop_();_nop_();_nop_();_nop_();
+  61   3      
+  62   3            while (1) {
+  63   4              uint8_t res;
+  64   4              updateValue();
+  65   4              P1 = ~lastAdSteering;
+  66   4              res = sendData();
+  67   4              if (res == 0xff) {
+  68   5                P1 = 0x20;
+  69   5                break;
+  70   5              }
+  71   4            }
+  72   3          } else {
+  73   3            g_rece[0] = 0xff;
+  74   3            g_rece[1] = 0xff;
+  75   3            initSteeringPWMTimer24M12T();
+  76   3            RF24L01_Set_Mode(MODE_RX); //½ÓÊÕÄ£Ê½
+  77   3            _nop_();_nop_();_nop_();_nop_();_nop_();
+  78   3            while(1) {
+  79   4              uint8_t rx;
+  80   4              
+  81   4              rx = NRF24L01_RxPacket(g_rece); //½ÓÊÕ×Ö½Ú
+  82   4              // P1 = rx;
+  83   4              shanshuo = ~shanshuo;
+  84   4              P17 = shanshuo;
+  85   4              if(2 == rx) {
+  86   5                uint8_t tmp, value, cmd;
+  87   5                cmd = g_rece[0];
+  88   5                value = g_rece[1];
+  89   5                switch (cmd) {
+  90   6                  case CMD_STEERING:
+  91   6                    tmp = calculateSteeringDegree(value);
+  92   6                    if (g_steering != tmp) {
+  93   7                      g_steering = tmp;
+  94   7                      setSteeringDegree(g_steering);
+  95   7                    }
+  96   6                    break;
+  97   6                  case CMD_GO: {
+  98   7                    int motorSpeed;
+  99   7                    if (value == 0x02) {
+ 100   8                      break;
+ 101   8                    }
+ 102   7                    P1 = ~value;
+ 103   7                    motorSpeed = getMotorSpeed(value);
+ 104   7                    if (motorSpeed > 0) {
+ 105   8                      PIN_MOTOR_A = 1;
+ 106   8                      PIN_MOTOR_B = 0;
+ 107   8                      // P1 = 0x01;
+ 108   8                    } else if (motorSpeed < 0) {
+ 109   8                      PIN_MOTOR_A = 0;
+ 110   8                      PIN_MOTOR_B = 1;
+ 111   8                      // P1 = 0x02;
+ 112   8                    } else {
+ 113   8                      PIN_MOTOR_A = 0;
+ 114   8                      PIN_MOTOR_B = 0;
+ 115   8                      // P1 = 0xff;
+ 116   8                    }
+C51 COMPILER V9.60.0.0   MAIN                                                              06/12/2022 17:30:45 PAGE 3   
+
+ 117   7                    break;
+ 118   7                  }
+ 119   6                }
+ 120   5              }
+ 121   4            }
+ 122   3          }
+ 123   2        } else {
+ 124   2          P11 = 0;
+ 125   2        }
+ 126   1        
+ 127   1        while(1);
+ 128   1      }
+ 129          
+ 130          uint8_t sendData() {
+ 131   1        uint8_t res;
+ 132   1        uint8_t tx[2];
+ 133   1      
+ 134   1        tx[0] = CMD_STEERING;
+ 135   1        tx[1] = lastAdSteering;
+ 136   1        res = NRF24L01_TxPacket((uint8_t *) tx, 2);
+ 137   1        
+ 138   1        tx[0] = CMD_GO;
+ 139   1        tx[1] = lastAdGo;
+ 140   1        res = NRF24L01_TxPacket((uint8_t *) tx, 2);
+ 141   1        
+ 142   1        return res;
+ 143   1      }
+ 144          
+ 145          void updateValue() {
+ 146   1        I2CBus_Start();
+ 147   1        I2CBus_Write(0x90); // Ð´ÃüÁî
+ 148   1        I2CBus_Write(0x00); // Ñ¡ÔñAIN0
+ 149   1        I2CBus_Stop();
+ 150   1      
+ 151   1        I2CBus_Start(); // ¿ÉÒÔ²»StopÖ±½Óstart
+ 152   1        I2CBus_Write(0x91); // ¶ÁÃüÁî
+ 153   1        g_adGo = I2CBus_Read(1); // PCF8591TÊÇÏÈÒª½«Êý¾Ý·Åµ½ÆäÄÚ²¿buffer£¬Ã¿´Î´ÓÆäbufferÖÐ·¢ËÍÊý¾Ý£¬ËùÒÔÊý¾Ý»áÓÐ´
+             -íÎ»
+ 154   1        I2CBus_Stop();
+ 155   1      
+ 156   1        
+ 157   1        I2CBus_Start();
+ 158   1        I2CBus_Write(0x90); // Ð´ÃüÁî
+ 159   1        I2CBus_Write(0x01); // Ñ¡ÔñAIN1
+ 160   1        I2CBus_Stop();
+ 161   1      
+ 162   1        I2CBus_Start(); // ¿ÉÒÔ²»StopÖ±½Óstart
+ 163   1        I2CBus_Write(0x91);
+ 164   1        g_adSteering = I2CBus_Read(1); // PCF8591TÊÇÏÈÒª½«Êý¾Ý·Åµ½ÆäÄÚ²¿buffer£¬Ã¿´Î´ÓÆäbufferÖÐ·¢ËÍÊý¾Ý£¬ËùÒÔÊý¾
+             -Ý»áÓÐ´íÎ»
+ 165   1        I2CBus_Stop();
+ 166   1        
+ 167   1        if (g_adSteering != lastAdSteering) {
+ 168   2          lastAdSteering = g_adSteering;
+ 169   2        }
+ 170   1        
+ 171   1        if (g_adGo != lastAdGo) {
+ 172   2          lastAdGo = g_adGo;
+ 173   2        }
+ 174   1      }
+ 175          
+ 176          void tm1_isr() interrupt 3 {
+C51 COMPILER V9.60.0.0   MAIN                                                              06/12/2022 17:30:45 PAGE 4   
+
+ 177   1        SteeringPWMTimerInterruption();
+ 178   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    391    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     13       8
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      2       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

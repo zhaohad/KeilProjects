@@ -1,0 +1,76 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              06/12/2022 02:37:32 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: d:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <reg51.h>
+   2          
+   3          sbit P10 = P1 ^ 0;
+   4          sbit P11 = P1 ^ 1;
+   5          sbit P12 = P1 ^ 2;
+   6          sbit P13 = P1 ^ 3;
+   7          sbit P14 = P1 ^ 4;
+   8          sbit P15 = P1 ^ 5;
+   9          sbit P16 = P1 ^ 6;
+  10          sbit P17 = P1 ^ 7;
+  11          
+  12          sbit P00 = P0 ^ 0;
+  13          sbit P01 = P0 ^ 1;
+  14          sbit P02 = P0 ^ 2;
+  15          sbit P03 = P0 ^ 3;
+  16          sbit P04 = P0 ^ 4;
+  17          sbit P05 = P0 ^ 5;
+  18          sbit P06 = P0 ^ 6;
+  19          sbit P07 = P0 ^ 7;
+  20          
+  21          sbit P20 = P2 ^ 0;
+  22          sbit P21 = P2 ^ 1;
+  23          sbit P22 = P2 ^ 2;
+  24          sbit P23 = P2 ^ 3;
+  25          sbit P24 = P2 ^ 4;
+  26          sbit P25 = P2 ^ 5;
+  27          sbit P26 = P2 ^ 6;
+  28          sbit P27 = P2 ^ 7;
+  29          
+  30          void main() {
+  31   1        while (1) {
+  32   2          /*P10 = 0;
+  33   2          P11 = 1;
+  34   2          P12 = 0;
+  35   2          P13 = 1;
+  36   2          P14 = 0;
+  37   2          P15 = 1;
+  38   2          P16 = 0;
+  39   2          P17 = 1;*/
+  40   2          
+  41   2          /*P20 = 0;
+  42   2          P21 = 1;
+  43   2          P22 = 0;
+  44   2          P10 = P20;
+  45   2          P11 = P21;
+  46   2          P1 = P2;*/
+  47   2          P1 = 0x55;
+  48   2          P0 = 0xff;
+  49   2        }
+  50   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =      8    ----
+C51 COMPILER V9.60.0.0   MAIN                                                              06/12/2022 02:37:32 PAGE 2   
+
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

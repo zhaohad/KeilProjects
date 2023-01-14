@@ -1,0 +1,25 @@
+C51 COMPILER V9.60.0.0   STEPMOTOR4P8S                                                     05/10/2022 23:05:35 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE STEPMOTOR4P8S
+OBJECT MODULE PLACED IN .\Objects\StepMotor4P8S.obj
+COMPILER INVOKED BY: d:\Keil_v5\C51\BIN\C51.EXE StepMotor4P8S.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\List
+                    -ings\StepMotor4P8S.lst) TABS(2) OBJECT(.\Objects\StepMotor4P8S.obj)
+
+line level    source
+
+   1          #include "StepMotor4P8S.h"
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

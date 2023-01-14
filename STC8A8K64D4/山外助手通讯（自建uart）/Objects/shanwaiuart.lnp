@@ -1,0 +1,8 @@
+".\Objects\STARTUP.obj",
+".\Objects\main.obj",
+".\Objects\uart.obj",
+".\Objects\shanwai.obj",
+".\Objects\delay.obj" 
+TO ".\Objects\shanwaiuart" 
+PRINT(".\Listings\shanwaiuart.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

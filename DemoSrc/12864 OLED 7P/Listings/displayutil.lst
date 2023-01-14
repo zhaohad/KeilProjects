@@ -1,0 +1,26 @@
+C51 COMPILER V9.60.0.0   DISPLAYUTIL                                                       06/26/2022 16:40:00 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE DISPLAYUTIL
+OBJECT MODULE PLACED IN .\Objects\displayutil.obj
+COMPILER INVOKED BY: d:\Keil_v5\C51\BIN\C51.EXE src\displayutil.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Li
+                    -stings\displayutil.lst) TABS(2) OBJECT(.\Objects\displayutil.obj)
+
+line level    source
+
+   1          #include "displayutil.h"
+   2          #include "typedef.h"
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

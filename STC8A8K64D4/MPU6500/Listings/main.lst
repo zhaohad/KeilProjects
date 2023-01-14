@@ -1,0 +1,63 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              08/01/2022 13:58:01 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: d:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\src) DEBUG OBJECTEXTEND PRINT(.
+                    -\Listings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "stc/stc8a8k64d4.H"
+   2          #include "stc/stc8a_gpio.H"
+   3          #include "typedef.h"
+   4          #include "12864/oled12864.h"
+   5          #include "uart/uart.h"
+   6          #include "mpu6500/mpu6500.h"
+   7          #include "stdio.h"
+   8          
+   9          float xdata g_AX, g_AY = 0, g_AZ = 0;
+  10          float xdata g_GX = 0, g_GY = 0, g_GZ = 0;
+  11          
+  12          void GPIO_Config() {
+  13   1        GPIO_InitTypeDef conf;
+  14   1        conf.Mode = GPIO_OUT_OD;
+  15   1        conf.Pin = GPIO_Pin_All;
+  16   1        GPIO_Inilize(GPIO_P0, &conf);
+  17   1      }
+  18          
+  19          void main() {
+  20   1        GPIO_Config();
+  21   1        OLED_Init();
+  22   1        InitMPU6500();
+  23   1        while (1) {
+  24   2          char str[16];
+  25   2          g_AX = GetData(ACCEL_XOUT_H) / (float) 16384;
+  26   2          sprintf(str, "AX = %f", g_AX);
+  27   2          OLED_ShowString8(0, 0, str);
+  28   2          sprintf(str, "AY = %f", GetData(ACCEL_YOUT_H) / (float) 16384);
+  29   2          OLED_ShowString8(0, 1, str);
+  30   2          sprintf(str, "AZ = %f", GetData(ACCEL_ZOUT_H) / (float) 16384);
+  31   2          OLED_ShowString8(0, 2, str);
+  32   2          sprintf(str, "GX = %f", GetData(GYRO_XOUT_H) / (float) 131);
+  33   2          OLED_ShowString8(0, 3, str);
+  34   2          sprintf(str, "GY = %f", GetData(GYRO_YOUT_H) / (float) 131);
+  35   2          OLED_ShowString8(0, 4, str);
+  36   2          sprintf(str, "GZ = %f", GetData(GYRO_ZOUT_H) / (float) 131);
+  37   2          OLED_ShowString8(0, 5, str);
+  38   2        }
+  39   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    419    ----
+   CONSTANT SIZE    =     48    ----
+   XDATA SIZE       =     24    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      18
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

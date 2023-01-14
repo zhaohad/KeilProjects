@@ -1,0 +1,62 @@
+C51 COMPILER V9.60.0.0   SPI                                                               06/12/2022 17:30:45 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE SPI
+OBJECT MODULE PLACED IN .\Objects\spi.obj
+COMPILER INVOKED BY: d:\Keil_v5\C51\BIN\C51.EXE spi.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\spi.l
+                    -st) TABS(2) OBJECT(.\Objects\spi.obj)
+
+line level    source
+
+   1          #include <intrins.h>
+   2          #include "spi.h"
+   3          
+   4          /**
+   5            * @brief :SPI收发一个字节
+   6            * @param :
+   7            *     @TxByte: 发送的数据字节
+   8            * @note  :非堵塞式，一旦等待超时，函数会自动退出
+   9            * @retval:接收到的字节
+  10            */
+  11          uint8_t spi_read_write_byte(uint8_t TxByte) {
+  12   1        uint8_t i = 0, Data = 0;
+  13   1        
+  14   1        spi_set_clk_low();
+  15   1      
+  16   1        for(i = 0; i < 8; i++ ) { //一个字节8byte需要循环8次
+  17   2          /** 发送 */
+  18   2          if(0x80 == (TxByte & 0x80)) {
+  19   3            spi_set_mosi_hight(); //如果即将要发送的位为 1 则置高IO引脚
+  20   3          } else {
+  21   3            spi_set_mosi_low(); //如果即将要发送的位为 0 则置低IO引脚
+  22   3          }
+  23   2          TxByte <<= 1; //数据左移一位，先发送的是最高位
+  24   2          spi_set_clk_high(); //时钟线置高
+  25   2          _nop_();
+  26   2      
+  27   2          /** 接收 */
+  28   2          Data <<= 1; //接收数据左移一位，先接收到的是最高位
+  29   2          if(1 == spi_get_miso()) {
+  30   3            Data |= 0x01; //如果接收时IO引脚为高则认为接收到 1
+  31   3          }
+  32   2      
+  33   2          spi_set_clk_low(); //时钟线置低
+  34   2          _nop_();
+  35   2        }
+  36   1      
+  37   1        return Data;    //返回接收到的字节
+  38   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     54    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,102 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              05/07/2022 15:03:32 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: d:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <reg51.h>
+   2          #include <intrins.h>
+   3          #include "DigitalDisplay_8.h"
+   4          #include "I2CBus.h"
+   5          
+   6          sbit lastAck = P1 ^ 0;
+   7          sbit err = P1 ^ 1;
+   8          
+   9          unsigned char analog1 = 0;
+  10          unsigned char analog2 = 0;
+  11          unsigned char lastAnalog1 = 1;
+  12          unsigned char lastAnalog2 = 1;
+  13          
+  14          unsigned char nums[8];
+  15          
+  16          void Display_Analog();
+  17          
+  18          void main() {
+  19   1        err = 1;
+  20   1      
+  21   1        while(1) {
+  22   2          I2CBus_Start();
+  23   2          lastAck = I2CBus_Write(0x90);
+  24   2          err &= ~lastAck;
+  25   2          lastAck = I2CBus_Write(0x41); // 0x41 Ò»Ö±±£³ÖÊä³ö×´Ì¬£¬·ñÔòLED»áÉÁË¸
+  26   2          err &= ~lastAck;
+  27   2          // I2CBus_Stop();
+  28   2          I2CBus_Start(); // ¿ÉÒÔ²»StopÖ±½Óstart
+  29   2          lastAck = I2CBus_Write(0x91);
+  30   2          err &= ~lastAck;
+  31   2          analog2 = I2CBus_Read(1); // PCF8591TÊÇÏÈÒª½«Êý¾Ý·Åµ½ÆäÄÚ²¿buffer£¬Ã¿´Î´ÓÆäbufferÖÐ·¢ËÍÊý¾Ý£¬ËùÒÔÊý¾Ý»áÓ
+             -Ð´íÎ»
+  32   2          I2CBus_Stop();
+  33   2          
+  34   2          I2CBus_Start();
+  35   2          lastAck = I2CBus_Write(0x90);
+  36   2          err &= ~lastAck;
+  37   2          lastAck = I2CBus_Write(0x43); // 0x43 Ò»Ö±±£³ÖÊä³ö×´Ì¬£¬·ñÔòLED»áÉÁË¸
+  38   2          err &= ~lastAck;
+  39   2          // I2CBus_Stop();
+  40   2          I2CBus_Start(); // ¿ÉÒÔ²»StopÖ±½Óstart
+  41   2          lastAck = I2CBus_Write(0x91);
+  42   2          err &= ~lastAck;
+  43   2          analog1 = I2CBus_Read(1);  // PCF8591TÊÇÏÈÒª½«Êý¾Ý·Åµ½ÆäÄÚ²¿buffer£¬Ã¿´Î´ÓÆäbufferÖÐ·¢ËÍÊý¾Ý£¬ËùÒÔÊý¾Ý»á
+             -ÓÐ´íÎ»
+  44   2          I2CBus_Stop();
+  45   2          
+  46   2          if (lastAnalog1 != analog1) {
+  47   3            lastAnalog1 = analog1;
+  48   3            I2CBus_Start();
+  49   3            lastAck = I2CBus_Write(0x90);
+  50   3            err &= ~lastAck;
+  51   3            lastAck = I2CBus_Write(0x40);
+  52   3            err &= ~lastAck;
+C51 COMPILER V9.60.0.0   MAIN                                                              05/07/2022 15:03:32 PAGE 2   
+
+  53   3            lastAck = I2CBus_Write(analog1);
+  54   3            err &= ~lastAck;
+  55   3            I2CBus_Stop();
+  56   3      
+  57   3            nums[0] = analog1 & 0x0f;
+  58   3            nums[1] = analog1 >> 4;
+  59   3          }
+  60   2          if (lastAnalog2 != analog2) {
+  61   3            lastAnalog2 = analog2;
+  62   3      
+  63   3            nums[2] = analog2 & 0x0f;
+  64   3            nums[3] = analog2 >> 4;
+  65   3          }
+  66   2          DigitalDisplay_8_Display(nums, 4);
+  67   2        }
+  68   1      }
+  69          
+  70          void Display_Analog() {
+  71   1        nums[2] = analog2 & 0x0f;
+  72   1        nums[3] = analog2 >> 4;
+  73   1        DigitalDisplay_8_Display(nums, 8);
+  74   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    239    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     12    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

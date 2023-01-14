@@ -1,0 +1,41 @@
+C51 COMPILER V9.60.0.0   HANDLECONTROL                                                     05/11/2022 22:59:18 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE HANDLECONTROL
+OBJECT MODULE PLACED IN .\Objects\HandleControl.obj
+COMPILER INVOKED BY: d:\Keil_v5\C51\BIN\C51.EXE HandleControl.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\List
+                    -ings\HandleControl.lst) TABS(2) OBJECT(.\Objects\HandleControl.obj)
+
+line level    source
+
+   1          #include "HandleControl.h"
+   2          
+   3          #define MIDDLE_E_MIN 0x78
+   4          #define MIDDLE_E_MAX 0x8F
+   5          
+   6          unsigned char calculateSteeringDegree(unsigned char analog) {
+   7   1        unsigned char d;
+   8   1        if (analog < MIDDLE_E_MIN) {
+   9   2          d = 90 * analog / MIDDLE_E_MIN;
+  10   2        } else if (analog > MIDDLE_E_MAX) {
+  11   2          d = 90 * (analog - 0xFF) / (0xFF - MIDDLE_E_MAX) + 180;
+  12   2        } else {
+  13   2          d = 90;
+  14   2        }
+  15   1        
+  16   1        return d;
+  17   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     71    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

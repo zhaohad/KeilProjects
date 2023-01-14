@@ -1,0 +1,8 @@
+".\Objects\STARTUP.obj",
+".\Objects\main.obj",
+".\Objects\oled12864.obj",
+".\Objects\delay.obj",
+".\Objects\uart.obj" 
+TO ".\Objects\OLED12864" 
+PRINT(".\Listings\OLED12864.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

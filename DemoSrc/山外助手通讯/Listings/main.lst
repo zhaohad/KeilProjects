@@ -1,0 +1,56 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              07/25/2022 01:38:20 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: d:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <reg51.h>
+   2          #include "src/uart.h"
+   3          #include "src/shanwai.h"
+   4          #include "src/delay.h"
+   5          
+   6          bit hasR = 0;
+   7          
+   8          void UART_onReceived(u8 c);
+   9          
+  10          void main() {
+  11   1        int d1 = 0;
+  12   1        int d2 = 0;
+  13   1        UART_Init_110592MHz_9600bps(UART_onReceived);
+  14   1      
+  15   1        while(1) {
+  16   2          float sends[2];
+  17   2          sends[0] = d1;
+  18   2          sends[1] = d2;
+  19   2          SHANWAI_sendWaveValue(&sends, sizeof(sends[0]), 2);
+  20   2          if (d1++ > 100) {
+  21   3            d1 = 0;
+  22   3          }
+  23   2          if (d2-- < -100) {
+  24   3            d2 = 0;
+  25   3          }
+  26   2        }
+  27   1      }
+  28          
+  29          void UART_onReceived(u8 c) {
+  30   1        hasR = 1;
+  31   1      }
+*** WARNING C280 IN LINE 29 OF main.c: 'c': unreferenced local variable
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    122    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      13
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

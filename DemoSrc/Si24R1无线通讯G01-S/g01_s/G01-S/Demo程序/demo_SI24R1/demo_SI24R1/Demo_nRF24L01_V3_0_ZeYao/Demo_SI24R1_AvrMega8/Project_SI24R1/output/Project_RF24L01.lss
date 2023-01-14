@@ -1,0 +1,3152 @@
+
+Project_RF24L01.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         0000106a  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000038  00800060  0000106a  000010fe  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000086  00800098  00800098  00001136  2**0
+                  ALLOC
+  3 .debug_aranges 000000e0  00000000  00000000  00001136  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_pubnames 000004be  00000000  00000000  00001216  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   00000ccb  00000000  00000000  000016d4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 00000509  00000000  00000000  0000239f  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   00001215  00000000  00000000  000028a8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  00000310  00000000  00000000  00003ac0  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    0000074f  00000000  00000000  00003dd0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+       0:	12 c0       	rjmp	.+36     	; 0x26 <__ctors_end>
+       2:	2c c0       	rjmp	.+88     	; 0x5c <__bad_interrupt>
+       4:	2b c0       	rjmp	.+86     	; 0x5c <__bad_interrupt>
+       6:	2a c0       	rjmp	.+84     	; 0x5c <__bad_interrupt>
+       8:	29 c0       	rjmp	.+82     	; 0x5c <__bad_interrupt>
+       a:	28 c0       	rjmp	.+80     	; 0x5c <__bad_interrupt>
+       c:	27 c0       	rjmp	.+78     	; 0x5c <__bad_interrupt>
+       e:	26 c0       	rjmp	.+76     	; 0x5c <__bad_interrupt>
+      10:	25 c0       	rjmp	.+74     	; 0x5c <__bad_interrupt>
+      12:	24 c0       	rjmp	.+72     	; 0x5c <__bad_interrupt>
+      14:	23 c0       	rjmp	.+70     	; 0x5c <__bad_interrupt>
+      16:	22 c0       	rjmp	.+68     	; 0x5c <__bad_interrupt>
+      18:	21 c0       	rjmp	.+66     	; 0x5c <__bad_interrupt>
+      1a:	20 c0       	rjmp	.+64     	; 0x5c <__bad_interrupt>
+      1c:	1f c0       	rjmp	.+62     	; 0x5c <__bad_interrupt>
+      1e:	1e c0       	rjmp	.+60     	; 0x5c <__bad_interrupt>
+      20:	1d c0       	rjmp	.+58     	; 0x5c <__bad_interrupt>
+      22:	1c c0       	rjmp	.+56     	; 0x5c <__bad_interrupt>
+      24:	1b c0       	rjmp	.+54     	; 0x5c <__bad_interrupt>
+
+00000026 <__ctors_end>:
+      26:	11 24       	eor	r1, r1
+      28:	1f be       	out	0x3f, r1	; 63
+      2a:	cf e5       	ldi	r28, 0x5F	; 95
+      2c:	d4 e0       	ldi	r29, 0x04	; 4
+      2e:	de bf       	out	0x3e, r29	; 62
+      30:	cd bf       	out	0x3d, r28	; 61
+
+00000032 <__do_copy_data>:
+      32:	10 e0       	ldi	r17, 0x00	; 0
+      34:	a0 e6       	ldi	r26, 0x60	; 96
+      36:	b0 e0       	ldi	r27, 0x00	; 0
+      38:	ea e6       	ldi	r30, 0x6A	; 106
+      3a:	f0 e1       	ldi	r31, 0x10	; 16
+      3c:	02 c0       	rjmp	.+4      	; 0x42 <.do_copy_data_start>
+
+0000003e <.do_copy_data_loop>:
+      3e:	05 90       	lpm	r0, Z+
+      40:	0d 92       	st	X+, r0
+
+00000042 <.do_copy_data_start>:
+      42:	a8 39       	cpi	r26, 0x98	; 152
+      44:	b1 07       	cpc	r27, r17
+      46:	d9 f7       	brne	.-10     	; 0x3e <.do_copy_data_loop>
+
+00000048 <__do_clear_bss>:
+      48:	11 e0       	ldi	r17, 0x01	; 1
+      4a:	a8 e9       	ldi	r26, 0x98	; 152
+      4c:	b0 e0       	ldi	r27, 0x00	; 0
+      4e:	01 c0       	rjmp	.+2      	; 0x52 <.do_clear_bss_start>
+
+00000050 <.do_clear_bss_loop>:
+      50:	1d 92       	st	X+, r1
+
+00000052 <.do_clear_bss_start>:
+      52:	ae 31       	cpi	r26, 0x1E	; 30
+      54:	b1 07       	cpc	r27, r17
+      56:	e1 f7       	brne	.-8      	; 0x50 <.do_clear_bss_loop>
+      58:	02 d0       	rcall	.+4      	; 0x5e <main>
+      5a:	05 c8       	rjmp	.-4086   	; 0xfffff066 <__eeprom_end+0xff7ef066>
+
+0000005c <__bad_interrupt>:
+      5c:	d1 cf       	rjmp	.-94     	; 0x0 <__vectors>
+
+0000005e <main>:
+  * @param :无
+  * @note  :无
+  * @retval:无
+  */ 
+int main( void )
+{	
+      5e:	df 93       	push	r29
+      60:	cf 93       	push	r28
+      62:	0f 92       	push	r0
+      64:	cd b7       	in	r28, 0x3d	; 61
+      66:	de b7       	in	r29, 0x3e	; 62
+ 	uint8_t i = 0;
+      68:	19 82       	std	Y+1, r1	; 0x01
+ 
+ 	//串口初始化
+ 	drv_uart_init( );	
+      6a:	08 d2       	rcall	.+1040   	; 0x47c <drv_uart_init>
+
+ 	//LED初始化
+ 	drv_led_init( );
+      6c:	27 d0       	rcall	.+78     	; 0xbc <drv_led_init>
+  	
+ 	//SPI初始化
+ 	drv_spi_init( );
+      6e:	4a d1       	rcall	.+660    	; 0x304 <drv_spi_init>
+ 	
+ 	//RF24L01引脚初始化
+ 	NRF24L01_Gpio_Init( );
+      70:	63 d7       	rcall	.+3782   	; 0xf38 <NRF24L01_Gpio_Init>
+ 	
+ 	//检测nRF24L01
+ 	NRF24L01_check( );	
+      72:	ed d5       	rcall	.+3034   	; 0xc4e <NRF24L01_check>
+	RF24L01_Init( );			
+      74:	92 d7       	rcall	.+3876   	; 0xf9a <RF24L01_Init>
+
+ 	for( i = 0; i < 6; i++ )
+      76:	19 82       	std	Y+1, r1	; 0x01
+      78:	0a c0       	rjmp	.+20     	; 0x8e <main+0x30>
+ 	{
+ 		led_red_flashing( );
+      7a:	80 e0       	ldi	r24, 0x00	; 0
+      7c:	7a d0       	rcall	.+244    	; 0x172 <drv_led_flashing>
+ 		led_green_flashing( );
+      7e:	81 e0       	ldi	r24, 0x01	; 1
+      80:	78 d0       	rcall	.+240    	; 0x172 <drv_led_flashing>
+ 		drv_delay_ms( 500 );
+      82:	84 ef       	ldi	r24, 0xF4	; 244
+      84:	91 e0       	ldi	r25, 0x01	; 1
+      86:	1f d1       	rcall	.+574    	; 0x2c6 <drv_delay_ms>
+ 	
+ 	//检测nRF24L01
+ 	NRF24L01_check( );	
+	RF24L01_Init( );			
+
+ 	for( i = 0; i < 6; i++ )
+      88:	89 81       	ldd	r24, Y+1	; 0x01
+      8a:	8f 5f       	subi	r24, 0xFF	; 255
+      8c:	89 83       	std	Y+1, r24	; 0x01
+      8e:	89 81       	ldd	r24, Y+1	; 0x01
+      90:	86 30       	cpi	r24, 0x06	; 6
+      92:	98 f3       	brcs	.-26     	; 0x7a <main+0x1c>
+ 		led_red_flashing( );
+ 		led_green_flashing( );
+ 		drv_delay_ms( 500 );
+ 	}
+
+	led_red_off( );
+      94:	80 e0       	ldi	r24, 0x00	; 0
+      96:	51 d0       	rcall	.+162    	; 0x13a <drv_led_off>
+	led_green_off( );
+      98:	81 e0       	ldi	r24, 0x01	; 1
+      9a:	4f d0       	rcall	.+158    	; 0x13a <drv_led_off>
+ //*****************************************************************************************//
+ //************************************* 接收 **********************************************//
+ //*****************************************************************************************//
+ //=========================================================================================//	
+ 	
+ 	RF24L01_Set_Mode( MODE_RX );		//接收模式
+      9c:	81 e0       	ldi	r24, 0x01	; 1
+      9e:	49 d6       	rcall	.+3218   	; 0xd32 <RF24L01_Set_Mode>
+ 	while( 1 )
+ 	{
+ 		i = NRF24L01_RxPacket( g_RF24L01RxBuffer );		//接收字节
+      a0:	8e ef       	ldi	r24, 0xFE	; 254
+      a2:	90 e0       	ldi	r25, 0x00	; 0
+      a4:	e5 d6       	rcall	.+3530   	; 0xe70 <NRF24L01_RxPacket>
+      a6:	89 83       	std	Y+1, r24	; 0x01
+ 		if( 0 != i )
+      a8:	89 81       	ldd	r24, Y+1	; 0x01
+      aa:	88 23       	and	r24, r24
+      ac:	c9 f3       	breq	.-14     	; 0xa0 <main+0x42>
+ 		{
+			led_green_flashing( );
+      ae:	81 e0       	ldi	r24, 0x01	; 1
+      b0:	60 d0       	rcall	.+192    	; 0x172 <drv_led_flashing>
+ 			drv_uart_tx_bytes( g_RF24L01RxBuffer,i);	//输出接收到的字节
+      b2:	8e ef       	ldi	r24, 0xFE	; 254
+      b4:	90 e0       	ldi	r25, 0x00	; 0
+      b6:	69 81       	ldd	r22, Y+1	; 0x01
+      b8:	27 d2       	rcall	.+1102   	; 0x508 <drv_uart_tx_bytes>
+      ba:	f2 cf       	rjmp	.-28     	; 0xa0 <main+0x42>
+
+000000bc <drv_led_init>:
+  * @param :无
+  * @note  :无
+  * @retval:无
+  */ 
+void drv_led_init( void )
+{
+      bc:	df 93       	push	r29
+      be:	cf 93       	push	r28
+      c0:	cd b7       	in	r28, 0x3d	; 61
+      c2:	de b7       	in	r29, 0x3e	; 62
+	//引脚配置为输出，初始状态置高，LED灭
+	LED_RED_GPIO_ODR |= (uint8_t)GPIO_MODE_OUT << LED_RED_GPIO_BIT;		
+      c4:	a4 e3       	ldi	r26, 0x34	; 52
+      c6:	b0 e0       	ldi	r27, 0x00	; 0
+      c8:	e4 e3       	ldi	r30, 0x34	; 52
+      ca:	f0 e0       	ldi	r31, 0x00	; 0
+      cc:	80 81       	ld	r24, Z
+      ce:	81 60       	ori	r24, 0x01	; 1
+      d0:	8c 93       	st	X, r24
+	LED_RED_GPIO_PORT |= 1 << LED_RED_GPIO_BIT;	
+      d2:	a5 e3       	ldi	r26, 0x35	; 53
+      d4:	b0 e0       	ldi	r27, 0x00	; 0
+      d6:	e5 e3       	ldi	r30, 0x35	; 53
+      d8:	f0 e0       	ldi	r31, 0x00	; 0
+      da:	80 81       	ld	r24, Z
+      dc:	81 60       	ori	r24, 0x01	; 1
+      de:	8c 93       	st	X, r24
+	
+	LED_GREEN_GPIO_ODR |= (uint8_t)GPIO_MODE_OUT << LED_GREEN_GPIO_BIT;		
+      e0:	a4 e3       	ldi	r26, 0x34	; 52
+      e2:	b0 e0       	ldi	r27, 0x00	; 0
+      e4:	e4 e3       	ldi	r30, 0x34	; 52
+      e6:	f0 e0       	ldi	r31, 0x00	; 0
+      e8:	80 81       	ld	r24, Z
+      ea:	82 60       	ori	r24, 0x02	; 2
+      ec:	8c 93       	st	X, r24
+	LED_GREEN_GPIO_PORT |= 1 << LED_GREEN_GPIO_BIT;	
+      ee:	a5 e3       	ldi	r26, 0x35	; 53
+      f0:	b0 e0       	ldi	r27, 0x00	; 0
+      f2:	e5 e3       	ldi	r30, 0x35	; 53
+      f4:	f0 e0       	ldi	r31, 0x00	; 0
+      f6:	80 81       	ld	r24, Z
+      f8:	82 60       	ori	r24, 0x02	; 2
+      fa:	8c 93       	st	X, r24
+	
+}
+      fc:	cf 91       	pop	r28
+      fe:	df 91       	pop	r29
+     100:	08 95       	ret
+
+00000102 <drv_led_on>:
+  *			@LedPort:LED选择，红色或绿色
+  * @note  :无
+  * @retval:无
+  */
+void drv_led_on( LedPortType LedPort )
+{
+     102:	df 93       	push	r29
+     104:	cf 93       	push	r28
+     106:	0f 92       	push	r0
+     108:	cd b7       	in	r28, 0x3d	; 61
+     10a:	de b7       	in	r29, 0x3e	; 62
+     10c:	89 83       	std	Y+1, r24	; 0x01
+	if( LED_RED == LedPort )	//LED_RED
+     10e:	89 81       	ldd	r24, Y+1	; 0x01
+     110:	88 23       	and	r24, r24
+     112:	41 f4       	brne	.+16     	; 0x124 <drv_led_on+0x22>
+	{
+		LED_RED_GPIO_PORT &= (uint8_t)(~( 0x01 << LED_RED_GPIO_BIT ));	//红色LED引脚置低，红色LED亮
+     114:	a5 e3       	ldi	r26, 0x35	; 53
+     116:	b0 e0       	ldi	r27, 0x00	; 0
+     118:	e5 e3       	ldi	r30, 0x35	; 53
+     11a:	f0 e0       	ldi	r31, 0x00	; 0
+     11c:	80 81       	ld	r24, Z
+     11e:	8e 7f       	andi	r24, 0xFE	; 254
+     120:	8c 93       	st	X, r24
+     122:	07 c0       	rjmp	.+14     	; 0x132 <drv_led_on+0x30>
+	}
+	else						//LED_BLUE
+	{
+		LED_GREEN_GPIO_PORT &= (uint8_t)(~( 0x01 << LED_GREEN_GPIO_BIT ));//绿色LED引脚置低，蓝色LED亮
+     124:	a5 e3       	ldi	r26, 0x35	; 53
+     126:	b0 e0       	ldi	r27, 0x00	; 0
+     128:	e5 e3       	ldi	r30, 0x35	; 53
+     12a:	f0 e0       	ldi	r31, 0x00	; 0
+     12c:	80 81       	ld	r24, Z
+     12e:	8d 7f       	andi	r24, 0xFD	; 253
+     130:	8c 93       	st	X, r24
+	}
+	
+}
+     132:	0f 90       	pop	r0
+     134:	cf 91       	pop	r28
+     136:	df 91       	pop	r29
+     138:	08 95       	ret
+
+0000013a <drv_led_off>:
+  *			@LedPort:LED选择，红色或绿色
+  * @note  :无
+  * @retval:无
+  */
+void drv_led_off( LedPortType LedPort )
+{
+     13a:	df 93       	push	r29
+     13c:	cf 93       	push	r28
+     13e:	0f 92       	push	r0
+     140:	cd b7       	in	r28, 0x3d	; 61
+     142:	de b7       	in	r29, 0x3e	; 62
+     144:	89 83       	std	Y+1, r24	; 0x01
+	if( LED_RED == LedPort )	//LED_RED
+     146:	89 81       	ldd	r24, Y+1	; 0x01
+     148:	88 23       	and	r24, r24
+     14a:	41 f4       	brne	.+16     	; 0x15c <drv_led_off+0x22>
+	{
+		LED_RED_GPIO_PORT |= 0x01 << LED_RED_GPIO_BIT;		//红色LED引脚置高，红色LED灭
+     14c:	a5 e3       	ldi	r26, 0x35	; 53
+     14e:	b0 e0       	ldi	r27, 0x00	; 0
+     150:	e5 e3       	ldi	r30, 0x35	; 53
+     152:	f0 e0       	ldi	r31, 0x00	; 0
+     154:	80 81       	ld	r24, Z
+     156:	81 60       	ori	r24, 0x01	; 1
+     158:	8c 93       	st	X, r24
+     15a:	07 c0       	rjmp	.+14     	; 0x16a <drv_led_off+0x30>
+	}
+	else						//LED_BLUE
+	{
+		LED_GREEN_GPIO_PORT |= 0x01 << LED_GREEN_GPIO_BIT;	//绿色LED引脚置高，蓝色LED灭
+     15c:	a5 e3       	ldi	r26, 0x35	; 53
+     15e:	b0 e0       	ldi	r27, 0x00	; 0
+     160:	e5 e3       	ldi	r30, 0x35	; 53
+     162:	f0 e0       	ldi	r31, 0x00	; 0
+     164:	80 81       	ld	r24, Z
+     166:	82 60       	ori	r24, 0x02	; 2
+     168:	8c 93       	st	X, r24
+	}
+	
+}
+     16a:	0f 90       	pop	r0
+     16c:	cf 91       	pop	r28
+     16e:	df 91       	pop	r29
+     170:	08 95       	ret
+
+00000172 <drv_led_flashing>:
+  *			@LedPort:LED选择，红色或绿色
+  * @note  :无
+  * @retval:无
+  */
+void drv_led_flashing( LedPortType LedPort )
+{
+     172:	df 93       	push	r29
+     174:	cf 93       	push	r28
+     176:	0f 92       	push	r0
+     178:	cd b7       	in	r28, 0x3d	; 61
+     17a:	de b7       	in	r29, 0x3e	; 62
+     17c:	89 83       	std	Y+1, r24	; 0x01
+	//引脚翻转，LED闪烁
+	if( LED_RED == LedPort )
+     17e:	89 81       	ldd	r24, Y+1	; 0x01
+     180:	88 23       	and	r24, r24
+     182:	49 f4       	brne	.+18     	; 0x196 <drv_led_flashing+0x24>
+	{
+		LED_RED_GPIO_PORT ^= (uint8_t)( 0x01 << LED_RED_GPIO_BIT );	
+     184:	a5 e3       	ldi	r26, 0x35	; 53
+     186:	b0 e0       	ldi	r27, 0x00	; 0
+     188:	e5 e3       	ldi	r30, 0x35	; 53
+     18a:	f0 e0       	ldi	r31, 0x00	; 0
+     18c:	90 81       	ld	r25, Z
+     18e:	81 e0       	ldi	r24, 0x01	; 1
+     190:	89 27       	eor	r24, r25
+     192:	8c 93       	st	X, r24
+     194:	08 c0       	rjmp	.+16     	; 0x1a6 <drv_led_flashing+0x34>
+	}
+	else
+	{
+		LED_GREEN_GPIO_PORT ^= (uint8_t)( 0x01 << LED_GREEN_GPIO_BIT );
+     196:	a5 e3       	ldi	r26, 0x35	; 53
+     198:	b0 e0       	ldi	r27, 0x00	; 0
+     19a:	e5 e3       	ldi	r30, 0x35	; 53
+     19c:	f0 e0       	ldi	r31, 0x00	; 0
+     19e:	90 81       	ld	r25, Z
+     1a0:	82 e0       	ldi	r24, 0x02	; 2
+     1a2:	89 27       	eor	r24, r25
+     1a4:	8c 93       	st	X, r24
+	}
+}
+     1a6:	0f 90       	pop	r0
+     1a8:	cf 91       	pop	r28
+     1aa:	df 91       	pop	r29
+     1ac:	08 95       	ret
+
+000001ae <drv_button_init>:
+  * @param :无
+  * @note  :无
+  * @retval:无
+  */ 
+void drv_button_init( void )
+{
+     1ae:	df 93       	push	r29
+     1b0:	cf 93       	push	r28
+     1b2:	cd b7       	in	r28, 0x3d	; 61
+     1b4:	de b7       	in	r29, 0x3e	; 62
+	//配置按键为输入 上拉
+	BUTTON_GPIO_ODR |= (uint8_t)( ~( 0x01 << BUTTOND_GPIO_BIT ));		
+     1b6:	a1 e3       	ldi	r26, 0x31	; 49
+     1b8:	b0 e0       	ldi	r27, 0x00	; 0
+     1ba:	e1 e3       	ldi	r30, 0x31	; 49
+     1bc:	f0 e0       	ldi	r31, 0x00	; 0
+     1be:	80 81       	ld	r24, Z
+     1c0:	8b 6f       	ori	r24, 0xFB	; 251
+     1c2:	8c 93       	st	X, r24
+	BUTTON_GPIO_PORT |= 1 << BUTTOND_GPIO_BIT;	
+     1c4:	a2 e3       	ldi	r26, 0x32	; 50
+     1c6:	b0 e0       	ldi	r27, 0x00	; 0
+     1c8:	e2 e3       	ldi	r30, 0x32	; 50
+     1ca:	f0 e0       	ldi	r31, 0x00	; 0
+     1cc:	80 81       	ld	r24, Z
+     1ce:	84 60       	ori	r24, 0x04	; 4
+     1d0:	8c 93       	st	X, r24
+}
+     1d2:	cf 91       	pop	r28
+     1d4:	df 91       	pop	r29
+     1d6:	08 95       	ret
+
+000001d8 <drv_button_check>:
+  * @retval:
+  *			0:按键没有按下
+  *			1:检测到按键动作
+  */
+uint8_t drv_button_check( void )
+{
+     1d8:	df 93       	push	r29
+     1da:	cf 93       	push	r28
+     1dc:	0f 92       	push	r0
+     1de:	cd b7       	in	r28, 0x3d	; 61
+     1e0:	de b7       	in	r29, 0x3e	; 62
+	if( 0x00 == (( BUTTON_GPIO_PIN >> BUTTOND_GPIO_BIT ) & 0x01 ))		//检测按键输入状态
+     1e2:	e0 e3       	ldi	r30, 0x30	; 48
+     1e4:	f0 e0       	ldi	r31, 0x00	; 0
+     1e6:	80 81       	ld	r24, Z
+     1e8:	86 95       	lsr	r24
+     1ea:	86 95       	lsr	r24
+     1ec:	88 2f       	mov	r24, r24
+     1ee:	90 e0       	ldi	r25, 0x00	; 0
+     1f0:	81 70       	andi	r24, 0x01	; 1
+     1f2:	90 70       	andi	r25, 0x00	; 0
+     1f4:	00 97       	sbiw	r24, 0x00	; 0
+     1f6:	89 f4       	brne	.+34     	; 0x21a <drv_button_check+0x42>
+	{
+		drv_delay_ms( 40 );			//消抖
+     1f8:	88 e2       	ldi	r24, 0x28	; 40
+     1fa:	90 e0       	ldi	r25, 0x00	; 0
+     1fc:	64 d0       	rcall	.+200    	; 0x2c6 <drv_delay_ms>
+		if( 0x00 == (( BUTTON_GPIO_PIN >> BUTTOND_GPIO_BIT ) & 0x01 ))
+     1fe:	e0 e3       	ldi	r30, 0x30	; 48
+     200:	f0 e0       	ldi	r31, 0x00	; 0
+     202:	80 81       	ld	r24, Z
+     204:	86 95       	lsr	r24
+     206:	86 95       	lsr	r24
+     208:	88 2f       	mov	r24, r24
+     20a:	90 e0       	ldi	r25, 0x00	; 0
+     20c:	81 70       	andi	r24, 0x01	; 1
+     20e:	90 70       	andi	r25, 0x00	; 0
+     210:	00 97       	sbiw	r24, 0x00	; 0
+     212:	19 f4       	brne	.+6      	; 0x21a <drv_button_check+0x42>
+		{
+			return 1;				//按键按下，返回按键状态
+     214:	81 e0       	ldi	r24, 0x01	; 1
+     216:	89 83       	std	Y+1, r24	; 0x01
+     218:	01 c0       	rjmp	.+2      	; 0x21c <drv_button_check+0x44>
+		}
+	}
+	
+	return 0;
+     21a:	19 82       	std	Y+1, r1	; 0x01
+     21c:	89 81       	ldd	r24, Y+1	; 0x01
+}
+     21e:	0f 90       	pop	r0
+     220:	cf 91       	pop	r28
+     222:	df 91       	pop	r29
+     224:	08 95       	ret
+
+00000226 <drv_delay_1ms>:
+  * @param :
+  * @note  :12MHz 下1MS延时
+  * @retval:无
+  */
+static void drv_delay_1ms( )
+{	
+     226:	df 93       	push	r29
+     228:	cf 93       	push	r28
+     22a:	cd b7       	in	r28, 0x3d	; 61
+     22c:	de b7       	in	r29, 0x3e	; 62
+     22e:	28 97       	sbiw	r28, 0x08	; 8
+     230:	0f b6       	in	r0, 0x3f	; 63
+     232:	f8 94       	cli
+     234:	de bf       	out	0x3e, r29	; 62
+     236:	0f be       	out	0x3f, r0	; 63
+     238:	cd bf       	out	0x3d, r28	; 61
+ 	uint16_t Delay_Ms = 60;
+     23a:	8c e3       	ldi	r24, 0x3C	; 60
+     23c:	90 e0       	ldi	r25, 0x00	; 0
+     23e:	9e 83       	std	Y+6, r25	; 0x06
+     240:	8d 83       	std	Y+5, r24	; 0x05
+ 	uint32_t Delay_j = 1;
+     242:	81 e0       	ldi	r24, 0x01	; 1
+     244:	90 e0       	ldi	r25, 0x00	; 0
+     246:	a0 e0       	ldi	r26, 0x00	; 0
+     248:	b0 e0       	ldi	r27, 0x00	; 0
+     24a:	89 83       	std	Y+1, r24	; 0x01
+     24c:	9a 83       	std	Y+2, r25	; 0x02
+     24e:	ab 83       	std	Y+3, r26	; 0x03
+     250:	bc 83       	std	Y+4, r27	; 0x04
+     252:	21 c0       	rjmp	.+66     	; 0x296 <drv_delay_1ms+0x70>
+
+	while( Delay_Ms-- )
+	{
+	    Delay_j = 1;
+     254:	81 e0       	ldi	r24, 0x01	; 1
+     256:	90 e0       	ldi	r25, 0x00	; 0
+     258:	a0 e0       	ldi	r26, 0x00	; 0
+     25a:	b0 e0       	ldi	r27, 0x00	; 0
+     25c:	89 83       	std	Y+1, r24	; 0x01
+     25e:	9a 83       	std	Y+2, r25	; 0x02
+     260:	ab 83       	std	Y+3, r26	; 0x03
+     262:	bc 83       	std	Y+4, r27	; 0x04
+		while( Delay_j-- );
+     264:	18 86       	std	Y+8, r1	; 0x08
+     266:	89 81       	ldd	r24, Y+1	; 0x01
+     268:	9a 81       	ldd	r25, Y+2	; 0x02
+     26a:	ab 81       	ldd	r26, Y+3	; 0x03
+     26c:	bc 81       	ldd	r27, Y+4	; 0x04
+     26e:	00 97       	sbiw	r24, 0x00	; 0
+     270:	a1 05       	cpc	r26, r1
+     272:	b1 05       	cpc	r27, r1
+     274:	11 f0       	breq	.+4      	; 0x27a <drv_delay_1ms+0x54>
+     276:	81 e0       	ldi	r24, 0x01	; 1
+     278:	88 87       	std	Y+8, r24	; 0x08
+     27a:	89 81       	ldd	r24, Y+1	; 0x01
+     27c:	9a 81       	ldd	r25, Y+2	; 0x02
+     27e:	ab 81       	ldd	r26, Y+3	; 0x03
+     280:	bc 81       	ldd	r27, Y+4	; 0x04
+     282:	01 97       	sbiw	r24, 0x01	; 1
+     284:	a1 09       	sbc	r26, r1
+     286:	b1 09       	sbc	r27, r1
+     288:	89 83       	std	Y+1, r24	; 0x01
+     28a:	9a 83       	std	Y+2, r25	; 0x02
+     28c:	ab 83       	std	Y+3, r26	; 0x03
+     28e:	bc 83       	std	Y+4, r27	; 0x04
+     290:	88 85       	ldd	r24, Y+8	; 0x08
+     292:	88 23       	and	r24, r24
+     294:	39 f7       	brne	.-50     	; 0x264 <drv_delay_1ms+0x3e>
+static void drv_delay_1ms( )
+{	
+ 	uint16_t Delay_Ms = 60;
+ 	uint32_t Delay_j = 1;
+
+	while( Delay_Ms-- )
+     296:	1f 82       	std	Y+7, r1	; 0x07
+     298:	8d 81       	ldd	r24, Y+5	; 0x05
+     29a:	9e 81       	ldd	r25, Y+6	; 0x06
+     29c:	00 97       	sbiw	r24, 0x00	; 0
+     29e:	11 f0       	breq	.+4      	; 0x2a4 <drv_delay_1ms+0x7e>
+     2a0:	81 e0       	ldi	r24, 0x01	; 1
+     2a2:	8f 83       	std	Y+7, r24	; 0x07
+     2a4:	8d 81       	ldd	r24, Y+5	; 0x05
+     2a6:	9e 81       	ldd	r25, Y+6	; 0x06
+     2a8:	01 97       	sbiw	r24, 0x01	; 1
+     2aa:	9e 83       	std	Y+6, r25	; 0x06
+     2ac:	8d 83       	std	Y+5, r24	; 0x05
+     2ae:	8f 81       	ldd	r24, Y+7	; 0x07
+     2b0:	88 23       	and	r24, r24
+     2b2:	81 f6       	brne	.-96     	; 0x254 <drv_delay_1ms+0x2e>
+	{
+	    Delay_j = 1;
+		while( Delay_j-- );
+	}
+}
+     2b4:	28 96       	adiw	r28, 0x08	; 8
+     2b6:	0f b6       	in	r0, 0x3f	; 63
+     2b8:	f8 94       	cli
+     2ba:	de bf       	out	0x3e, r29	; 62
+     2bc:	0f be       	out	0x3f, r0	; 63
+     2be:	cd bf       	out	0x3d, r28	; 61
+     2c0:	cf 91       	pop	r28
+     2c2:	df 91       	pop	r29
+     2c4:	08 95       	ret
+
+000002c6 <drv_delay_ms>:
+  *			@Ms:延时的MS数
+  * @note  :无
+  * @retval:无
+  */
+void drv_delay_ms( uint16_t Ms )
+{
+     2c6:	df 93       	push	r29
+     2c8:	cf 93       	push	r28
+     2ca:	00 d0       	rcall	.+0      	; 0x2cc <drv_delay_ms+0x6>
+     2cc:	0f 92       	push	r0
+     2ce:	cd b7       	in	r28, 0x3d	; 61
+     2d0:	de b7       	in	r29, 0x3e	; 62
+     2d2:	9a 83       	std	Y+2, r25	; 0x02
+     2d4:	89 83       	std	Y+1, r24	; 0x01
+     2d6:	01 c0       	rjmp	.+2      	; 0x2da <drv_delay_ms+0x14>
+	while( Ms-- )
+	{
+		drv_delay_1ms( );
+     2d8:	a6 df       	rcall	.-180    	; 0x226 <drv_delay_1ms>
+  * @note  :无
+  * @retval:无
+  */
+void drv_delay_ms( uint16_t Ms )
+{
+	while( Ms-- )
+     2da:	1b 82       	std	Y+3, r1	; 0x03
+     2dc:	89 81       	ldd	r24, Y+1	; 0x01
+     2de:	9a 81       	ldd	r25, Y+2	; 0x02
+     2e0:	00 97       	sbiw	r24, 0x00	; 0
+     2e2:	11 f0       	breq	.+4      	; 0x2e8 <drv_delay_ms+0x22>
+     2e4:	81 e0       	ldi	r24, 0x01	; 1
+     2e6:	8b 83       	std	Y+3, r24	; 0x03
+     2e8:	89 81       	ldd	r24, Y+1	; 0x01
+     2ea:	9a 81       	ldd	r25, Y+2	; 0x02
+     2ec:	01 97       	sbiw	r24, 0x01	; 1
+     2ee:	9a 83       	std	Y+2, r25	; 0x02
+     2f0:	89 83       	std	Y+1, r24	; 0x01
+     2f2:	8b 81       	ldd	r24, Y+3	; 0x03
+     2f4:	88 23       	and	r24, r24
+     2f6:	81 f7       	brne	.-32     	; 0x2d8 <drv_delay_ms+0x12>
+	{
+		drv_delay_1ms( );
+	}
+}
+     2f8:	0f 90       	pop	r0
+     2fa:	0f 90       	pop	r0
+     2fc:	0f 90       	pop	r0
+     2fe:	cf 91       	pop	r28
+     300:	df 91       	pop	r29
+     302:	08 95       	ret
+
+00000304 <drv_spi_init>:
+  * @param :无
+  * @note  :无
+  * @retval:无
+  */ 
+void drv_spi_init( void )
+{
+     304:	df 93       	push	r29
+     306:	cf 93       	push	r28
+     308:	cd b7       	in	r28, 0x3d	; 61
+     30a:	de b7       	in	r29, 0x3e	; 62
+	/** 引脚属性配置 */
+	//SCK MOSI NSS配置为输出 MISO配置为输入
+	SPI_CLK_GPIO_ODR |= 0x01 << SPI_CLK_GPIO_BIT;						//置位相应的ODR 配置为输出
+     30c:	a7 e3       	ldi	r26, 0x37	; 55
+     30e:	b0 e0       	ldi	r27, 0x00	; 0
+     310:	e7 e3       	ldi	r30, 0x37	; 55
+     312:	f0 e0       	ldi	r31, 0x00	; 0
+     314:	80 81       	ld	r24, Z
+     316:	80 62       	ori	r24, 0x20	; 32
+     318:	8c 93       	st	X, r24
+	SPI_MOSI_GPIO_ODR |= 0x01 << SPI_MOSI_GPIO_BIT;
+     31a:	a7 e3       	ldi	r26, 0x37	; 55
+     31c:	b0 e0       	ldi	r27, 0x00	; 0
+     31e:	e7 e3       	ldi	r30, 0x37	; 55
+     320:	f0 e0       	ldi	r31, 0x00	; 0
+     322:	80 81       	ld	r24, Z
+     324:	88 60       	ori	r24, 0x08	; 8
+     326:	8c 93       	st	X, r24
+	SPI_NSS_GPIO_ODR |= 0x01 << SPI_NSS_GPIO_BIT;
+     328:	a7 e3       	ldi	r26, 0x37	; 55
+     32a:	b0 e0       	ldi	r27, 0x00	; 0
+     32c:	e7 e3       	ldi	r30, 0x37	; 55
+     32e:	f0 e0       	ldi	r31, 0x00	; 0
+     330:	80 81       	ld	r24, Z
+     332:	84 60       	ori	r24, 0x04	; 4
+     334:	8c 93       	st	X, r24
+	SPI_MISO_GPIO_ODR &= (uint8_t)( ~( 0x01 << SPI_MISO_GPIO_BIT ));	//清零相应的ODR 配置为输入
+     336:	a7 e3       	ldi	r26, 0x37	; 55
+     338:	b0 e0       	ldi	r27, 0x00	; 0
+     33a:	e7 e3       	ldi	r30, 0x37	; 55
+     33c:	f0 e0       	ldi	r31, 0x00	; 0
+     33e:	80 81       	ld	r24, Z
+     340:	8f 7e       	andi	r24, 0xEF	; 239
+     342:	8c 93       	st	X, r24
+	
+	//SCK初始状态设置为低 MOSI NSS初始状态设置为高
+	SPI_CLK_GPIO_PORT &= (uint8_t)( ~( 0x01 << SPI_CLK_GPIO_BIT ));		//零0 PORT输出低
+     344:	a8 e3       	ldi	r26, 0x38	; 56
+     346:	b0 e0       	ldi	r27, 0x00	; 0
+     348:	e8 e3       	ldi	r30, 0x38	; 56
+     34a:	f0 e0       	ldi	r31, 0x00	; 0
+     34c:	80 81       	ld	r24, Z
+     34e:	8f 7d       	andi	r24, 0xDF	; 223
+     350:	8c 93       	st	X, r24
+	SPI_MOSI_GPIO_PORT |= 0x01 << SPI_MOSI_GPIO_BIT;
+     352:	a8 e3       	ldi	r26, 0x38	; 56
+     354:	b0 e0       	ldi	r27, 0x00	; 0
+     356:	e8 e3       	ldi	r30, 0x38	; 56
+     358:	f0 e0       	ldi	r31, 0x00	; 0
+     35a:	80 81       	ld	r24, Z
+     35c:	88 60       	ori	r24, 0x08	; 8
+     35e:	8c 93       	st	X, r24
+	SPI_NSS_GPIO_PORT |= 0x01 << SPI_NSS_GPIO_BIT;						//置1 PORT输出高
+     360:	a8 e3       	ldi	r26, 0x38	; 56
+     362:	b0 e0       	ldi	r27, 0x00	; 0
+     364:	e8 e3       	ldi	r30, 0x38	; 56
+     366:	f0 e0       	ldi	r31, 0x00	; 0
+     368:	80 81       	ld	r24, Z
+     36a:	84 60       	ori	r24, 0x04	; 4
+     36c:	8c 93       	st	X, r24
+	
+	/** SPI外设配置 */
+	SPCR &= (uint8_t)( ~( 0x01 << SPE ));	//关闭SPI
+     36e:	ad e2       	ldi	r26, 0x2D	; 45
+     370:	b0 e0       	ldi	r27, 0x00	; 0
+     372:	ed e2       	ldi	r30, 0x2D	; 45
+     374:	f0 e0       	ldi	r31, 0x00	; 0
+     376:	80 81       	ld	r24, Z
+     378:	8f 7b       	andi	r24, 0xBF	; 191
+     37a:	8c 93       	st	X, r24
+	SPCR &= (uint8_t)( ~(( 0x01 << SPIE ) | ( 0x01 << DORD ) | ( 0x01 << CPOL ) | ( 0x01 << CPHA )));	//关中断 MSB在前 CPOL = CPHA = 0( 空闲低电平 第一个沿采集数据 )
+     37c:	ad e2       	ldi	r26, 0x2D	; 45
+     37e:	b0 e0       	ldi	r27, 0x00	; 0
+     380:	ed e2       	ldi	r30, 0x2D	; 45
+     382:	f0 e0       	ldi	r31, 0x00	; 0
+     384:	80 81       	ld	r24, Z
+     386:	83 75       	andi	r24, 0x53	; 83
+     388:	8c 93       	st	X, r24
+	//时钟4分频
+	SPCR &= (uint8_t)( ~(( 0x01 << SPR0 ) | ( 0x01 << SPR1 )));
+     38a:	ad e2       	ldi	r26, 0x2D	; 45
+     38c:	b0 e0       	ldi	r27, 0x00	; 0
+     38e:	ed e2       	ldi	r30, 0x2D	; 45
+     390:	f0 e0       	ldi	r31, 0x00	; 0
+     392:	80 81       	ld	r24, Z
+     394:	8c 7f       	andi	r24, 0xFC	; 252
+     396:	8c 93       	st	X, r24
+	SPSR  = 0x00;							
+     398:	ee e2       	ldi	r30, 0x2E	; 46
+     39a:	f0 e0       	ldi	r31, 0x00	; 0
+     39c:	10 82       	st	Z, r1
+	SPCR |= 0x01 << MSTR;					//主机模式
+     39e:	ad e2       	ldi	r26, 0x2D	; 45
+     3a0:	b0 e0       	ldi	r27, 0x00	; 0
+     3a2:	ed e2       	ldi	r30, 0x2D	; 45
+     3a4:	f0 e0       	ldi	r31, 0x00	; 0
+     3a6:	80 81       	ld	r24, Z
+     3a8:	80 61       	ori	r24, 0x10	; 16
+     3aa:	8c 93       	st	X, r24
+	SPCR |= 0x01 << SPE;					//使能SPI
+     3ac:	ad e2       	ldi	r26, 0x2D	; 45
+     3ae:	b0 e0       	ldi	r27, 0x00	; 0
+     3b0:	ed e2       	ldi	r30, 0x2D	; 45
+     3b2:	f0 e0       	ldi	r31, 0x00	; 0
+     3b4:	80 81       	ld	r24, Z
+     3b6:	80 64       	ori	r24, 0x40	; 64
+     3b8:	8c 93       	st	X, r24
+}
+     3ba:	cf 91       	pop	r28
+     3bc:	df 91       	pop	r29
+     3be:	08 95       	ret
+
+000003c0 <drv_spi_read_write_byte>:
+  *			@TxByte: 发送的数据字节
+  * @note  :无
+  * @retval:接收到的字节
+  */
+uint8_t drv_spi_read_write_byte( uint8_t TxByte )
+{
+     3c0:	df 93       	push	r29
+     3c2:	cf 93       	push	r28
+     3c4:	0f 92       	push	r0
+     3c6:	cd b7       	in	r28, 0x3d	; 61
+     3c8:	de b7       	in	r29, 0x3e	; 62
+     3ca:	89 83       	std	Y+1, r24	; 0x01
+	SPDR = TxByte;					//发送数据
+     3cc:	ef e2       	ldi	r30, 0x2F	; 47
+     3ce:	f0 e0       	ldi	r31, 0x00	; 0
+     3d0:	89 81       	ldd	r24, Y+1	; 0x01
+     3d2:	80 83       	st	Z, r24
+	while( 0x00 == ( SPSR & ( 0x01 << SPIF )));	//等待数据传输完成
+     3d4:	ee e2       	ldi	r30, 0x2E	; 46
+     3d6:	f0 e0       	ldi	r31, 0x00	; 0
+     3d8:	80 81       	ld	r24, Z
+     3da:	88 23       	and	r24, r24
+     3dc:	dc f7       	brge	.-10     	; 0x3d4 <drv_spi_read_write_byte+0x14>
+	return ( (uint8_t)SPDR );		//返回接收到的数据
+     3de:	ef e2       	ldi	r30, 0x2F	; 47
+     3e0:	f0 e0       	ldi	r31, 0x00	; 0
+     3e2:	80 81       	ld	r24, Z
+}
+     3e4:	0f 90       	pop	r0
+     3e6:	cf 91       	pop	r28
+     3e8:	df 91       	pop	r29
+     3ea:	08 95       	ret
+
+000003ec <drv_spi_read_write_string>:
+  *			@Length:字节长度
+  * @note  :无
+  * @retval:无
+  */
+void drv_spi_read_write_string( uint8_t* ReadBuffer, uint8_t* WriteBuffer, uint16_t Length )
+{
+     3ec:	df 93       	push	r29
+     3ee:	cf 93       	push	r28
+     3f0:	cd b7       	in	r28, 0x3d	; 61
+     3f2:	de b7       	in	r29, 0x3e	; 62
+     3f4:	27 97       	sbiw	r28, 0x07	; 7
+     3f6:	0f b6       	in	r0, 0x3f	; 63
+     3f8:	f8 94       	cli
+     3fa:	de bf       	out	0x3e, r29	; 62
+     3fc:	0f be       	out	0x3f, r0	; 63
+     3fe:	cd bf       	out	0x3d, r28	; 61
+     400:	9a 83       	std	Y+2, r25	; 0x02
+     402:	89 83       	std	Y+1, r24	; 0x01
+     404:	7c 83       	std	Y+4, r23	; 0x04
+     406:	6b 83       	std	Y+3, r22	; 0x03
+     408:	5e 83       	std	Y+6, r21	; 0x06
+     40a:	4d 83       	std	Y+5, r20	; 0x05
+	spi_set_nss_low( );			//拉低片选
+     40c:	a8 e3       	ldi	r26, 0x38	; 56
+     40e:	b0 e0       	ldi	r27, 0x00	; 0
+     410:	e8 e3       	ldi	r30, 0x38	; 56
+     412:	f0 e0       	ldi	r31, 0x00	; 0
+     414:	80 81       	ld	r24, Z
+     416:	8b 7f       	andi	r24, 0xFB	; 251
+     418:	8c 93       	st	X, r24
+     41a:	11 c0       	rjmp	.+34     	; 0x43e <drv_spi_read_write_string+0x52>
+	while( Length-- )
+	{
+		*ReadBuffer = drv_spi_read_write_byte( *WriteBuffer );		//收发数据
+     41c:	eb 81       	ldd	r30, Y+3	; 0x03
+     41e:	fc 81       	ldd	r31, Y+4	; 0x04
+     420:	80 81       	ld	r24, Z
+     422:	ce df       	rcall	.-100    	; 0x3c0 <drv_spi_read_write_byte>
+     424:	e9 81       	ldd	r30, Y+1	; 0x01
+     426:	fa 81       	ldd	r31, Y+2	; 0x02
+     428:	80 83       	st	Z, r24
+		ReadBuffer++;
+     42a:	89 81       	ldd	r24, Y+1	; 0x01
+     42c:	9a 81       	ldd	r25, Y+2	; 0x02
+     42e:	01 96       	adiw	r24, 0x01	; 1
+     430:	9a 83       	std	Y+2, r25	; 0x02
+     432:	89 83       	std	Y+1, r24	; 0x01
+		WriteBuffer++;			//读写地址加1
+     434:	8b 81       	ldd	r24, Y+3	; 0x03
+     436:	9c 81       	ldd	r25, Y+4	; 0x04
+     438:	01 96       	adiw	r24, 0x01	; 1
+     43a:	9c 83       	std	Y+4, r25	; 0x04
+     43c:	8b 83       	std	Y+3, r24	; 0x03
+  * @retval:无
+  */
+void drv_spi_read_write_string( uint8_t* ReadBuffer, uint8_t* WriteBuffer, uint16_t Length )
+{
+	spi_set_nss_low( );			//拉低片选
+	while( Length-- )
+     43e:	1f 82       	std	Y+7, r1	; 0x07
+     440:	8d 81       	ldd	r24, Y+5	; 0x05
+     442:	9e 81       	ldd	r25, Y+6	; 0x06
+     444:	00 97       	sbiw	r24, 0x00	; 0
+     446:	11 f0       	breq	.+4      	; 0x44c <drv_spi_read_write_string+0x60>
+     448:	81 e0       	ldi	r24, 0x01	; 1
+     44a:	8f 83       	std	Y+7, r24	; 0x07
+     44c:	8d 81       	ldd	r24, Y+5	; 0x05
+     44e:	9e 81       	ldd	r25, Y+6	; 0x06
+     450:	01 97       	sbiw	r24, 0x01	; 1
+     452:	9e 83       	std	Y+6, r25	; 0x06
+     454:	8d 83       	std	Y+5, r24	; 0x05
+     456:	8f 81       	ldd	r24, Y+7	; 0x07
+     458:	88 23       	and	r24, r24
+     45a:	01 f7       	brne	.-64     	; 0x41c <drv_spi_read_write_string+0x30>
+	{
+		*ReadBuffer = drv_spi_read_write_byte( *WriteBuffer );		//收发数据
+		ReadBuffer++;
+		WriteBuffer++;			//读写地址加1
+	}
+	spi_set_nss_high( );		//拉高片选
+     45c:	a8 e3       	ldi	r26, 0x38	; 56
+     45e:	b0 e0       	ldi	r27, 0x00	; 0
+     460:	e8 e3       	ldi	r30, 0x38	; 56
+     462:	f0 e0       	ldi	r31, 0x00	; 0
+     464:	80 81       	ld	r24, Z
+     466:	84 60       	ori	r24, 0x04	; 4
+     468:	8c 93       	st	X, r24
+}
+     46a:	27 96       	adiw	r28, 0x07	; 7
+     46c:	0f b6       	in	r0, 0x3f	; 63
+     46e:	f8 94       	cli
+     470:	de bf       	out	0x3e, r29	; 62
+     472:	0f be       	out	0x3f, r0	; 63
+     474:	cd bf       	out	0x3d, r28	; 61
+     476:	cf 91       	pop	r28
+     478:	df 91       	pop	r29
+     47a:	08 95       	ret
+
+0000047c <drv_uart_init>:
+  * @param :无
+  * @note  :无
+  * @retval:无
+  */
+void drv_uart_init( )
+{
+     47c:	df 93       	push	r29
+     47e:	cf 93       	push	r28
+     480:	cd b7       	in	r28, 0x3d	; 61
+     482:	de b7       	in	r29, 0x3e	; 62
+	/** 串口引脚初始化 */
+	//TX 配置为输出 RX 配置为输入
+	UART_TX_GPIO_ODR |= 0x01 << UART_TX_GPIO_BIT;
+     484:	a1 e3       	ldi	r26, 0x31	; 49
+     486:	b0 e0       	ldi	r27, 0x00	; 0
+     488:	e1 e3       	ldi	r30, 0x31	; 49
+     48a:	f0 e0       	ldi	r31, 0x00	; 0
+     48c:	80 81       	ld	r24, Z
+     48e:	82 60       	ori	r24, 0x02	; 2
+     490:	8c 93       	st	X, r24
+	UART_RX_GPIO_ODR &= (uint8_t)( ~( 0x01 << UART_RX_GPIO_BIT ));
+     492:	a1 e3       	ldi	r26, 0x31	; 49
+     494:	b0 e0       	ldi	r27, 0x00	; 0
+     496:	e1 e3       	ldi	r30, 0x31	; 49
+     498:	f0 e0       	ldi	r31, 0x00	; 0
+     49a:	80 81       	ld	r24, Z
+     49c:	8e 7f       	andi	r24, 0xFE	; 254
+     49e:	8c 93       	st	X, r24
+	
+	UART_TX_GPIO_PORT |= 0x01 << UART_TX_GPIO_BIT;	//TX 引脚默认置高
+     4a0:	a2 e3       	ldi	r26, 0x32	; 50
+     4a2:	b0 e0       	ldi	r27, 0x00	; 0
+     4a4:	e2 e3       	ldi	r30, 0x32	; 50
+     4a6:	f0 e0       	ldi	r31, 0x00	; 0
+     4a8:	80 81       	ld	r24, Z
+     4aa:	82 60       	ori	r24, 0x02	; 2
+     4ac:	8c 93       	st	X, r24
+	UART_RX_GPIO_PORT |= 0x01 << UART_RX_GPIO_BIT;	//RX 引脚上拉
+     4ae:	a2 e3       	ldi	r26, 0x32	; 50
+     4b0:	b0 e0       	ldi	r27, 0x00	; 0
+     4b2:	e2 e3       	ldi	r30, 0x32	; 50
+     4b4:	f0 e0       	ldi	r31, 0x00	; 0
+     4b6:	80 81       	ld	r24, Z
+     4b8:	81 60       	ori	r24, 0x01	; 1
+     4ba:	8c 93       	st	X, r24
+	
+	/** 串口外设初始化 */
+	
+	UCSRB = 0x00;	
+     4bc:	ea e2       	ldi	r30, 0x2A	; 42
+     4be:	f0 e0       	ldi	r31, 0x00	; 0
+     4c0:	10 82       	st	Z, r1
+	UCSRB |= ( 0x01 << RXEN ) | ( 0x01 << TXEN );	//使能接收 发送
+     4c2:	aa e2       	ldi	r26, 0x2A	; 42
+     4c4:	b0 e0       	ldi	r27, 0x00	; 0
+     4c6:	ea e2       	ldi	r30, 0x2A	; 42
+     4c8:	f0 e0       	ldi	r31, 0x00	; 0
+     4ca:	80 81       	ld	r24, Z
+     4cc:	88 61       	ori	r24, 0x18	; 24
+     4ce:	8c 93       	st	X, r24
+	
+	UCSRC |= ( 0x01 << UCSZ1 ) | ( 0x01 << UCSZ0 );	//8位数据位 1个停止位 无校验 异步通信
+     4d0:	a0 e4       	ldi	r26, 0x40	; 64
+     4d2:	b0 e0       	ldi	r27, 0x00	; 0
+     4d4:	e0 e4       	ldi	r30, 0x40	; 64
+     4d6:	f0 e0       	ldi	r31, 0x00	; 0
+     4d8:	80 81       	ld	r24, Z
+     4da:	86 60       	ori	r24, 0x06	; 6
+     4dc:	8c 93       	st	X, r24
+	
+	UCSRC &= (uint8_t)( ~( 0x01 << URSEL ));		//更新UBRRH
+     4de:	a0 e4       	ldi	r26, 0x40	; 64
+     4e0:	b0 e0       	ldi	r27, 0x00	; 0
+     4e2:	e0 e4       	ldi	r30, 0x40	; 64
+     4e4:	f0 e0       	ldi	r31, 0x00	; 0
+     4e6:	80 81       	ld	r24, Z
+     4e8:	8f 77       	andi	r24, 0x7F	; 127
+     4ea:	8c 93       	st	X, r24
+	UBRRH &= (uint8_t)( ~0x0F ); 
+     4ec:	a0 e4       	ldi	r26, 0x40	; 64
+     4ee:	b0 e0       	ldi	r27, 0x00	; 0
+     4f0:	e0 e4       	ldi	r30, 0x40	; 64
+     4f2:	f0 e0       	ldi	r31, 0x00	; 0
+     4f4:	80 81       	ld	r24, Z
+     4f6:	80 7f       	andi	r24, 0xF0	; 240
+     4f8:	8c 93       	st	X, r24
+	UBRRL = 49;		//波特率9600  8MHz晶振是理论应该为51 实际调试因为RC误差改为49
+     4fa:	e9 e2       	ldi	r30, 0x29	; 41
+     4fc:	f0 e0       	ldi	r31, 0x00	; 0
+     4fe:	81 e3       	ldi	r24, 0x31	; 49
+     500:	80 83       	st	Z, r24
+}
+     502:	cf 91       	pop	r28
+     504:	df 91       	pop	r29
+     506:	08 95       	ret
+
+00000508 <drv_uart_tx_bytes>:
+  *			@Length:数据长度
+  * @note  :无
+  * @retval:无
+  */
+void drv_uart_tx_bytes( uint8_t* TxBuffer, uint8_t Length )
+{
+     508:	df 93       	push	r29
+     50a:	cf 93       	push	r28
+     50c:	00 d0       	rcall	.+0      	; 0x50e <drv_uart_tx_bytes+0x6>
+     50e:	00 d0       	rcall	.+0      	; 0x510 <drv_uart_tx_bytes+0x8>
+     510:	cd b7       	in	r28, 0x3d	; 61
+     512:	de b7       	in	r29, 0x3e	; 62
+     514:	9a 83       	std	Y+2, r25	; 0x02
+     516:	89 83       	std	Y+1, r24	; 0x01
+     518:	6b 83       	std	Y+3, r22	; 0x03
+     51a:	14 c0       	rjmp	.+40     	; 0x544 <drv_uart_tx_bytes+0x3c>
+	while( Length-- )
+	{
+		while( 0x00 == ( UCSRA & ( 0x01 << UDRE )));  
+     51c:	eb e2       	ldi	r30, 0x2B	; 43
+     51e:	f0 e0       	ldi	r31, 0x00	; 0
+     520:	80 81       	ld	r24, Z
+     522:	88 2f       	mov	r24, r24
+     524:	90 e0       	ldi	r25, 0x00	; 0
+     526:	80 72       	andi	r24, 0x20	; 32
+     528:	90 70       	andi	r25, 0x00	; 0
+     52a:	00 97       	sbiw	r24, 0x00	; 0
+     52c:	b9 f3       	breq	.-18     	; 0x51c <drv_uart_tx_bytes+0x14>
+		UDR = *TxBuffer;
+     52e:	ac e2       	ldi	r26, 0x2C	; 44
+     530:	b0 e0       	ldi	r27, 0x00	; 0
+     532:	e9 81       	ldd	r30, Y+1	; 0x01
+     534:	fa 81       	ldd	r31, Y+2	; 0x02
+     536:	80 81       	ld	r24, Z
+     538:	8c 93       	st	X, r24
+		TxBuffer++;
+     53a:	89 81       	ldd	r24, Y+1	; 0x01
+     53c:	9a 81       	ldd	r25, Y+2	; 0x02
+     53e:	01 96       	adiw	r24, 0x01	; 1
+     540:	9a 83       	std	Y+2, r25	; 0x02
+     542:	89 83       	std	Y+1, r24	; 0x01
+  * @note  :无
+  * @retval:无
+  */
+void drv_uart_tx_bytes( uint8_t* TxBuffer, uint8_t Length )
+{
+	while( Length-- )
+     544:	8b 81       	ldd	r24, Y+3	; 0x03
+     546:	8c 83       	std	Y+4, r24	; 0x04
+     548:	8c 81       	ldd	r24, Y+4	; 0x04
+     54a:	88 23       	and	r24, r24
+     54c:	11 f0       	breq	.+4      	; 0x552 <drv_uart_tx_bytes+0x4a>
+     54e:	81 e0       	ldi	r24, 0x01	; 1
+     550:	8c 83       	std	Y+4, r24	; 0x04
+     552:	8c 81       	ldd	r24, Y+4	; 0x04
+     554:	9b 81       	ldd	r25, Y+3	; 0x03
+     556:	91 50       	subi	r25, 0x01	; 1
+     558:	9b 83       	std	Y+3, r25	; 0x03
+     55a:	88 23       	and	r24, r24
+     55c:	f9 f6       	brne	.-66     	; 0x51c <drv_uart_tx_bytes+0x14>
+	{
+		while( 0x00 == ( UCSRA & ( 0x01 << UDRE )));  
+		UDR = *TxBuffer;
+		TxBuffer++;
+	}
+}
+     55e:	0f 90       	pop	r0
+     560:	0f 90       	pop	r0
+     562:	0f 90       	pop	r0
+     564:	0f 90       	pop	r0
+     566:	cf 91       	pop	r28
+     568:	df 91       	pop	r29
+     56a:	08 95       	ret
+
+0000056c <drv_uart_rx_bytes>:
+  *			@RxBuffer:发送数据首地址
+  * @note  :无
+  * @retval:接收到的字节个数
+  */
+uint8_t drv_uart_rx_bytes( uint8_t* RxBuffer )
+{
+     56c:	df 93       	push	r29
+     56e:	cf 93       	push	r28
+     570:	00 d0       	rcall	.+0      	; 0x572 <drv_uart_rx_bytes+0x6>
+     572:	00 d0       	rcall	.+0      	; 0x574 <drv_uart_rx_bytes+0x8>
+     574:	00 d0       	rcall	.+0      	; 0x576 <drv_uart_rx_bytes+0xa>
+     576:	cd b7       	in	r28, 0x3d	; 61
+     578:	de b7       	in	r29, 0x3e	; 62
+     57a:	9d 83       	std	Y+5, r25	; 0x05
+     57c:	8c 83       	std	Y+4, r24	; 0x04
+	uint8_t l_RxLength = 0;
+     57e:	1b 82       	std	Y+3, r1	; 0x03
+	uint16_t l_UartRxTimOut = 0x7FFF;
+     580:	8f ef       	ldi	r24, 0xFF	; 255
+     582:	9f e7       	ldi	r25, 0x7F	; 127
+     584:	9a 83       	std	Y+2, r25	; 0x02
+     586:	89 83       	std	Y+1, r24	; 0x01
+     588:	1a c0       	rjmp	.+52     	; 0x5be <drv_uart_rx_bytes+0x52>
+	
+	while( l_UartRxTimOut-- )			//等待查询串口数据
+	{
+		if( 0x00 != ( UCSRA & ( 0x01 << RXC )))
+     58a:	eb e2       	ldi	r30, 0x2B	; 43
+     58c:	f0 e0       	ldi	r31, 0x00	; 0
+     58e:	80 81       	ld	r24, Z
+     590:	88 23       	and	r24, r24
+     592:	94 f4       	brge	.+36     	; 0x5b8 <drv_uart_rx_bytes+0x4c>
+		{
+			*RxBuffer = (uint8_t)UDR;
+     594:	ec e2       	ldi	r30, 0x2C	; 44
+     596:	f0 e0       	ldi	r31, 0x00	; 0
+     598:	80 81       	ld	r24, Z
+     59a:	ec 81       	ldd	r30, Y+4	; 0x04
+     59c:	fd 81       	ldd	r31, Y+5	; 0x05
+     59e:	80 83       	st	Z, r24
+			RxBuffer++;
+     5a0:	8c 81       	ldd	r24, Y+4	; 0x04
+     5a2:	9d 81       	ldd	r25, Y+5	; 0x05
+     5a4:	01 96       	adiw	r24, 0x01	; 1
+     5a6:	9d 83       	std	Y+5, r25	; 0x05
+     5a8:	8c 83       	std	Y+4, r24	; 0x04
+			l_RxLength++;
+     5aa:	8b 81       	ldd	r24, Y+3	; 0x03
+     5ac:	8f 5f       	subi	r24, 0xFF	; 255
+     5ae:	8b 83       	std	Y+3, r24	; 0x03
+			l_UartRxTimOut = 0x7FFF;	//接收到一个字符，回复等待时间
+     5b0:	8f ef       	ldi	r24, 0xFF	; 255
+     5b2:	9f e7       	ldi	r25, 0x7F	; 127
+     5b4:	9a 83       	std	Y+2, r25	; 0x02
+     5b6:	89 83       	std	Y+1, r24	; 0x01
+		}
+		if( 100 == l_RxLength )
+     5b8:	8b 81       	ldd	r24, Y+3	; 0x03
+     5ba:	84 36       	cpi	r24, 0x64	; 100
+     5bc:	79 f0       	breq	.+30     	; 0x5dc <drv_uart_rx_bytes+0x70>
+uint8_t drv_uart_rx_bytes( uint8_t* RxBuffer )
+{
+	uint8_t l_RxLength = 0;
+	uint16_t l_UartRxTimOut = 0x7FFF;
+	
+	while( l_UartRxTimOut-- )			//等待查询串口数据
+     5be:	1e 82       	std	Y+6, r1	; 0x06
+     5c0:	89 81       	ldd	r24, Y+1	; 0x01
+     5c2:	9a 81       	ldd	r25, Y+2	; 0x02
+     5c4:	00 97       	sbiw	r24, 0x00	; 0
+     5c6:	11 f0       	breq	.+4      	; 0x5cc <drv_uart_rx_bytes+0x60>
+     5c8:	81 e0       	ldi	r24, 0x01	; 1
+     5ca:	8e 83       	std	Y+6, r24	; 0x06
+     5cc:	89 81       	ldd	r24, Y+1	; 0x01
+     5ce:	9a 81       	ldd	r25, Y+2	; 0x02
+     5d0:	01 97       	sbiw	r24, 0x01	; 1
+     5d2:	9a 83       	std	Y+2, r25	; 0x02
+     5d4:	89 83       	std	Y+1, r24	; 0x01
+     5d6:	8e 81       	ldd	r24, Y+6	; 0x06
+     5d8:	88 23       	and	r24, r24
+     5da:	b9 f6       	brne	.-82     	; 0x58a <drv_uart_rx_bytes+0x1e>
+		{
+			break;			//不能超过100个字节
+		}
+	}
+	
+	return l_RxLength;					//等待超时，数据接收完成
+     5dc:	8b 81       	ldd	r24, Y+3	; 0x03
+}
+     5de:	26 96       	adiw	r28, 0x06	; 6
+     5e0:	0f b6       	in	r0, 0x3f	; 63
+     5e2:	f8 94       	cli
+     5e4:	de bf       	out	0x3e, r29	; 62
+     5e6:	0f be       	out	0x3f, r0	; 63
+     5e8:	cd bf       	out	0x3d, r28	; 61
+     5ea:	cf 91       	pop	r28
+     5ec:	df 91       	pop	r29
+     5ee:	08 95       	ret
+
+000005f0 <NRF24L01_Read_Reg>:
+           @Addr:寄存器地址
+  * @note  :地址在设备中有效
+  * @retval:读取的数据
+  */
+uint8_t NRF24L01_Read_Reg( uint8_t RegAddr )
+{
+     5f0:	df 93       	push	r29
+     5f2:	cf 93       	push	r28
+     5f4:	00 d0       	rcall	.+0      	; 0x5f6 <NRF24L01_Read_Reg+0x6>
+     5f6:	cd b7       	in	r28, 0x3d	; 61
+     5f8:	de b7       	in	r29, 0x3e	; 62
+     5fa:	8a 83       	std	Y+2, r24	; 0x02
+    uint8_t btmp;
+	
+    RF24L01_SET_CS_LOW( );			//片选
+     5fc:	a8 e3       	ldi	r26, 0x38	; 56
+     5fe:	b0 e0       	ldi	r27, 0x00	; 0
+     600:	e8 e3       	ldi	r30, 0x38	; 56
+     602:	f0 e0       	ldi	r31, 0x00	; 0
+     604:	80 81       	ld	r24, Z
+     606:	8b 7f       	andi	r24, 0xFB	; 251
+     608:	8c 93       	st	X, r24
+	
+    drv_spi_read_write_byte( NRF_READ_REG | RegAddr );	//读命令 地址
+     60a:	8a 81       	ldd	r24, Y+2	; 0x02
+     60c:	d9 de       	rcall	.-590    	; 0x3c0 <drv_spi_read_write_byte>
+    btmp = drv_spi_read_write_byte( 0xFF );				//读数据
+     60e:	8f ef       	ldi	r24, 0xFF	; 255
+     610:	d7 de       	rcall	.-594    	; 0x3c0 <drv_spi_read_write_byte>
+     612:	89 83       	std	Y+1, r24	; 0x01
+	
+    RF24L01_SET_CS_HIGH( );			//取消片选
+     614:	a8 e3       	ldi	r26, 0x38	; 56
+     616:	b0 e0       	ldi	r27, 0x00	; 0
+     618:	e8 e3       	ldi	r30, 0x38	; 56
+     61a:	f0 e0       	ldi	r31, 0x00	; 0
+     61c:	80 81       	ld	r24, Z
+     61e:	84 60       	ori	r24, 0x04	; 4
+     620:	8c 93       	st	X, r24
+	
+    return btmp;
+     622:	89 81       	ldd	r24, Y+1	; 0x01
+}
+     624:	0f 90       	pop	r0
+     626:	0f 90       	pop	r0
+     628:	cf 91       	pop	r28
+     62a:	df 91       	pop	r29
+     62c:	08 95       	ret
+
+0000062e <NRF24L01_Read_Buf>:
+  *			@len:数据长度
+  * @note  :数据长度不超过255，地址在设备中有效
+  * @retval:读取状态
+  */
+void NRF24L01_Read_Buf( uint8_t RegAddr, uint8_t *pBuf, uint8_t len )
+{
+     62e:	0f 93       	push	r16
+     630:	1f 93       	push	r17
+     632:	df 93       	push	r29
+     634:	cf 93       	push	r28
+     636:	00 d0       	rcall	.+0      	; 0x638 <NRF24L01_Read_Buf+0xa>
+     638:	00 d0       	rcall	.+0      	; 0x63a <NRF24L01_Read_Buf+0xc>
+     63a:	0f 92       	push	r0
+     63c:	cd b7       	in	r28, 0x3d	; 61
+     63e:	de b7       	in	r29, 0x3e	; 62
+     640:	8a 83       	std	Y+2, r24	; 0x02
+     642:	7c 83       	std	Y+4, r23	; 0x04
+     644:	6b 83       	std	Y+3, r22	; 0x03
+     646:	4d 83       	std	Y+5, r20	; 0x05
+    uint8_t btmp;
+	
+    RF24L01_SET_CS_LOW( );			//片选
+     648:	a8 e3       	ldi	r26, 0x38	; 56
+     64a:	b0 e0       	ldi	r27, 0x00	; 0
+     64c:	e8 e3       	ldi	r30, 0x38	; 56
+     64e:	f0 e0       	ldi	r31, 0x00	; 0
+     650:	80 81       	ld	r24, Z
+     652:	8b 7f       	andi	r24, 0xFB	; 251
+     654:	8c 93       	st	X, r24
+	
+    drv_spi_read_write_byte( NRF_READ_REG | RegAddr );	//读命令 地址
+     656:	8a 81       	ldd	r24, Y+2	; 0x02
+     658:	b3 de       	rcall	.-666    	; 0x3c0 <drv_spi_read_write_byte>
+    for( btmp = 0; btmp < len; btmp ++ )
+     65a:	19 82       	std	Y+1, r1	; 0x01
+     65c:	0f c0       	rjmp	.+30     	; 0x67c <NRF24L01_Read_Buf+0x4e>
+    {
+        *( pBuf + btmp ) = drv_spi_read_write_byte( 0xFF );	//读数据
+     65e:	89 81       	ldd	r24, Y+1	; 0x01
+     660:	28 2f       	mov	r18, r24
+     662:	30 e0       	ldi	r19, 0x00	; 0
+     664:	8b 81       	ldd	r24, Y+3	; 0x03
+     666:	9c 81       	ldd	r25, Y+4	; 0x04
+     668:	8c 01       	movw	r16, r24
+     66a:	02 0f       	add	r16, r18
+     66c:	13 1f       	adc	r17, r19
+     66e:	8f ef       	ldi	r24, 0xFF	; 255
+     670:	a7 de       	rcall	.-690    	; 0x3c0 <drv_spi_read_write_byte>
+     672:	f8 01       	movw	r30, r16
+     674:	80 83       	st	Z, r24
+    uint8_t btmp;
+	
+    RF24L01_SET_CS_LOW( );			//片选
+	
+    drv_spi_read_write_byte( NRF_READ_REG | RegAddr );	//读命令 地址
+    for( btmp = 0; btmp < len; btmp ++ )
+     676:	89 81       	ldd	r24, Y+1	; 0x01
+     678:	8f 5f       	subi	r24, 0xFF	; 255
+     67a:	89 83       	std	Y+1, r24	; 0x01
+     67c:	99 81       	ldd	r25, Y+1	; 0x01
+     67e:	8d 81       	ldd	r24, Y+5	; 0x05
+     680:	98 17       	cp	r25, r24
+     682:	68 f3       	brcs	.-38     	; 0x65e <NRF24L01_Read_Buf+0x30>
+    {
+        *( pBuf + btmp ) = drv_spi_read_write_byte( 0xFF );	//读数据
+    }
+    RF24L01_SET_CS_HIGH( );		//取消片选
+     684:	a8 e3       	ldi	r26, 0x38	; 56
+     686:	b0 e0       	ldi	r27, 0x00	; 0
+     688:	e8 e3       	ldi	r30, 0x38	; 56
+     68a:	f0 e0       	ldi	r31, 0x00	; 0
+     68c:	80 81       	ld	r24, Z
+     68e:	84 60       	ori	r24, 0x04	; 4
+     690:	8c 93       	st	X, r24
+}
+     692:	0f 90       	pop	r0
+     694:	0f 90       	pop	r0
+     696:	0f 90       	pop	r0
+     698:	0f 90       	pop	r0
+     69a:	0f 90       	pop	r0
+     69c:	cf 91       	pop	r28
+     69e:	df 91       	pop	r29
+     6a0:	1f 91       	pop	r17
+     6a2:	0f 91       	pop	r16
+     6a4:	08 95       	ret
+
+000006a6 <NRF24L01_Write_Reg>:
+  * @param :无
+  * @note  :地址在设备中有效
+  * @retval:读写状态
+  */
+void NRF24L01_Write_Reg( uint8_t RegAddr, uint8_t Value )
+{
+     6a6:	df 93       	push	r29
+     6a8:	cf 93       	push	r28
+     6aa:	00 d0       	rcall	.+0      	; 0x6ac <NRF24L01_Write_Reg+0x6>
+     6ac:	cd b7       	in	r28, 0x3d	; 61
+     6ae:	de b7       	in	r29, 0x3e	; 62
+     6b0:	89 83       	std	Y+1, r24	; 0x01
+     6b2:	6a 83       	std	Y+2, r22	; 0x02
+    RF24L01_SET_CS_LOW( );		//片选
+     6b4:	a8 e3       	ldi	r26, 0x38	; 56
+     6b6:	b0 e0       	ldi	r27, 0x00	; 0
+     6b8:	e8 e3       	ldi	r30, 0x38	; 56
+     6ba:	f0 e0       	ldi	r31, 0x00	; 0
+     6bc:	80 81       	ld	r24, Z
+     6be:	8b 7f       	andi	r24, 0xFB	; 251
+     6c0:	8c 93       	st	X, r24
+	
+    drv_spi_read_write_byte( NRF_WRITE_REG | RegAddr );	//写命令 地址
+     6c2:	89 81       	ldd	r24, Y+1	; 0x01
+     6c4:	80 62       	ori	r24, 0x20	; 32
+     6c6:	7c de       	rcall	.-776    	; 0x3c0 <drv_spi_read_write_byte>
+    drv_spi_read_write_byte( Value );			//写数据
+     6c8:	8a 81       	ldd	r24, Y+2	; 0x02
+     6ca:	7a de       	rcall	.-780    	; 0x3c0 <drv_spi_read_write_byte>
+	
+    RF24L01_SET_CS_HIGH( );		//取消片选
+     6cc:	a8 e3       	ldi	r26, 0x38	; 56
+     6ce:	b0 e0       	ldi	r27, 0x00	; 0
+     6d0:	e8 e3       	ldi	r30, 0x38	; 56
+     6d2:	f0 e0       	ldi	r31, 0x00	; 0
+     6d4:	80 81       	ld	r24, Z
+     6d6:	84 60       	ori	r24, 0x04	; 4
+     6d8:	8c 93       	st	X, r24
+}
+     6da:	0f 90       	pop	r0
+     6dc:	0f 90       	pop	r0
+     6de:	cf 91       	pop	r28
+     6e0:	df 91       	pop	r29
+     6e2:	08 95       	ret
+
+000006e4 <NRF24L01_Write_Buf>:
+  *			@len:数据长度
+  * @note  :数据长度不超过255，地址在设备中有效
+  * @retval:写状态
+  */
+void NRF24L01_Write_Buf( uint8_t RegAddr, uint8_t *pBuf, uint8_t len )
+{
+     6e4:	df 93       	push	r29
+     6e6:	cf 93       	push	r28
+     6e8:	00 d0       	rcall	.+0      	; 0x6ea <NRF24L01_Write_Buf+0x6>
+     6ea:	00 d0       	rcall	.+0      	; 0x6ec <NRF24L01_Write_Buf+0x8>
+     6ec:	0f 92       	push	r0
+     6ee:	cd b7       	in	r28, 0x3d	; 61
+     6f0:	de b7       	in	r29, 0x3e	; 62
+     6f2:	8a 83       	std	Y+2, r24	; 0x02
+     6f4:	7c 83       	std	Y+4, r23	; 0x04
+     6f6:	6b 83       	std	Y+3, r22	; 0x03
+     6f8:	4d 83       	std	Y+5, r20	; 0x05
+    uint8_t i;
+	
+    RF24L01_SET_CS_LOW( );		//片选
+     6fa:	a8 e3       	ldi	r26, 0x38	; 56
+     6fc:	b0 e0       	ldi	r27, 0x00	; 0
+     6fe:	e8 e3       	ldi	r30, 0x38	; 56
+     700:	f0 e0       	ldi	r31, 0x00	; 0
+     702:	80 81       	ld	r24, Z
+     704:	8b 7f       	andi	r24, 0xFB	; 251
+     706:	8c 93       	st	X, r24
+	
+    drv_spi_read_write_byte( NRF_WRITE_REG | RegAddr );	//写命令 地址
+     708:	8a 81       	ldd	r24, Y+2	; 0x02
+     70a:	80 62       	ori	r24, 0x20	; 32
+     70c:	59 de       	rcall	.-846    	; 0x3c0 <drv_spi_read_write_byte>
+    for( i = 0; i < len; i ++ )
+     70e:	19 82       	std	Y+1, r1	; 0x01
+     710:	0d c0       	rjmp	.+26     	; 0x72c <NRF24L01_Write_Buf+0x48>
+    {
+        drv_spi_read_write_byte( *( pBuf + i ) );		//写数据
+     712:	89 81       	ldd	r24, Y+1	; 0x01
+     714:	28 2f       	mov	r18, r24
+     716:	30 e0       	ldi	r19, 0x00	; 0
+     718:	8b 81       	ldd	r24, Y+3	; 0x03
+     71a:	9c 81       	ldd	r25, Y+4	; 0x04
+     71c:	fc 01       	movw	r30, r24
+     71e:	e2 0f       	add	r30, r18
+     720:	f3 1f       	adc	r31, r19
+     722:	80 81       	ld	r24, Z
+     724:	4d de       	rcall	.-870    	; 0x3c0 <drv_spi_read_write_byte>
+    uint8_t i;
+	
+    RF24L01_SET_CS_LOW( );		//片选
+	
+    drv_spi_read_write_byte( NRF_WRITE_REG | RegAddr );	//写命令 地址
+    for( i = 0; i < len; i ++ )
+     726:	89 81       	ldd	r24, Y+1	; 0x01
+     728:	8f 5f       	subi	r24, 0xFF	; 255
+     72a:	89 83       	std	Y+1, r24	; 0x01
+     72c:	99 81       	ldd	r25, Y+1	; 0x01
+     72e:	8d 81       	ldd	r24, Y+5	; 0x05
+     730:	98 17       	cp	r25, r24
+     732:	78 f3       	brcs	.-34     	; 0x712 <NRF24L01_Write_Buf+0x2e>
+    {
+        drv_spi_read_write_byte( *( pBuf + i ) );		//写数据
+    }
+	
+    RF24L01_SET_CS_HIGH( );		//取消片选
+     734:	a8 e3       	ldi	r26, 0x38	; 56
+     736:	b0 e0       	ldi	r27, 0x00	; 0
+     738:	e8 e3       	ldi	r30, 0x38	; 56
+     73a:	f0 e0       	ldi	r31, 0x00	; 0
+     73c:	80 81       	ld	r24, Z
+     73e:	84 60       	ori	r24, 0x04	; 4
+     740:	8c 93       	st	X, r24
+}
+     742:	0f 90       	pop	r0
+     744:	0f 90       	pop	r0
+     746:	0f 90       	pop	r0
+     748:	0f 90       	pop	r0
+     74a:	0f 90       	pop	r0
+     74c:	cf 91       	pop	r28
+     74e:	df 91       	pop	r29
+     750:	08 95       	ret
+
+00000752 <NRF24L01_Flush_Tx_Fifo>:
+  * @param :无
+  * @note  :无
+  * @retval:无
+  */
+void NRF24L01_Flush_Tx_Fifo ( void )
+{
+     752:	df 93       	push	r29
+     754:	cf 93       	push	r28
+     756:	cd b7       	in	r28, 0x3d	; 61
+     758:	de b7       	in	r29, 0x3e	; 62
+    RF24L01_SET_CS_LOW( );		//片选
+     75a:	a8 e3       	ldi	r26, 0x38	; 56
+     75c:	b0 e0       	ldi	r27, 0x00	; 0
+     75e:	e8 e3       	ldi	r30, 0x38	; 56
+     760:	f0 e0       	ldi	r31, 0x00	; 0
+     762:	80 81       	ld	r24, Z
+     764:	8b 7f       	andi	r24, 0xFB	; 251
+     766:	8c 93       	st	X, r24
+	
+    drv_spi_read_write_byte( FLUSH_TX );	//清TX FIFO命令
+     768:	81 ee       	ldi	r24, 0xE1	; 225
+     76a:	2a de       	rcall	.-940    	; 0x3c0 <drv_spi_read_write_byte>
+	
+    RF24L01_SET_CS_HIGH( );		//取消片选
+     76c:	a8 e3       	ldi	r26, 0x38	; 56
+     76e:	b0 e0       	ldi	r27, 0x00	; 0
+     770:	e8 e3       	ldi	r30, 0x38	; 56
+     772:	f0 e0       	ldi	r31, 0x00	; 0
+     774:	80 81       	ld	r24, Z
+     776:	84 60       	ori	r24, 0x04	; 4
+     778:	8c 93       	st	X, r24
+}
+     77a:	cf 91       	pop	r28
+     77c:	df 91       	pop	r29
+     77e:	08 95       	ret
+
+00000780 <NRF24L01_Flush_Rx_Fifo>:
+  * @param :无
+  * @note  :无
+  * @retval:无
+  */
+void NRF24L01_Flush_Rx_Fifo( void )
+{
+     780:	df 93       	push	r29
+     782:	cf 93       	push	r28
+     784:	cd b7       	in	r28, 0x3d	; 61
+     786:	de b7       	in	r29, 0x3e	; 62
+    RF24L01_SET_CS_LOW( );		//片选
+     788:	a8 e3       	ldi	r26, 0x38	; 56
+     78a:	b0 e0       	ldi	r27, 0x00	; 0
+     78c:	e8 e3       	ldi	r30, 0x38	; 56
+     78e:	f0 e0       	ldi	r31, 0x00	; 0
+     790:	80 81       	ld	r24, Z
+     792:	8b 7f       	andi	r24, 0xFB	; 251
+     794:	8c 93       	st	X, r24
+	
+    drv_spi_read_write_byte( FLUSH_RX );	//清RX FIFO命令
+     796:	82 ee       	ldi	r24, 0xE2	; 226
+     798:	13 de       	rcall	.-986    	; 0x3c0 <drv_spi_read_write_byte>
+	
+    RF24L01_SET_CS_HIGH( );		//取消片选
+     79a:	a8 e3       	ldi	r26, 0x38	; 56
+     79c:	b0 e0       	ldi	r27, 0x00	; 0
+     79e:	e8 e3       	ldi	r30, 0x38	; 56
+     7a0:	f0 e0       	ldi	r31, 0x00	; 0
+     7a2:	80 81       	ld	r24, Z
+     7a4:	84 60       	ori	r24, 0x04	; 4
+     7a6:	8c 93       	st	X, r24
+}
+     7a8:	cf 91       	pop	r28
+     7aa:	df 91       	pop	r29
+     7ac:	08 95       	ret
+
+000007ae <NRF24L01_Reuse_Tx_Payload>:
+  * @param :无
+  * @note  :无
+  * @retval:无
+  */
+void NRF24L01_Reuse_Tx_Payload( void )
+{
+     7ae:	df 93       	push	r29
+     7b0:	cf 93       	push	r28
+     7b2:	cd b7       	in	r28, 0x3d	; 61
+     7b4:	de b7       	in	r29, 0x3e	; 62
+    RF24L01_SET_CS_LOW( );		//片选
+     7b6:	a8 e3       	ldi	r26, 0x38	; 56
+     7b8:	b0 e0       	ldi	r27, 0x00	; 0
+     7ba:	e8 e3       	ldi	r30, 0x38	; 56
+     7bc:	f0 e0       	ldi	r31, 0x00	; 0
+     7be:	80 81       	ld	r24, Z
+     7c0:	8b 7f       	andi	r24, 0xFB	; 251
+     7c2:	8c 93       	st	X, r24
+	
+    drv_spi_read_write_byte( REUSE_TX_PL );		//重新使用上一包命令
+     7c4:	83 ee       	ldi	r24, 0xE3	; 227
+     7c6:	fc dd       	rcall	.-1032   	; 0x3c0 <drv_spi_read_write_byte>
+	
+    RF24L01_SET_CS_HIGH( );		//取消片选
+     7c8:	a8 e3       	ldi	r26, 0x38	; 56
+     7ca:	b0 e0       	ldi	r27, 0x00	; 0
+     7cc:	e8 e3       	ldi	r30, 0x38	; 56
+     7ce:	f0 e0       	ldi	r31, 0x00	; 0
+     7d0:	80 81       	ld	r24, Z
+     7d2:	84 60       	ori	r24, 0x04	; 4
+     7d4:	8c 93       	st	X, r24
+}
+     7d6:	cf 91       	pop	r28
+     7d8:	df 91       	pop	r29
+     7da:	08 95       	ret
+
+000007dc <NRF24L01_Nop>:
+  * @param :无
+  * @note  :无
+  * @retval:无
+  */
+void NRF24L01_Nop( void )
+{
+     7dc:	df 93       	push	r29
+     7de:	cf 93       	push	r28
+     7e0:	cd b7       	in	r28, 0x3d	; 61
+     7e2:	de b7       	in	r29, 0x3e	; 62
+    RF24L01_SET_CS_LOW( );		//片选
+     7e4:	a8 e3       	ldi	r26, 0x38	; 56
+     7e6:	b0 e0       	ldi	r27, 0x00	; 0
+     7e8:	e8 e3       	ldi	r30, 0x38	; 56
+     7ea:	f0 e0       	ldi	r31, 0x00	; 0
+     7ec:	80 81       	ld	r24, Z
+     7ee:	8b 7f       	andi	r24, 0xFB	; 251
+     7f0:	8c 93       	st	X, r24
+	
+    drv_spi_read_write_byte( NOP );		//空操作命令
+     7f2:	8f ef       	ldi	r24, 0xFF	; 255
+     7f4:	e5 dd       	rcall	.-1078   	; 0x3c0 <drv_spi_read_write_byte>
+	
+    RF24L01_SET_CS_HIGH( );		//取消片选
+     7f6:	a8 e3       	ldi	r26, 0x38	; 56
+     7f8:	b0 e0       	ldi	r27, 0x00	; 0
+     7fa:	e8 e3       	ldi	r30, 0x38	; 56
+     7fc:	f0 e0       	ldi	r31, 0x00	; 0
+     7fe:	80 81       	ld	r24, Z
+     800:	84 60       	ori	r24, 0x04	; 4
+     802:	8c 93       	st	X, r24
+}
+     804:	cf 91       	pop	r28
+     806:	df 91       	pop	r29
+     808:	08 95       	ret
+
+0000080a <NRF24L01_Read_Status_Register>:
+  * @param :无
+  * @note  :无
+  * @retval:RF24L01状态
+  */
+uint8_t NRF24L01_Read_Status_Register( void )
+{
+     80a:	df 93       	push	r29
+     80c:	cf 93       	push	r28
+     80e:	0f 92       	push	r0
+     810:	cd b7       	in	r28, 0x3d	; 61
+     812:	de b7       	in	r29, 0x3e	; 62
+    uint8_t Status;
+	
+    RF24L01_SET_CS_LOW( );		//片选
+     814:	a8 e3       	ldi	r26, 0x38	; 56
+     816:	b0 e0       	ldi	r27, 0x00	; 0
+     818:	e8 e3       	ldi	r30, 0x38	; 56
+     81a:	f0 e0       	ldi	r31, 0x00	; 0
+     81c:	80 81       	ld	r24, Z
+     81e:	8b 7f       	andi	r24, 0xFB	; 251
+     820:	8c 93       	st	X, r24
+	
+    Status = drv_spi_read_write_byte( NRF_READ_REG + STATUS );	//读状态寄存器
+     822:	87 e0       	ldi	r24, 0x07	; 7
+     824:	cd dd       	rcall	.-1126   	; 0x3c0 <drv_spi_read_write_byte>
+     826:	89 83       	std	Y+1, r24	; 0x01
+	
+    RF24L01_SET_CS_HIGH( );		//取消片选
+     828:	a8 e3       	ldi	r26, 0x38	; 56
+     82a:	b0 e0       	ldi	r27, 0x00	; 0
+     82c:	e8 e3       	ldi	r30, 0x38	; 56
+     82e:	f0 e0       	ldi	r31, 0x00	; 0
+     830:	80 81       	ld	r24, Z
+     832:	84 60       	ori	r24, 0x04	; 4
+     834:	8c 93       	st	X, r24
+	
+    return Status;
+     836:	89 81       	ldd	r24, Y+1	; 0x01
+}
+     838:	0f 90       	pop	r0
+     83a:	cf 91       	pop	r28
+     83c:	df 91       	pop	r29
+     83e:	08 95       	ret
+
+00000840 <NRF24L01_Clear_IRQ_Flag>:
+           @IRQ_Source:中断源
+  * @note  :无
+  * @retval:清除后状态寄存器的值
+  */
+uint8_t NRF24L01_Clear_IRQ_Flag( uint8_t IRQ_Source )
+{
+     840:	df 93       	push	r29
+     842:	cf 93       	push	r28
+     844:	00 d0       	rcall	.+0      	; 0x846 <NRF24L01_Clear_IRQ_Flag+0x6>
+     846:	cd b7       	in	r28, 0x3d	; 61
+     848:	de b7       	in	r29, 0x3e	; 62
+     84a:	8a 83       	std	Y+2, r24	; 0x02
+    uint8_t btmp = 0;
+     84c:	19 82       	std	Y+1, r1	; 0x01
+
+    IRQ_Source &= ( 1 << RX_DR ) | ( 1 << TX_DS ) | ( 1 << MAX_RT );	//中断标志处理
+     84e:	8a 81       	ldd	r24, Y+2	; 0x02
+     850:	80 77       	andi	r24, 0x70	; 112
+     852:	8a 83       	std	Y+2, r24	; 0x02
+    btmp = NRF24L01_Read_Status_Register( );			//读状态寄存器
+     854:	da df       	rcall	.-76     	; 0x80a <NRF24L01_Read_Status_Register>
+     856:	89 83       	std	Y+1, r24	; 0x01
+			
+    RF24L01_SET_CS_LOW( );			//片选
+     858:	a8 e3       	ldi	r26, 0x38	; 56
+     85a:	b0 e0       	ldi	r27, 0x00	; 0
+     85c:	e8 e3       	ldi	r30, 0x38	; 56
+     85e:	f0 e0       	ldi	r31, 0x00	; 0
+     860:	80 81       	ld	r24, Z
+     862:	8b 7f       	andi	r24, 0xFB	; 251
+     864:	8c 93       	st	X, r24
+    drv_spi_read_write_byte( NRF_WRITE_REG + STATUS );	//写状态寄存器命令
+     866:	87 e2       	ldi	r24, 0x27	; 39
+     868:	ab dd       	rcall	.-1194   	; 0x3c0 <drv_spi_read_write_byte>
+    drv_spi_read_write_byte( IRQ_Source | btmp );		//清相应中断标志
+     86a:	9a 81       	ldd	r25, Y+2	; 0x02
+     86c:	89 81       	ldd	r24, Y+1	; 0x01
+     86e:	89 2b       	or	r24, r25
+     870:	a7 dd       	rcall	.-1202   	; 0x3c0 <drv_spi_read_write_byte>
+    RF24L01_SET_CS_HIGH( );			//取消片选
+     872:	a8 e3       	ldi	r26, 0x38	; 56
+     874:	b0 e0       	ldi	r27, 0x00	; 0
+     876:	e8 e3       	ldi	r30, 0x38	; 56
+     878:	f0 e0       	ldi	r31, 0x00	; 0
+     87a:	80 81       	ld	r24, Z
+     87c:	84 60       	ori	r24, 0x04	; 4
+     87e:	8c 93       	st	X, r24
+	
+    return ( NRF24L01_Read_Status_Register( ));			//返回状态寄存器状态
+     880:	c4 df       	rcall	.-120    	; 0x80a <NRF24L01_Read_Status_Register>
+}
+     882:	0f 90       	pop	r0
+     884:	0f 90       	pop	r0
+     886:	cf 91       	pop	r28
+     888:	df 91       	pop	r29
+     88a:	08 95       	ret
+
+0000088c <RF24L01_Read_IRQ_Status>:
+  * @param :无
+  * @note  :无
+  * @retval:中断状态
+  */
+uint8_t RF24L01_Read_IRQ_Status( void )
+{
+     88c:	df 93       	push	r29
+     88e:	cf 93       	push	r28
+     890:	cd b7       	in	r28, 0x3d	; 61
+     892:	de b7       	in	r29, 0x3e	; 62
+    return ( NRF24L01_Read_Status_Register( ) & (( 1 << RX_DR ) | ( 1 << TX_DS ) | ( 1 << MAX_RT )));	//返回中断状态
+     894:	ba df       	rcall	.-140    	; 0x80a <NRF24L01_Read_Status_Register>
+     896:	80 77       	andi	r24, 0x70	; 112
+}
+     898:	cf 91       	pop	r28
+     89a:	df 91       	pop	r29
+     89c:	08 95       	ret
+
+0000089e <NRF24L01_Read_Top_Fifo_Width>:
+  * @param :无
+  * @note  :无
+  * @retval:数据宽度
+  */
+uint8_t NRF24L01_Read_Top_Fifo_Width( void )
+{
+     89e:	df 93       	push	r29
+     8a0:	cf 93       	push	r28
+     8a2:	0f 92       	push	r0
+     8a4:	cd b7       	in	r28, 0x3d	; 61
+     8a6:	de b7       	in	r29, 0x3e	; 62
+    uint8_t btmp;
+	
+    RF24L01_SET_CS_LOW( );		//片选
+     8a8:	a8 e3       	ldi	r26, 0x38	; 56
+     8aa:	b0 e0       	ldi	r27, 0x00	; 0
+     8ac:	e8 e3       	ldi	r30, 0x38	; 56
+     8ae:	f0 e0       	ldi	r31, 0x00	; 0
+     8b0:	80 81       	ld	r24, Z
+     8b2:	8b 7f       	andi	r24, 0xFB	; 251
+     8b4:	8c 93       	st	X, r24
+	
+    drv_spi_read_write_byte( R_RX_PL_WID );	//读FIFO中数据宽度命令
+     8b6:	80 e6       	ldi	r24, 0x60	; 96
+     8b8:	83 dd       	rcall	.-1274   	; 0x3c0 <drv_spi_read_write_byte>
+    btmp = drv_spi_read_write_byte( 0xFF );	//读数据
+     8ba:	8f ef       	ldi	r24, 0xFF	; 255
+     8bc:	81 dd       	rcall	.-1278   	; 0x3c0 <drv_spi_read_write_byte>
+     8be:	89 83       	std	Y+1, r24	; 0x01
+	
+    RF24L01_SET_CS_HIGH( );		//取消片选
+     8c0:	a8 e3       	ldi	r26, 0x38	; 56
+     8c2:	b0 e0       	ldi	r27, 0x00	; 0
+     8c4:	e8 e3       	ldi	r30, 0x38	; 56
+     8c6:	f0 e0       	ldi	r31, 0x00	; 0
+     8c8:	80 81       	ld	r24, Z
+     8ca:	84 60       	ori	r24, 0x04	; 4
+     8cc:	8c 93       	st	X, r24
+	
+    return btmp;
+     8ce:	89 81       	ldd	r24, Y+1	; 0x01
+}
+     8d0:	0f 90       	pop	r0
+     8d2:	cf 91       	pop	r28
+     8d4:	df 91       	pop	r29
+     8d6:	08 95       	ret
+
+000008d8 <NRF24L01_Read_Rx_Payload>:
+  * @note  :无
+  * @retval:
+           @pRxBuf:数据存放地址首地址
+  */
+uint8_t NRF24L01_Read_Rx_Payload( uint8_t *pRxBuf )
+{
+     8d8:	0f 93       	push	r16
+     8da:	1f 93       	push	r17
+     8dc:	df 93       	push	r29
+     8de:	cf 93       	push	r28
+     8e0:	00 d0       	rcall	.+0      	; 0x8e2 <NRF24L01_Read_Rx_Payload+0xa>
+     8e2:	00 d0       	rcall	.+0      	; 0x8e4 <NRF24L01_Read_Rx_Payload+0xc>
+     8e4:	cd b7       	in	r28, 0x3d	; 61
+     8e6:	de b7       	in	r29, 0x3e	; 62
+     8e8:	9c 83       	std	Y+4, r25	; 0x04
+     8ea:	8b 83       	std	Y+3, r24	; 0x03
+    uint8_t Width, PipeNum;
+	
+    PipeNum = ( NRF24L01_Read_Reg( STATUS ) >> 1 ) & 0x07;	//读接收状态
+     8ec:	87 e0       	ldi	r24, 0x07	; 7
+     8ee:	80 de       	rcall	.-768    	; 0x5f0 <NRF24L01_Read_Reg>
+     8f0:	86 95       	lsr	r24
+     8f2:	87 70       	andi	r24, 0x07	; 7
+     8f4:	89 83       	std	Y+1, r24	; 0x01
+    Width = NRF24L01_Read_Top_Fifo_Width( );		//读接收数据个数
+     8f6:	d3 df       	rcall	.-90     	; 0x89e <NRF24L01_Read_Top_Fifo_Width>
+     8f8:	8a 83       	std	Y+2, r24	; 0x02
+
+    RF24L01_SET_CS_LOW( );		//片选
+     8fa:	a8 e3       	ldi	r26, 0x38	; 56
+     8fc:	b0 e0       	ldi	r27, 0x00	; 0
+     8fe:	e8 e3       	ldi	r30, 0x38	; 56
+     900:	f0 e0       	ldi	r31, 0x00	; 0
+     902:	80 81       	ld	r24, Z
+     904:	8b 7f       	andi	r24, 0xFB	; 251
+     906:	8c 93       	st	X, r24
+    drv_spi_read_write_byte( RD_RX_PLOAD );			//读有效数据命令
+     908:	81 e6       	ldi	r24, 0x61	; 97
+     90a:	5a dd       	rcall	.-1356   	; 0x3c0 <drv_spi_read_write_byte>
+	
+    for( PipeNum = 0; PipeNum < Width; PipeNum ++ )
+     90c:	19 82       	std	Y+1, r1	; 0x01
+     90e:	0f c0       	rjmp	.+30     	; 0x92e <NRF24L01_Read_Rx_Payload+0x56>
+    {
+        *( pRxBuf + PipeNum ) = drv_spi_read_write_byte( 0xFF );		//读数据
+     910:	89 81       	ldd	r24, Y+1	; 0x01
+     912:	28 2f       	mov	r18, r24
+     914:	30 e0       	ldi	r19, 0x00	; 0
+     916:	8b 81       	ldd	r24, Y+3	; 0x03
+     918:	9c 81       	ldd	r25, Y+4	; 0x04
+     91a:	8c 01       	movw	r16, r24
+     91c:	02 0f       	add	r16, r18
+     91e:	13 1f       	adc	r17, r19
+     920:	8f ef       	ldi	r24, 0xFF	; 255
+     922:	4e dd       	rcall	.-1380   	; 0x3c0 <drv_spi_read_write_byte>
+     924:	f8 01       	movw	r30, r16
+     926:	80 83       	st	Z, r24
+    Width = NRF24L01_Read_Top_Fifo_Width( );		//读接收数据个数
+
+    RF24L01_SET_CS_LOW( );		//片选
+    drv_spi_read_write_byte( RD_RX_PLOAD );			//读有效数据命令
+	
+    for( PipeNum = 0; PipeNum < Width; PipeNum ++ )
+     928:	89 81       	ldd	r24, Y+1	; 0x01
+     92a:	8f 5f       	subi	r24, 0xFF	; 255
+     92c:	89 83       	std	Y+1, r24	; 0x01
+     92e:	99 81       	ldd	r25, Y+1	; 0x01
+     930:	8a 81       	ldd	r24, Y+2	; 0x02
+     932:	98 17       	cp	r25, r24
+     934:	68 f3       	brcs	.-38     	; 0x910 <NRF24L01_Read_Rx_Payload+0x38>
+    {
+        *( pRxBuf + PipeNum ) = drv_spi_read_write_byte( 0xFF );		//读数据
+    }
+    RF24L01_SET_CS_HIGH( );		//取消片选
+     936:	a8 e3       	ldi	r26, 0x38	; 56
+     938:	b0 e0       	ldi	r27, 0x00	; 0
+     93a:	e8 e3       	ldi	r30, 0x38	; 56
+     93c:	f0 e0       	ldi	r31, 0x00	; 0
+     93e:	80 81       	ld	r24, Z
+     940:	84 60       	ori	r24, 0x04	; 4
+     942:	8c 93       	st	X, r24
+    NRF24L01_Flush_Rx_Fifo( );	//清空RX FIFO
+     944:	1d df       	rcall	.-454    	; 0x780 <NRF24L01_Flush_Rx_Fifo>
+	
+    return Width;
+     946:	8a 81       	ldd	r24, Y+2	; 0x02
+}
+     948:	0f 90       	pop	r0
+     94a:	0f 90       	pop	r0
+     94c:	0f 90       	pop	r0
+     94e:	0f 90       	pop	r0
+     950:	cf 91       	pop	r28
+     952:	df 91       	pop	r29
+     954:	1f 91       	pop	r17
+     956:	0f 91       	pop	r16
+     958:	08 95       	ret
+
+0000095a <NRF24L01_Write_Tx_Payload_Ack>:
+  *			@len:长度
+  * @note  :一次不超过32个字节
+  * @retval:无
+  */
+void NRF24L01_Write_Tx_Payload_Ack( uint8_t *pTxBuf, uint8_t len )
+{
+     95a:	df 93       	push	r29
+     95c:	cf 93       	push	r28
+     95e:	00 d0       	rcall	.+0      	; 0x960 <NRF24L01_Write_Tx_Payload_Ack+0x6>
+     960:	00 d0       	rcall	.+0      	; 0x962 <NRF24L01_Write_Tx_Payload_Ack+0x8>
+     962:	00 d0       	rcall	.+0      	; 0x964 <NRF24L01_Write_Tx_Payload_Ack+0xa>
+     964:	cd b7       	in	r28, 0x3d	; 61
+     966:	de b7       	in	r29, 0x3e	; 62
+     968:	9c 83       	std	Y+4, r25	; 0x04
+     96a:	8b 83       	std	Y+3, r24	; 0x03
+     96c:	6d 83       	std	Y+5, r22	; 0x05
+    uint8_t btmp;
+    uint8_t length = ( len > 32 ) ? 32 : len;		//数据长达大约32 则只发送32个
+     96e:	8d 81       	ldd	r24, Y+5	; 0x05
+     970:	8e 83       	std	Y+6, r24	; 0x06
+     972:	8e 81       	ldd	r24, Y+6	; 0x06
+     974:	81 32       	cpi	r24, 0x21	; 33
+     976:	10 f0       	brcs	.+4      	; 0x97c <NRF24L01_Write_Tx_Payload_Ack+0x22>
+     978:	80 e2       	ldi	r24, 0x20	; 32
+     97a:	8e 83       	std	Y+6, r24	; 0x06
+     97c:	8e 81       	ldd	r24, Y+6	; 0x06
+     97e:	89 83       	std	Y+1, r24	; 0x01
+
+    NRF24L01_Flush_Tx_Fifo( );		//清TX FIFO
+     980:	e8 de       	rcall	.-560    	; 0x752 <NRF24L01_Flush_Tx_Fifo>
+	
+    RF24L01_SET_CS_LOW( );			//片选
+     982:	a8 e3       	ldi	r26, 0x38	; 56
+     984:	b0 e0       	ldi	r27, 0x00	; 0
+     986:	e8 e3       	ldi	r30, 0x38	; 56
+     988:	f0 e0       	ldi	r31, 0x00	; 0
+     98a:	80 81       	ld	r24, Z
+     98c:	8b 7f       	andi	r24, 0xFB	; 251
+     98e:	8c 93       	st	X, r24
+    drv_spi_read_write_byte( WR_TX_PLOAD );	//发送命令
+     990:	80 ea       	ldi	r24, 0xA0	; 160
+     992:	16 dd       	rcall	.-1492   	; 0x3c0 <drv_spi_read_write_byte>
+	
+    for( btmp = 0; btmp < length; btmp ++ )
+     994:	1a 82       	std	Y+2, r1	; 0x02
+     996:	0d c0       	rjmp	.+26     	; 0x9b2 <NRF24L01_Write_Tx_Payload_Ack+0x58>
+    {
+        drv_spi_read_write_byte( *( pTxBuf + btmp ) );	//发送数据
+     998:	8a 81       	ldd	r24, Y+2	; 0x02
+     99a:	28 2f       	mov	r18, r24
+     99c:	30 e0       	ldi	r19, 0x00	; 0
+     99e:	8b 81       	ldd	r24, Y+3	; 0x03
+     9a0:	9c 81       	ldd	r25, Y+4	; 0x04
+     9a2:	fc 01       	movw	r30, r24
+     9a4:	e2 0f       	add	r30, r18
+     9a6:	f3 1f       	adc	r31, r19
+     9a8:	80 81       	ld	r24, Z
+     9aa:	0a dd       	rcall	.-1516   	; 0x3c0 <drv_spi_read_write_byte>
+    NRF24L01_Flush_Tx_Fifo( );		//清TX FIFO
+	
+    RF24L01_SET_CS_LOW( );			//片选
+    drv_spi_read_write_byte( WR_TX_PLOAD );	//发送命令
+	
+    for( btmp = 0; btmp < length; btmp ++ )
+     9ac:	8a 81       	ldd	r24, Y+2	; 0x02
+     9ae:	8f 5f       	subi	r24, 0xFF	; 255
+     9b0:	8a 83       	std	Y+2, r24	; 0x02
+     9b2:	9a 81       	ldd	r25, Y+2	; 0x02
+     9b4:	89 81       	ldd	r24, Y+1	; 0x01
+     9b6:	98 17       	cp	r25, r24
+     9b8:	78 f3       	brcs	.-34     	; 0x998 <NRF24L01_Write_Tx_Payload_Ack+0x3e>
+    {
+        drv_spi_read_write_byte( *( pTxBuf + btmp ) );	//发送数据
+    }
+    RF24L01_SET_CS_HIGH( );			//取消片选
+     9ba:	a8 e3       	ldi	r26, 0x38	; 56
+     9bc:	b0 e0       	ldi	r27, 0x00	; 0
+     9be:	e8 e3       	ldi	r30, 0x38	; 56
+     9c0:	f0 e0       	ldi	r31, 0x00	; 0
+     9c2:	80 81       	ld	r24, Z
+     9c4:	84 60       	ori	r24, 0x04	; 4
+     9c6:	8c 93       	st	X, r24
+}
+     9c8:	26 96       	adiw	r28, 0x06	; 6
+     9ca:	0f b6       	in	r0, 0x3f	; 63
+     9cc:	f8 94       	cli
+     9ce:	de bf       	out	0x3e, r29	; 62
+     9d0:	0f be       	out	0x3f, r0	; 63
+     9d2:	cd bf       	out	0x3d, r28	; 61
+     9d4:	cf 91       	pop	r28
+     9d6:	df 91       	pop	r29
+     9d8:	08 95       	ret
+
+000009da <NRF24L01_Write_Tx_Payload_NoAck>:
+  *			@len:长度
+  * @note  :一次不超过32个字节
+  * @retval:无
+  */
+void NRF24L01_Write_Tx_Payload_NoAck( uint8_t *pTxBuf, uint8_t len )
+{
+     9da:	df 93       	push	r29
+     9dc:	cf 93       	push	r28
+     9de:	00 d0       	rcall	.+0      	; 0x9e0 <NRF24L01_Write_Tx_Payload_NoAck+0x6>
+     9e0:	00 d0       	rcall	.+0      	; 0x9e2 <NRF24L01_Write_Tx_Payload_NoAck+0x8>
+     9e2:	cd b7       	in	r28, 0x3d	; 61
+     9e4:	de b7       	in	r29, 0x3e	; 62
+     9e6:	9a 83       	std	Y+2, r25	; 0x02
+     9e8:	89 83       	std	Y+1, r24	; 0x01
+     9ea:	6b 83       	std	Y+3, r22	; 0x03
+    if( len > 32 || len == 0 )
+     9ec:	8b 81       	ldd	r24, Y+3	; 0x03
+     9ee:	81 32       	cpi	r24, 0x21	; 33
+     9f0:	50 f5       	brcc	.+84     	; 0xa46 <NRF24L01_Write_Tx_Payload_NoAck+0x6c>
+     9f2:	8b 81       	ldd	r24, Y+3	; 0x03
+     9f4:	88 23       	and	r24, r24
+     9f6:	39 f1       	breq	.+78     	; 0xa46 <NRF24L01_Write_Tx_Payload_NoAck+0x6c>
+    {
+        return ;		//数据长度大于32 或者等于0 不执行
+    }
+	
+    RF24L01_SET_CS_LOW( );	//片选
+     9f8:	a8 e3       	ldi	r26, 0x38	; 56
+     9fa:	b0 e0       	ldi	r27, 0x00	; 0
+     9fc:	e8 e3       	ldi	r30, 0x38	; 56
+     9fe:	f0 e0       	ldi	r31, 0x00	; 0
+     a00:	80 81       	ld	r24, Z
+     a02:	8b 7f       	andi	r24, 0xFB	; 251
+     a04:	8c 93       	st	X, r24
+    drv_spi_read_write_byte( WR_TX_PLOAD_NACK );	//发送命令
+     a06:	80 eb       	ldi	r24, 0xB0	; 176
+     a08:	db dc       	rcall	.-1610   	; 0x3c0 <drv_spi_read_write_byte>
+     a0a:	09 c0       	rjmp	.+18     	; 0xa1e <NRF24L01_Write_Tx_Payload_NoAck+0x44>
+    while( len-- )
+    {
+        drv_spi_read_write_byte( *pTxBuf );			//发送数据
+     a0c:	e9 81       	ldd	r30, Y+1	; 0x01
+     a0e:	fa 81       	ldd	r31, Y+2	; 0x02
+     a10:	80 81       	ld	r24, Z
+     a12:	d6 dc       	rcall	.-1620   	; 0x3c0 <drv_spi_read_write_byte>
+		pTxBuf++;
+     a14:	89 81       	ldd	r24, Y+1	; 0x01
+     a16:	9a 81       	ldd	r25, Y+2	; 0x02
+     a18:	01 96       	adiw	r24, 0x01	; 1
+     a1a:	9a 83       	std	Y+2, r25	; 0x02
+     a1c:	89 83       	std	Y+1, r24	; 0x01
+        return ;		//数据长度大于32 或者等于0 不执行
+    }
+	
+    RF24L01_SET_CS_LOW( );	//片选
+    drv_spi_read_write_byte( WR_TX_PLOAD_NACK );	//发送命令
+    while( len-- )
+     a1e:	8b 81       	ldd	r24, Y+3	; 0x03
+     a20:	8c 83       	std	Y+4, r24	; 0x04
+     a22:	8c 81       	ldd	r24, Y+4	; 0x04
+     a24:	88 23       	and	r24, r24
+     a26:	11 f0       	breq	.+4      	; 0xa2c <NRF24L01_Write_Tx_Payload_NoAck+0x52>
+     a28:	81 e0       	ldi	r24, 0x01	; 1
+     a2a:	8c 83       	std	Y+4, r24	; 0x04
+     a2c:	8c 81       	ldd	r24, Y+4	; 0x04
+     a2e:	9b 81       	ldd	r25, Y+3	; 0x03
+     a30:	91 50       	subi	r25, 0x01	; 1
+     a32:	9b 83       	std	Y+3, r25	; 0x03
+     a34:	88 23       	and	r24, r24
+     a36:	51 f7       	brne	.-44     	; 0xa0c <NRF24L01_Write_Tx_Payload_NoAck+0x32>
+    {
+        drv_spi_read_write_byte( *pTxBuf );			//发送数据
+		pTxBuf++;
+    }
+    RF24L01_SET_CS_HIGH( );		//取消片选
+     a38:	a8 e3       	ldi	r26, 0x38	; 56
+     a3a:	b0 e0       	ldi	r27, 0x00	; 0
+     a3c:	e8 e3       	ldi	r30, 0x38	; 56
+     a3e:	f0 e0       	ldi	r31, 0x00	; 0
+     a40:	80 81       	ld	r24, Z
+     a42:	84 60       	ori	r24, 0x04	; 4
+     a44:	8c 93       	st	X, r24
+}
+     a46:	0f 90       	pop	r0
+     a48:	0f 90       	pop	r0
+     a4a:	0f 90       	pop	r0
+     a4c:	0f 90       	pop	r0
+     a4e:	cf 91       	pop	r28
+     a50:	df 91       	pop	r29
+     a52:	08 95       	ret
+
+00000a54 <NRF24L01_Write_Tx_Payload_InAck>:
+  *			@len:长度
+  * @note  :一次不超过32个字节
+  * @retval:无
+  */
+void NRF24L01_Write_Tx_Payload_InAck( uint8_t *pData, uint8_t len )
+{
+     a54:	df 93       	push	r29
+     a56:	cf 93       	push	r28
+     a58:	00 d0       	rcall	.+0      	; 0xa5a <NRF24L01_Write_Tx_Payload_InAck+0x6>
+     a5a:	00 d0       	rcall	.+0      	; 0xa5c <NRF24L01_Write_Tx_Payload_InAck+0x8>
+     a5c:	0f 92       	push	r0
+     a5e:	cd b7       	in	r28, 0x3d	; 61
+     a60:	de b7       	in	r29, 0x3e	; 62
+     a62:	9b 83       	std	Y+3, r25	; 0x03
+     a64:	8a 83       	std	Y+2, r24	; 0x02
+     a66:	6c 83       	std	Y+4, r22	; 0x04
+    uint8_t btmp;
+	
+	len = ( len > 32 ) ? 32 : len;		//数据长度大于32个则只写32个字节
+     a68:	8c 81       	ldd	r24, Y+4	; 0x04
+     a6a:	8d 83       	std	Y+5, r24	; 0x05
+     a6c:	8d 81       	ldd	r24, Y+5	; 0x05
+     a6e:	81 32       	cpi	r24, 0x21	; 33
+     a70:	10 f0       	brcs	.+4      	; 0xa76 <NRF24L01_Write_Tx_Payload_InAck+0x22>
+     a72:	80 e2       	ldi	r24, 0x20	; 32
+     a74:	8d 83       	std	Y+5, r24	; 0x05
+     a76:	8d 81       	ldd	r24, Y+5	; 0x05
+     a78:	8c 83       	std	Y+4, r24	; 0x04
+
+    RF24L01_SET_CS_LOW( );			//片选
+     a7a:	a8 e3       	ldi	r26, 0x38	; 56
+     a7c:	b0 e0       	ldi	r27, 0x00	; 0
+     a7e:	e8 e3       	ldi	r30, 0x38	; 56
+     a80:	f0 e0       	ldi	r31, 0x00	; 0
+     a82:	80 81       	ld	r24, Z
+     a84:	8b 7f       	andi	r24, 0xFB	; 251
+     a86:	8c 93       	st	X, r24
+    drv_spi_read_write_byte( W_ACK_PLOAD );		//命令
+     a88:	88 ea       	ldi	r24, 0xA8	; 168
+     a8a:	9a dc       	rcall	.-1740   	; 0x3c0 <drv_spi_read_write_byte>
+    for( btmp = 0; btmp < len; btmp ++ )
+     a8c:	19 82       	std	Y+1, r1	; 0x01
+     a8e:	0d c0       	rjmp	.+26     	; 0xaaa <NRF24L01_Write_Tx_Payload_InAck+0x56>
+    {
+        drv_spi_read_write_byte( *( pData + btmp ) );	//写数据
+     a90:	89 81       	ldd	r24, Y+1	; 0x01
+     a92:	28 2f       	mov	r18, r24
+     a94:	30 e0       	ldi	r19, 0x00	; 0
+     a96:	8a 81       	ldd	r24, Y+2	; 0x02
+     a98:	9b 81       	ldd	r25, Y+3	; 0x03
+     a9a:	fc 01       	movw	r30, r24
+     a9c:	e2 0f       	add	r30, r18
+     a9e:	f3 1f       	adc	r31, r19
+     aa0:	80 81       	ld	r24, Z
+     aa2:	8e dc       	rcall	.-1764   	; 0x3c0 <drv_spi_read_write_byte>
+	
+	len = ( len > 32 ) ? 32 : len;		//数据长度大于32个则只写32个字节
+
+    RF24L01_SET_CS_LOW( );			//片选
+    drv_spi_read_write_byte( W_ACK_PLOAD );		//命令
+    for( btmp = 0; btmp < len; btmp ++ )
+     aa4:	89 81       	ldd	r24, Y+1	; 0x01
+     aa6:	8f 5f       	subi	r24, 0xFF	; 255
+     aa8:	89 83       	std	Y+1, r24	; 0x01
+     aaa:	99 81       	ldd	r25, Y+1	; 0x01
+     aac:	8c 81       	ldd	r24, Y+4	; 0x04
+     aae:	98 17       	cp	r25, r24
+     ab0:	78 f3       	brcs	.-34     	; 0xa90 <NRF24L01_Write_Tx_Payload_InAck+0x3c>
+    {
+        drv_spi_read_write_byte( *( pData + btmp ) );	//写数据
+    }
+    RF24L01_SET_CS_HIGH( );			//取消片选
+     ab2:	a8 e3       	ldi	r26, 0x38	; 56
+     ab4:	b0 e0       	ldi	r27, 0x00	; 0
+     ab6:	e8 e3       	ldi	r30, 0x38	; 56
+     ab8:	f0 e0       	ldi	r31, 0x00	; 0
+     aba:	80 81       	ld	r24, Z
+     abc:	84 60       	ori	r24, 0x04	; 4
+     abe:	8c 93       	st	X, r24
+}
+     ac0:	0f 90       	pop	r0
+     ac2:	0f 90       	pop	r0
+     ac4:	0f 90       	pop	r0
+     ac6:	0f 90       	pop	r0
+     ac8:	0f 90       	pop	r0
+     aca:	cf 91       	pop	r28
+     acc:	df 91       	pop	r29
+     ace:	08 95       	ret
+
+00000ad0 <NRF24L01_Set_TxAddr>:
+  *			@len:长度
+  * @note  :无
+  * @retval:无
+  */
+void NRF24L01_Set_TxAddr( uint8_t *pAddr, uint8_t len )
+{
+     ad0:	df 93       	push	r29
+     ad2:	cf 93       	push	r28
+     ad4:	00 d0       	rcall	.+0      	; 0xad6 <NRF24L01_Set_TxAddr+0x6>
+     ad6:	00 d0       	rcall	.+0      	; 0xad8 <NRF24L01_Set_TxAddr+0x8>
+     ad8:	cd b7       	in	r28, 0x3d	; 61
+     ada:	de b7       	in	r29, 0x3e	; 62
+     adc:	9a 83       	std	Y+2, r25	; 0x02
+     ade:	89 83       	std	Y+1, r24	; 0x01
+     ae0:	6b 83       	std	Y+3, r22	; 0x03
+	len = ( len > 5 ) ? 5 : len;					//地址不能大于5个字节
+     ae2:	8b 81       	ldd	r24, Y+3	; 0x03
+     ae4:	8c 83       	std	Y+4, r24	; 0x04
+     ae6:	8c 81       	ldd	r24, Y+4	; 0x04
+     ae8:	86 30       	cpi	r24, 0x06	; 6
+     aea:	10 f0       	brcs	.+4      	; 0xaf0 <NRF24L01_Set_TxAddr+0x20>
+     aec:	85 e0       	ldi	r24, 0x05	; 5
+     aee:	8c 83       	std	Y+4, r24	; 0x04
+     af0:	8c 81       	ldd	r24, Y+4	; 0x04
+     af2:	8b 83       	std	Y+3, r24	; 0x03
+    NRF24L01_Write_Buf( TX_ADDR, pAddr, len );	//写地址
+     af4:	29 81       	ldd	r18, Y+1	; 0x01
+     af6:	3a 81       	ldd	r19, Y+2	; 0x02
+     af8:	80 e1       	ldi	r24, 0x10	; 16
+     afa:	b9 01       	movw	r22, r18
+     afc:	4b 81       	ldd	r20, Y+3	; 0x03
+     afe:	f2 dd       	rcall	.-1052   	; 0x6e4 <NRF24L01_Write_Buf>
+}
+     b00:	0f 90       	pop	r0
+     b02:	0f 90       	pop	r0
+     b04:	0f 90       	pop	r0
+     b06:	0f 90       	pop	r0
+     b08:	cf 91       	pop	r28
+     b0a:	df 91       	pop	r29
+     b0c:	08 95       	ret
+
+00000b0e <NRF24L01_Set_RxAddr>:
+  *			@Len:长度
+  * @note  :通道不大于5 地址长度不大于5个字节
+  * @retval:无
+  */
+void NRF24L01_Set_RxAddr( uint8_t PipeNum, uint8_t *pAddr, uint8_t Len )
+{
+     b0e:	df 93       	push	r29
+     b10:	cf 93       	push	r28
+     b12:	00 d0       	rcall	.+0      	; 0xb14 <NRF24L01_Set_RxAddr+0x6>
+     b14:	00 d0       	rcall	.+0      	; 0xb16 <NRF24L01_Set_RxAddr+0x8>
+     b16:	00 d0       	rcall	.+0      	; 0xb18 <NRF24L01_Set_RxAddr+0xa>
+     b18:	cd b7       	in	r28, 0x3d	; 61
+     b1a:	de b7       	in	r29, 0x3e	; 62
+     b1c:	89 83       	std	Y+1, r24	; 0x01
+     b1e:	7b 83       	std	Y+3, r23	; 0x03
+     b20:	6a 83       	std	Y+2, r22	; 0x02
+     b22:	4c 83       	std	Y+4, r20	; 0x04
+    Len = ( Len > 5 ) ? 5 : Len;
+     b24:	8c 81       	ldd	r24, Y+4	; 0x04
+     b26:	8d 83       	std	Y+5, r24	; 0x05
+     b28:	8d 81       	ldd	r24, Y+5	; 0x05
+     b2a:	86 30       	cpi	r24, 0x06	; 6
+     b2c:	10 f0       	brcs	.+4      	; 0xb32 <NRF24L01_Set_RxAddr+0x24>
+     b2e:	85 e0       	ldi	r24, 0x05	; 5
+     b30:	8d 83       	std	Y+5, r24	; 0x05
+     b32:	8d 81       	ldd	r24, Y+5	; 0x05
+     b34:	8c 83       	std	Y+4, r24	; 0x04
+    PipeNum = ( PipeNum > 5 ) ? 5 : PipeNum;		//通道不大于5 地址长度不大于5个字节
+     b36:	89 81       	ldd	r24, Y+1	; 0x01
+     b38:	8e 83       	std	Y+6, r24	; 0x06
+     b3a:	8e 81       	ldd	r24, Y+6	; 0x06
+     b3c:	86 30       	cpi	r24, 0x06	; 6
+     b3e:	10 f0       	brcs	.+4      	; 0xb44 <NRF24L01_Set_RxAddr+0x36>
+     b40:	85 e0       	ldi	r24, 0x05	; 5
+     b42:	8e 83       	std	Y+6, r24	; 0x06
+     b44:	8e 81       	ldd	r24, Y+6	; 0x06
+     b46:	89 83       	std	Y+1, r24	; 0x01
+
+    NRF24L01_Write_Buf( RX_ADDR_P0 + PipeNum, pAddr, Len );	//写入地址
+     b48:	89 81       	ldd	r24, Y+1	; 0x01
+     b4a:	86 5f       	subi	r24, 0xF6	; 246
+     b4c:	2a 81       	ldd	r18, Y+2	; 0x02
+     b4e:	3b 81       	ldd	r19, Y+3	; 0x03
+     b50:	b9 01       	movw	r22, r18
+     b52:	4c 81       	ldd	r20, Y+4	; 0x04
+     b54:	c7 dd       	rcall	.-1138   	; 0x6e4 <NRF24L01_Write_Buf>
+}
+     b56:	26 96       	adiw	r28, 0x06	; 6
+     b58:	0f b6       	in	r0, 0x3f	; 63
+     b5a:	f8 94       	cli
+     b5c:	de bf       	out	0x3e, r29	; 62
+     b5e:	0f be       	out	0x3f, r0	; 63
+     b60:	cd bf       	out	0x3d, r28	; 61
+     b62:	cf 91       	pop	r28
+     b64:	df 91       	pop	r29
+     b66:	08 95       	ret
+
+00000b68 <NRF24L01_Set_Speed>:
+  *			@Speed:速度
+  * @note  :无
+  * @retval:无
+  */
+void NRF24L01_Set_Speed( nRf24l01SpeedType Speed )
+{
+     b68:	df 93       	push	r29
+     b6a:	cf 93       	push	r28
+     b6c:	00 d0       	rcall	.+0      	; 0xb6e <NRF24L01_Set_Speed+0x6>
+     b6e:	cd b7       	in	r28, 0x3d	; 61
+     b70:	de b7       	in	r29, 0x3e	; 62
+     b72:	8a 83       	std	Y+2, r24	; 0x02
+	uint8_t btmp = 0;
+     b74:	19 82       	std	Y+1, r1	; 0x01
+	
+	btmp = NRF24L01_Read_Reg( RF_SETUP );
+     b76:	86 e0       	ldi	r24, 0x06	; 6
+     b78:	3b dd       	rcall	.-1418   	; 0x5f0 <NRF24L01_Read_Reg>
+     b7a:	89 83       	std	Y+1, r24	; 0x01
+	btmp &= ~( ( 1<<5 ) | ( 1<<3 ) );
+     b7c:	89 81       	ldd	r24, Y+1	; 0x01
+     b7e:	87 7d       	andi	r24, 0xD7	; 215
+     b80:	89 83       	std	Y+1, r24	; 0x01
+	
+	if( Speed == SPEED_250K )		//250K
+     b82:	8a 81       	ldd	r24, Y+2	; 0x02
+     b84:	88 23       	and	r24, r24
+     b86:	21 f4       	brne	.+8      	; 0xb90 <NRF24L01_Set_Speed+0x28>
+	{
+		btmp |= ( 1<<5 );
+     b88:	89 81       	ldd	r24, Y+1	; 0x01
+     b8a:	80 62       	ori	r24, 0x20	; 32
+     b8c:	89 83       	std	Y+1, r24	; 0x01
+     b8e:	0d c0       	rjmp	.+26     	; 0xbaa <NRF24L01_Set_Speed+0x42>
+	}
+	else if( Speed == SPEED_1M )   //1M
+     b90:	8a 81       	ldd	r24, Y+2	; 0x02
+     b92:	81 30       	cpi	r24, 0x01	; 1
+     b94:	21 f4       	brne	.+8      	; 0xb9e <NRF24L01_Set_Speed+0x36>
+	{
+   		btmp &= ~( ( 1<<5 ) | ( 1<<3 ) );
+     b96:	89 81       	ldd	r24, Y+1	; 0x01
+     b98:	87 7d       	andi	r24, 0xD7	; 215
+     b9a:	89 83       	std	Y+1, r24	; 0x01
+     b9c:	06 c0       	rjmp	.+12     	; 0xbaa <NRF24L01_Set_Speed+0x42>
+	}
+	else if( Speed == SPEED_2M )   //2M
+     b9e:	8a 81       	ldd	r24, Y+2	; 0x02
+     ba0:	82 30       	cpi	r24, 0x02	; 2
+     ba2:	19 f4       	brne	.+6      	; 0xbaa <NRF24L01_Set_Speed+0x42>
+	{
+		btmp |= ( 1<<3 );
+     ba4:	89 81       	ldd	r24, Y+1	; 0x01
+     ba6:	88 60       	ori	r24, 0x08	; 8
+     ba8:	89 83       	std	Y+1, r24	; 0x01
+	}
+
+	NRF24L01_Write_Reg( RF_SETUP, btmp );
+     baa:	86 e0       	ldi	r24, 0x06	; 6
+     bac:	69 81       	ldd	r22, Y+1	; 0x01
+     bae:	7b dd       	rcall	.-1290   	; 0x6a6 <NRF24L01_Write_Reg>
+}
+     bb0:	0f 90       	pop	r0
+     bb2:	0f 90       	pop	r0
+     bb4:	cf 91       	pop	r28
+     bb6:	df 91       	pop	r29
+     bb8:	08 95       	ret
+
+00000bba <NRF24L01_Set_Power>:
+  *			@Speed:速度
+  * @note  :无
+  * @retval:无
+  */
+void NRF24L01_Set_Power( nRf24l01PowerType Power )
+{
+     bba:	df 93       	push	r29
+     bbc:	cf 93       	push	r28
+     bbe:	00 d0       	rcall	.+0      	; 0xbc0 <NRF24L01_Set_Power+0x6>
+     bc0:	00 d0       	rcall	.+0      	; 0xbc2 <NRF24L01_Set_Power+0x8>
+     bc2:	cd b7       	in	r28, 0x3d	; 61
+     bc4:	de b7       	in	r29, 0x3e	; 62
+     bc6:	8a 83       	std	Y+2, r24	; 0x02
+    uint8_t btmp;
+	
+	btmp = NRF24L01_Read_Reg( RF_SETUP ) & ~0x07;
+     bc8:	86 e0       	ldi	r24, 0x06	; 6
+     bca:	12 dd       	rcall	.-1500   	; 0x5f0 <NRF24L01_Read_Reg>
+     bcc:	88 7f       	andi	r24, 0xF8	; 248
+     bce:	89 83       	std	Y+1, r24	; 0x01
+    switch( Power )
+     bd0:	8a 81       	ldd	r24, Y+2	; 0x02
+     bd2:	28 2f       	mov	r18, r24
+     bd4:	30 e0       	ldi	r19, 0x00	; 0
+     bd6:	3c 83       	std	Y+4, r19	; 0x04
+     bd8:	2b 83       	std	Y+3, r18	; 0x03
+     bda:	8b 81       	ldd	r24, Y+3	; 0x03
+     bdc:	9c 81       	ldd	r25, Y+4	; 0x04
+     bde:	81 30       	cpi	r24, 0x01	; 1
+     be0:	91 05       	cpc	r25, r1
+     be2:	81 f0       	breq	.+32     	; 0xc04 <NRF24L01_Set_Power+0x4a>
+     be4:	2b 81       	ldd	r18, Y+3	; 0x03
+     be6:	3c 81       	ldd	r19, Y+4	; 0x04
+     be8:	22 30       	cpi	r18, 0x02	; 2
+     bea:	31 05       	cpc	r19, r1
+     bec:	b4 f0       	brlt	.+44     	; 0xc1a <NRF24L01_Set_Power+0x60>
+     bee:	8b 81       	ldd	r24, Y+3	; 0x03
+     bf0:	9c 81       	ldd	r25, Y+4	; 0x04
+     bf2:	82 30       	cpi	r24, 0x02	; 2
+     bf4:	91 05       	cpc	r25, r1
+     bf6:	51 f0       	breq	.+20     	; 0xc0c <NRF24L01_Set_Power+0x52>
+     bf8:	2b 81       	ldd	r18, Y+3	; 0x03
+     bfa:	3c 81       	ldd	r19, Y+4	; 0x04
+     bfc:	23 30       	cpi	r18, 0x03	; 3
+     bfe:	31 05       	cpc	r19, r1
+     c00:	49 f0       	breq	.+18     	; 0xc14 <NRF24L01_Set_Power+0x5a>
+     c02:	0b c0       	rjmp	.+22     	; 0xc1a <NRF24L01_Set_Power+0x60>
+    {
+        case POWER_F18DBM:
+            btmp |= PWR_18DB;
+            break;
+        case POWER_F12DBM:
+            btmp |= PWR_12DB;
+     c04:	89 81       	ldd	r24, Y+1	; 0x01
+     c06:	82 60       	ori	r24, 0x02	; 2
+     c08:	89 83       	std	Y+1, r24	; 0x01
+     c0a:	07 c0       	rjmp	.+14     	; 0xc1a <NRF24L01_Set_Power+0x60>
+            break;
+        case POWER_F6DBM:
+            btmp |= PWR_6DB;
+     c0c:	89 81       	ldd	r24, Y+1	; 0x01
+     c0e:	84 60       	ori	r24, 0x04	; 4
+     c10:	89 83       	std	Y+1, r24	; 0x01
+     c12:	03 c0       	rjmp	.+6      	; 0xc1a <NRF24L01_Set_Power+0x60>
+            break;
+        case POWER_0DBM:
+            btmp |= PWR_0DB;
+     c14:	89 81       	ldd	r24, Y+1	; 0x01
+     c16:	86 60       	ori	r24, 0x06	; 6
+     c18:	89 83       	std	Y+1, r24	; 0x01
+            break;
+        default:
+            break;
+    }
+    NRF24L01_Write_Reg( RF_SETUP, btmp );
+     c1a:	86 e0       	ldi	r24, 0x06	; 6
+     c1c:	69 81       	ldd	r22, Y+1	; 0x01
+     c1e:	43 dd       	rcall	.-1402   	; 0x6a6 <NRF24L01_Write_Reg>
+}
+     c20:	0f 90       	pop	r0
+     c22:	0f 90       	pop	r0
+     c24:	0f 90       	pop	r0
+     c26:	0f 90       	pop	r0
+     c28:	cf 91       	pop	r28
+     c2a:	df 91       	pop	r29
+     c2c:	08 95       	ret
+
+00000c2e <RF24LL01_Write_Hopping_Point>:
+  *			@FreqPoint:频率设置参数
+  * @note  :值不大于127
+  * @retval:无
+  */
+void RF24LL01_Write_Hopping_Point( uint8_t FreqPoint )
+{
+     c2e:	df 93       	push	r29
+     c30:	cf 93       	push	r28
+     c32:	0f 92       	push	r0
+     c34:	cd b7       	in	r28, 0x3d	; 61
+     c36:	de b7       	in	r29, 0x3e	; 62
+     c38:	89 83       	std	Y+1, r24	; 0x01
+    NRF24L01_Write_Reg(  RF_CH, FreqPoint & 0x7F );
+     c3a:	89 81       	ldd	r24, Y+1	; 0x01
+     c3c:	98 2f       	mov	r25, r24
+     c3e:	9f 77       	andi	r25, 0x7F	; 127
+     c40:	85 e0       	ldi	r24, 0x05	; 5
+     c42:	69 2f       	mov	r22, r25
+     c44:	30 dd       	rcall	.-1440   	; 0x6a6 <NRF24L01_Write_Reg>
+}
+     c46:	0f 90       	pop	r0
+     c48:	cf 91       	pop	r28
+     c4a:	df 91       	pop	r29
+     c4c:	08 95       	ret
+
+00000c4e <NRF24L01_check>:
+  * @param :无
+  * @note  :无
+  * @retval:无
+  */ 
+void NRF24L01_check( void )
+{
+     c4e:	df 93       	push	r29
+     c50:	cf 93       	push	r28
+     c52:	cd b7       	in	r28, 0x3d	; 61
+     c54:	de b7       	in	r29, 0x3e	; 62
+     c56:	60 97       	sbiw	r28, 0x10	; 16
+     c58:	0f b6       	in	r0, 0x3f	; 63
+     c5a:	f8 94       	cli
+     c5c:	de bf       	out	0x3e, r29	; 62
+     c5e:	0f be       	out	0x3f, r0	; 63
+     c60:	cd bf       	out	0x3d, r28	; 61
+	uint8_t i;
+	uint8_t buf[5]={ 0XA5, 0XA5, 0XA5, 0XA5, 0XA5 };
+     c62:	ce 01       	movw	r24, r28
+     c64:	02 96       	adiw	r24, 0x02	; 2
+     c66:	9d 87       	std	Y+13, r25	; 0x0d
+     c68:	8c 87       	std	Y+12, r24	; 0x0c
+     c6a:	ae e8       	ldi	r26, 0x8E	; 142
+     c6c:	b0 e0       	ldi	r27, 0x00	; 0
+     c6e:	bf 87       	std	Y+15, r27	; 0x0f
+     c70:	ae 87       	std	Y+14, r26	; 0x0e
+     c72:	b5 e0       	ldi	r27, 0x05	; 5
+     c74:	b8 8b       	std	Y+16, r27	; 0x10
+     c76:	ee 85       	ldd	r30, Y+14	; 0x0e
+     c78:	ff 85       	ldd	r31, Y+15	; 0x0f
+     c7a:	00 80       	ld	r0, Z
+     c7c:	8e 85       	ldd	r24, Y+14	; 0x0e
+     c7e:	9f 85       	ldd	r25, Y+15	; 0x0f
+     c80:	01 96       	adiw	r24, 0x01	; 1
+     c82:	9f 87       	std	Y+15, r25	; 0x0f
+     c84:	8e 87       	std	Y+14, r24	; 0x0e
+     c86:	ac 85       	ldd	r26, Y+12	; 0x0c
+     c88:	bd 85       	ldd	r27, Y+13	; 0x0d
+     c8a:	0c 92       	st	X, r0
+     c8c:	ec 85       	ldd	r30, Y+12	; 0x0c
+     c8e:	fd 85       	ldd	r31, Y+13	; 0x0d
+     c90:	31 96       	adiw	r30, 0x01	; 1
+     c92:	fd 87       	std	Y+13, r31	; 0x0d
+     c94:	ec 87       	std	Y+12, r30	; 0x0c
+     c96:	f8 89       	ldd	r31, Y+16	; 0x10
+     c98:	f1 50       	subi	r31, 0x01	; 1
+     c9a:	f8 8b       	std	Y+16, r31	; 0x10
+     c9c:	88 89       	ldd	r24, Y+16	; 0x10
+     c9e:	88 23       	and	r24, r24
+     ca0:	51 f7       	brne	.-44     	; 0xc76 <NRF24L01_check+0x28>
+	uint8_t read_buf[ 5 ] = { 0 };
+     ca2:	85 e0       	ldi	r24, 0x05	; 5
+     ca4:	fe 01       	movw	r30, r28
+     ca6:	37 96       	adiw	r30, 0x07	; 7
+     ca8:	df 01       	movw	r26, r30
+     caa:	98 2f       	mov	r25, r24
+     cac:	1d 92       	st	X+, r1
+     cae:	9a 95       	dec	r25
+     cb0:	e9 f7       	brne	.-6      	; 0xcac <NRF24L01_check+0x5e>
+	 
+	while( 1 )
+	{
+		NRF24L01_Write_Buf( TX_ADDR, buf, 5 );			//写入5个字节的地址
+     cb2:	9e 01       	movw	r18, r28
+     cb4:	2e 5f       	subi	r18, 0xFE	; 254
+     cb6:	3f 4f       	sbci	r19, 0xFF	; 255
+     cb8:	80 e1       	ldi	r24, 0x10	; 16
+     cba:	b9 01       	movw	r22, r18
+     cbc:	45 e0       	ldi	r20, 0x05	; 5
+     cbe:	12 dd       	rcall	.-1500   	; 0x6e4 <NRF24L01_Write_Buf>
+		NRF24L01_Read_Buf( TX_ADDR, read_buf, 5 );		//读出写入的地址  
+     cc0:	9e 01       	movw	r18, r28
+     cc2:	29 5f       	subi	r18, 0xF9	; 249
+     cc4:	3f 4f       	sbci	r19, 0xFF	; 255
+     cc6:	80 e1       	ldi	r24, 0x10	; 16
+     cc8:	b9 01       	movw	r22, r18
+     cca:	45 e0       	ldi	r20, 0x05	; 5
+     ccc:	b0 dc       	rcall	.-1696   	; 0x62e <NRF24L01_Read_Buf>
+		for( i = 0; i < 5; i++ )
+     cce:	19 82       	std	Y+1, r1	; 0x01
+     cd0:	17 c0       	rjmp	.+46     	; 0xd00 <NRF24L01_check+0xb2>
+		{
+			if( buf[ i ] != read_buf[ i ] )
+     cd2:	89 81       	ldd	r24, Y+1	; 0x01
+     cd4:	28 2f       	mov	r18, r24
+     cd6:	30 e0       	ldi	r19, 0x00	; 0
+     cd8:	ce 01       	movw	r24, r28
+     cda:	02 96       	adiw	r24, 0x02	; 2
+     cdc:	fc 01       	movw	r30, r24
+     cde:	e2 0f       	add	r30, r18
+     ce0:	f3 1f       	adc	r31, r19
+     ce2:	40 81       	ld	r20, Z
+     ce4:	89 81       	ldd	r24, Y+1	; 0x01
+     ce6:	28 2f       	mov	r18, r24
+     ce8:	30 e0       	ldi	r19, 0x00	; 0
+     cea:	ce 01       	movw	r24, r28
+     cec:	07 96       	adiw	r24, 0x07	; 7
+     cee:	fc 01       	movw	r30, r24
+     cf0:	e2 0f       	add	r30, r18
+     cf2:	f3 1f       	adc	r31, r19
+     cf4:	80 81       	ld	r24, Z
+     cf6:	48 17       	cp	r20, r24
+     cf8:	31 f4       	brne	.+12     	; 0xd06 <NRF24L01_check+0xb8>
+	 
+	while( 1 )
+	{
+		NRF24L01_Write_Buf( TX_ADDR, buf, 5 );			//写入5个字节的地址
+		NRF24L01_Read_Buf( TX_ADDR, read_buf, 5 );		//读出写入的地址  
+		for( i = 0; i < 5; i++ )
+     cfa:	89 81       	ldd	r24, Y+1	; 0x01
+     cfc:	8f 5f       	subi	r24, 0xFF	; 255
+     cfe:	89 83       	std	Y+1, r24	; 0x01
+     d00:	89 81       	ldd	r24, Y+1	; 0x01
+     d02:	85 30       	cpi	r24, 0x05	; 5
+     d04:	30 f3       	brcs	.-52     	; 0xcd2 <NRF24L01_check+0x84>
+			{
+				break;
+			}	
+		} 
+		
+		if( 5 == i )
+     d06:	89 81       	ldd	r24, Y+1	; 0x01
+     d08:	85 30       	cpi	r24, 0x05	; 5
+     d0a:	51 f0       	breq	.+20     	; 0xd20 <NRF24L01_check+0xd2>
+		{
+			break;
+		}
+		else
+		{
+			drv_uart_tx_bytes( (uint8_t *)g_ErrorString, 26 );
+     d0c:	80 91 8c 00 	lds	r24, 0x008C
+     d10:	90 91 8d 00 	lds	r25, 0x008D
+     d14:	6a e1       	ldi	r22, 0x1A	; 26
+     d16:	f8 db       	rcall	.-2064   	; 0x508 <drv_uart_tx_bytes>
+		}
+		drv_delay_ms( 2000 );
+     d18:	80 ed       	ldi	r24, 0xD0	; 208
+     d1a:	97 e0       	ldi	r25, 0x07	; 7
+     d1c:	d4 da       	rcall	.-2648   	; 0x2c6 <drv_delay_ms>
+     d1e:	c9 cf       	rjmp	.-110    	; 0xcb2 <NRF24L01_check+0x64>
+	}
+}
+     d20:	60 96       	adiw	r28, 0x10	; 16
+     d22:	0f b6       	in	r0, 0x3f	; 63
+     d24:	f8 94       	cli
+     d26:	de bf       	out	0x3e, r29	; 62
+     d28:	0f be       	out	0x3f, r0	; 63
+     d2a:	cd bf       	out	0x3d, r28	; 61
+     d2c:	cf 91       	pop	r28
+     d2e:	df 91       	pop	r29
+     d30:	08 95       	ret
+
+00000d32 <RF24L01_Set_Mode>:
+  *			@Mode:模式发送模式或接收模式
+  * @note  :无
+  * @retval:无
+  */
+void RF24L01_Set_Mode( nRf24l01ModeType Mode )
+{
+     d32:	df 93       	push	r29
+     d34:	cf 93       	push	r28
+     d36:	00 d0       	rcall	.+0      	; 0xd38 <RF24L01_Set_Mode+0x6>
+     d38:	cd b7       	in	r28, 0x3d	; 61
+     d3a:	de b7       	in	r29, 0x3e	; 62
+     d3c:	8a 83       	std	Y+2, r24	; 0x02
+    uint8_t controlreg = 0;
+     d3e:	19 82       	std	Y+1, r1	; 0x01
+	controlreg = NRF24L01_Read_Reg( CONFIG );
+     d40:	80 e0       	ldi	r24, 0x00	; 0
+     d42:	56 dc       	rcall	.-1876   	; 0x5f0 <NRF24L01_Read_Reg>
+     d44:	89 83       	std	Y+1, r24	; 0x01
+	
+    if( Mode == MODE_TX )       
+     d46:	8a 81       	ldd	r24, Y+2	; 0x02
+     d48:	88 23       	and	r24, r24
+     d4a:	21 f4       	brne	.+8      	; 0xd54 <RF24L01_Set_Mode+0x22>
+	{
+		controlreg &= ~( 1<< PRIM_RX );
+     d4c:	89 81       	ldd	r24, Y+1	; 0x01
+     d4e:	8e 7f       	andi	r24, 0xFE	; 254
+     d50:	89 83       	std	Y+1, r24	; 0x01
+     d52:	06 c0       	rjmp	.+12     	; 0xd60 <RF24L01_Set_Mode+0x2e>
+	}
+    else 
+	{
+		if( Mode == MODE_RX )  
+     d54:	8a 81       	ldd	r24, Y+2	; 0x02
+     d56:	81 30       	cpi	r24, 0x01	; 1
+     d58:	19 f4       	brne	.+6      	; 0xd60 <RF24L01_Set_Mode+0x2e>
+		{ 
+			controlreg |= ( 1<< PRIM_RX ); 
+     d5a:	89 81       	ldd	r24, Y+1	; 0x01
+     d5c:	81 60       	ori	r24, 0x01	; 1
+     d5e:	89 83       	std	Y+1, r24	; 0x01
+		}
+	}
+
+    NRF24L01_Write_Reg( CONFIG, controlreg );
+     d60:	80 e0       	ldi	r24, 0x00	; 0
+     d62:	69 81       	ldd	r22, Y+1	; 0x01
+     d64:	a0 dc       	rcall	.-1728   	; 0x6a6 <NRF24L01_Write_Reg>
+}
+     d66:	0f 90       	pop	r0
+     d68:	0f 90       	pop	r0
+     d6a:	cf 91       	pop	r28
+     d6c:	df 91       	pop	r29
+     d6e:	08 95       	ret
+
+00000d70 <NRF24L01_TxPacket>:
+  *			MAX_TX：达到最大重发次数
+  *			TX_OK：发送完成
+  *			0xFF:其他原因
+  */ 
+uint8_t NRF24L01_TxPacket( uint8_t *txbuf, uint8_t Length )
+{
+     d70:	df 93       	push	r29
+     d72:	cf 93       	push	r28
+     d74:	cd b7       	in	r28, 0x3d	; 61
+     d76:	de b7       	in	r29, 0x3e	; 62
+     d78:	28 97       	sbiw	r28, 0x08	; 8
+     d7a:	0f b6       	in	r0, 0x3f	; 63
+     d7c:	f8 94       	cli
+     d7e:	de bf       	out	0x3e, r29	; 62
+     d80:	0f be       	out	0x3f, r0	; 63
+     d82:	cd bf       	out	0x3d, r28	; 61
+     d84:	9d 83       	std	Y+5, r25	; 0x05
+     d86:	8c 83       	std	Y+4, r24	; 0x04
+     d88:	6e 83       	std	Y+6, r22	; 0x06
+	uint8_t l_Status = 0;
+     d8a:	1b 82       	std	Y+3, r1	; 0x03
+	uint16_t l_MsTimes = 0;
+     d8c:	1a 82       	std	Y+2, r1	; 0x02
+     d8e:	19 82       	std	Y+1, r1	; 0x01
+	
+	RF24L01_SET_CS_LOW( );		//片选
+     d90:	a8 e3       	ldi	r26, 0x38	; 56
+     d92:	b0 e0       	ldi	r27, 0x00	; 0
+     d94:	e8 e3       	ldi	r30, 0x38	; 56
+     d96:	f0 e0       	ldi	r31, 0x00	; 0
+     d98:	80 81       	ld	r24, Z
+     d9a:	8b 7f       	andi	r24, 0xFB	; 251
+     d9c:	8c 93       	st	X, r24
+	drv_spi_read_write_byte( FLUSH_TX );
+     d9e:	81 ee       	ldi	r24, 0xE1	; 225
+     da0:	0f db       	rcall	.-2530   	; 0x3c0 <drv_spi_read_write_byte>
+	RF24L01_SET_CS_HIGH( );
+     da2:	a8 e3       	ldi	r26, 0x38	; 56
+     da4:	b0 e0       	ldi	r27, 0x00	; 0
+     da6:	e8 e3       	ldi	r30, 0x38	; 56
+     da8:	f0 e0       	ldi	r31, 0x00	; 0
+     daa:	80 81       	ld	r24, Z
+     dac:	84 60       	ori	r24, 0x04	; 4
+     dae:	8c 93       	st	X, r24
+	
+	RF24L01_SET_CE_LOW( );		
+     db0:	a8 e3       	ldi	r26, 0x38	; 56
+     db2:	b0 e0       	ldi	r27, 0x00	; 0
+     db4:	e8 e3       	ldi	r30, 0x38	; 56
+     db6:	f0 e0       	ldi	r31, 0x00	; 0
+     db8:	80 81       	ld	r24, Z
+     dba:	8f 77       	andi	r24, 0x7F	; 127
+     dbc:	8c 93       	st	X, r24
+	NRF24L01_Write_Buf( WR_TX_PLOAD, txbuf, Length );	//写数据到TX BUF 32字节  TX_PLOAD_WIDTH
+     dbe:	2c 81       	ldd	r18, Y+4	; 0x04
+     dc0:	3d 81       	ldd	r19, Y+5	; 0x05
+     dc2:	80 ea       	ldi	r24, 0xA0	; 160
+     dc4:	b9 01       	movw	r22, r18
+     dc6:	4e 81       	ldd	r20, Y+6	; 0x06
+     dc8:	8d dc       	rcall	.-1766   	; 0x6e4 <NRF24L01_Write_Buf>
+	RF24L01_SET_CE_HIGH( );			//启动发送
+     dca:	a8 e3       	ldi	r26, 0x38	; 56
+     dcc:	b0 e0       	ldi	r27, 0x00	; 0
+     dce:	e8 e3       	ldi	r30, 0x38	; 56
+     dd0:	f0 e0       	ldi	r31, 0x00	; 0
+     dd2:	80 81       	ld	r24, Z
+     dd4:	80 68       	ori	r24, 0x80	; 128
+     dd6:	8c 93       	st	X, r24
+     dd8:	19 c0       	rjmp	.+50     	; 0xe0c <NRF24L01_TxPacket+0x9c>
+	while( 0 != RF24L01_GET_IRQ_STATUS( ))
+	{
+		drv_delay_ms( 1 );
+     dda:	81 e0       	ldi	r24, 0x01	; 1
+     ddc:	90 e0       	ldi	r25, 0x00	; 0
+     dde:	73 da       	rcall	.-2842   	; 0x2c6 <drv_delay_ms>
+		if( 500 == l_MsTimes++ )						//500ms还没有发送成功，重新初始化设备
+     de0:	18 86       	std	Y+8, r1	; 0x08
+     de2:	89 81       	ldd	r24, Y+1	; 0x01
+     de4:	9a 81       	ldd	r25, Y+2	; 0x02
+     de6:	21 e0       	ldi	r18, 0x01	; 1
+     de8:	84 3f       	cpi	r24, 0xF4	; 244
+     dea:	92 07       	cpc	r25, r18
+     dec:	11 f4       	brne	.+4      	; 0xdf2 <NRF24L01_TxPacket+0x82>
+     dee:	81 e0       	ldi	r24, 0x01	; 1
+     df0:	88 87       	std	Y+8, r24	; 0x08
+     df2:	89 81       	ldd	r24, Y+1	; 0x01
+     df4:	9a 81       	ldd	r25, Y+2	; 0x02
+     df6:	01 96       	adiw	r24, 0x01	; 1
+     df8:	9a 83       	std	Y+2, r25	; 0x02
+     dfa:	89 83       	std	Y+1, r24	; 0x01
+     dfc:	28 85       	ldd	r18, Y+8	; 0x08
+     dfe:	22 23       	and	r18, r18
+     e00:	29 f0       	breq	.+10     	; 0xe0c <NRF24L01_TxPacket+0x9c>
+		{
+			NRF24L01_Gpio_Init( );
+     e02:	9a d0       	rcall	.+308    	; 0xf38 <NRF24L01_Gpio_Init>
+			RF24L01_Init( );
+     e04:	ca d0       	rcall	.+404    	; 0xf9a <RF24L01_Init>
+			RF24L01_Set_Mode( MODE_TX );
+     e06:	80 e0       	ldi	r24, 0x00	; 0
+     e08:	94 df       	rcall	.-216    	; 0xd32 <RF24L01_Set_Mode>
+     e0a:	09 c0       	rjmp	.+18     	; 0xe1e <NRF24L01_TxPacket+0xae>
+	RF24L01_SET_CS_HIGH( );
+	
+	RF24L01_SET_CE_LOW( );		
+	NRF24L01_Write_Buf( WR_TX_PLOAD, txbuf, Length );	//写数据到TX BUF 32字节  TX_PLOAD_WIDTH
+	RF24L01_SET_CE_HIGH( );			//启动发送
+	while( 0 != RF24L01_GET_IRQ_STATUS( ))
+     e0c:	e6 e3       	ldi	r30, 0x36	; 54
+     e0e:	f0 e0       	ldi	r31, 0x00	; 0
+     e10:	80 81       	ld	r24, Z
+     e12:	88 2f       	mov	r24, r24
+     e14:	90 e0       	ldi	r25, 0x00	; 0
+     e16:	80 74       	andi	r24, 0x40	; 64
+     e18:	90 70       	andi	r25, 0x00	; 0
+     e1a:	00 97       	sbiw	r24, 0x00	; 0
+     e1c:	f1 f6       	brne	.-68     	; 0xdda <NRF24L01_TxPacket+0x6a>
+			RF24L01_Init( );
+			RF24L01_Set_Mode( MODE_TX );
+			break;
+		}
+	}
+	l_Status = NRF24L01_Read_Reg(STATUS);						//读状态寄存器
+     e1e:	87 e0       	ldi	r24, 0x07	; 7
+     e20:	e7 db       	rcall	.-2098   	; 0x5f0 <NRF24L01_Read_Reg>
+     e22:	8b 83       	std	Y+3, r24	; 0x03
+	NRF24L01_Write_Reg( STATUS, l_Status );						//清除TX_DS或MAX_RT中断标志
+     e24:	87 e0       	ldi	r24, 0x07	; 7
+     e26:	6b 81       	ldd	r22, Y+3	; 0x03
+     e28:	3e dc       	rcall	.-1924   	; 0x6a6 <NRF24L01_Write_Reg>
+	
+	if( l_Status & MAX_TX )	//达到最大重发次数
+     e2a:	8b 81       	ldd	r24, Y+3	; 0x03
+     e2c:	88 2f       	mov	r24, r24
+     e2e:	90 e0       	ldi	r25, 0x00	; 0
+     e30:	80 71       	andi	r24, 0x10	; 16
+     e32:	90 70       	andi	r25, 0x00	; 0
+     e34:	00 97       	sbiw	r24, 0x00	; 0
+     e36:	31 f0       	breq	.+12     	; 0xe44 <NRF24L01_TxPacket+0xd4>
+	{
+		NRF24L01_Write_Reg( FLUSH_TX,0xff );	//清除TX FIFO寄存器
+     e38:	81 ee       	ldi	r24, 0xE1	; 225
+     e3a:	6f ef       	ldi	r22, 0xFF	; 255
+     e3c:	34 dc       	rcall	.-1944   	; 0x6a6 <NRF24L01_Write_Reg>
+		return MAX_TX; 
+     e3e:	80 e1       	ldi	r24, 0x10	; 16
+     e40:	8f 83       	std	Y+7, r24	; 0x07
+     e42:	0c c0       	rjmp	.+24     	; 0xe5c <NRF24L01_TxPacket+0xec>
+	}
+	if( l_Status & TX_OK )	//发送完成
+     e44:	8b 81       	ldd	r24, Y+3	; 0x03
+     e46:	88 2f       	mov	r24, r24
+     e48:	90 e0       	ldi	r25, 0x00	; 0
+     e4a:	80 72       	andi	r24, 0x20	; 32
+     e4c:	90 70       	andi	r25, 0x00	; 0
+     e4e:	00 97       	sbiw	r24, 0x00	; 0
+     e50:	19 f0       	breq	.+6      	; 0xe58 <NRF24L01_TxPacket+0xe8>
+	{
+		return TX_OK;
+     e52:	20 e2       	ldi	r18, 0x20	; 32
+     e54:	2f 83       	std	Y+7, r18	; 0x07
+     e56:	02 c0       	rjmp	.+4      	; 0xe5c <NRF24L01_TxPacket+0xec>
+	}
+	
+	return 0xFF;	//其他原因发送失败
+     e58:	8f ef       	ldi	r24, 0xFF	; 255
+     e5a:	8f 83       	std	Y+7, r24	; 0x07
+     e5c:	8f 81       	ldd	r24, Y+7	; 0x07
+}
+     e5e:	28 96       	adiw	r28, 0x08	; 8
+     e60:	0f b6       	in	r0, 0x3f	; 63
+     e62:	f8 94       	cli
+     e64:	de bf       	out	0x3e, r29	; 62
+     e66:	0f be       	out	0x3f, r0	; 63
+     e68:	cd bf       	out	0x3d, r28	; 61
+     e6a:	cf 91       	pop	r28
+     e6c:	df 91       	pop	r29
+     e6e:	08 95       	ret
+
+00000e70 <NRF24L01_RxPacket>:
+  *			@rxbuf:接收数据存放地址
+  * @note  :无
+  * @retval:接收到的数据个数
+  */ 
+uint8_t NRF24L01_RxPacket( uint8_t *rxbuf )
+{
+     e70:	df 93       	push	r29
+     e72:	cf 93       	push	r28
+     e74:	cd b7       	in	r28, 0x3d	; 61
+     e76:	de b7       	in	r29, 0x3e	; 62
+     e78:	27 97       	sbiw	r28, 0x07	; 7
+     e7a:	0f b6       	in	r0, 0x3f	; 63
+     e7c:	f8 94       	cli
+     e7e:	de bf       	out	0x3e, r29	; 62
+     e80:	0f be       	out	0x3f, r0	; 63
+     e82:	cd bf       	out	0x3d, r28	; 61
+     e84:	9d 83       	std	Y+5, r25	; 0x05
+     e86:	8c 83       	std	Y+4, r24	; 0x04
+	uint8_t l_Status = 0, l_RxLength = 0, l_100MsTimes = 0;
+     e88:	1b 82       	std	Y+3, r1	; 0x03
+     e8a:	1a 82       	std	Y+2, r1	; 0x02
+     e8c:	19 82       	std	Y+1, r1	; 0x01
+	
+	RF24L01_SET_CS_LOW( );		//片选
+     e8e:	a8 e3       	ldi	r26, 0x38	; 56
+     e90:	b0 e0       	ldi	r27, 0x00	; 0
+     e92:	e8 e3       	ldi	r30, 0x38	; 56
+     e94:	f0 e0       	ldi	r31, 0x00	; 0
+     e96:	80 81       	ld	r24, Z
+     e98:	8b 7f       	andi	r24, 0xFB	; 251
+     e9a:	8c 93       	st	X, r24
+	drv_spi_read_write_byte( FLUSH_RX );
+     e9c:	82 ee       	ldi	r24, 0xE2	; 226
+     e9e:	90 da       	rcall	.-2784   	; 0x3c0 <drv_spi_read_write_byte>
+	RF24L01_SET_CS_HIGH( );
+     ea0:	a8 e3       	ldi	r26, 0x38	; 56
+     ea2:	b0 e0       	ldi	r27, 0x00	; 0
+     ea4:	e8 e3       	ldi	r30, 0x38	; 56
+     ea6:	f0 e0       	ldi	r31, 0x00	; 0
+     ea8:	80 81       	ld	r24, Z
+     eaa:	84 60       	ori	r24, 0x04	; 4
+     eac:	8c 93       	st	X, r24
+     eae:	14 c0       	rjmp	.+40     	; 0xed8 <NRF24L01_RxPacket+0x68>
+	
+	while( 0 != RF24L01_GET_IRQ_STATUS( ))
+	{
+		drv_delay_ms( 100 );
+     eb0:	84 e6       	ldi	r24, 0x64	; 100
+     eb2:	90 e0       	ldi	r25, 0x00	; 0
+     eb4:	08 da       	rcall	.-3056   	; 0x2c6 <drv_delay_ms>
+		
+		if( 30 == l_100MsTimes++ )		//3s没接收过数据，重新初始化模块
+     eb6:	1f 82       	std	Y+7, r1	; 0x07
+     eb8:	89 81       	ldd	r24, Y+1	; 0x01
+     eba:	8e 31       	cpi	r24, 0x1E	; 30
+     ebc:	11 f4       	brne	.+4      	; 0xec2 <NRF24L01_RxPacket+0x52>
+     ebe:	81 e0       	ldi	r24, 0x01	; 1
+     ec0:	8f 83       	std	Y+7, r24	; 0x07
+     ec2:	89 81       	ldd	r24, Y+1	; 0x01
+     ec4:	8f 5f       	subi	r24, 0xFF	; 255
+     ec6:	89 83       	std	Y+1, r24	; 0x01
+     ec8:	8f 81       	ldd	r24, Y+7	; 0x07
+     eca:	88 23       	and	r24, r24
+     ecc:	29 f0       	breq	.+10     	; 0xed8 <NRF24L01_RxPacket+0x68>
+		{
+			NRF24L01_Gpio_Init( );
+     ece:	34 d0       	rcall	.+104    	; 0xf38 <NRF24L01_Gpio_Init>
+			RF24L01_Init( );
+     ed0:	64 d0       	rcall	.+200    	; 0xf9a <RF24L01_Init>
+			RF24L01_Set_Mode( MODE_RX );
+     ed2:	81 e0       	ldi	r24, 0x01	; 1
+     ed4:	2e df       	rcall	.-420    	; 0xd32 <RF24L01_Set_Mode>
+     ed6:	09 c0       	rjmp	.+18     	; 0xeea <NRF24L01_RxPacket+0x7a>
+	
+	RF24L01_SET_CS_LOW( );		//片选
+	drv_spi_read_write_byte( FLUSH_RX );
+	RF24L01_SET_CS_HIGH( );
+	
+	while( 0 != RF24L01_GET_IRQ_STATUS( ))
+     ed8:	e6 e3       	ldi	r30, 0x36	; 54
+     eda:	f0 e0       	ldi	r31, 0x00	; 0
+     edc:	80 81       	ld	r24, Z
+     ede:	88 2f       	mov	r24, r24
+     ee0:	90 e0       	ldi	r25, 0x00	; 0
+     ee2:	80 74       	andi	r24, 0x40	; 64
+     ee4:	90 70       	andi	r25, 0x00	; 0
+     ee6:	00 97       	sbiw	r24, 0x00	; 0
+     ee8:	19 f7       	brne	.-58     	; 0xeb0 <NRF24L01_RxPacket+0x40>
+			RF24L01_Set_Mode( MODE_RX );
+			break;
+		}
+	}
+	
+	l_Status = NRF24L01_Read_Reg( STATUS );		//读状态寄存器
+     eea:	87 e0       	ldi	r24, 0x07	; 7
+     eec:	81 db       	rcall	.-2302   	; 0x5f0 <NRF24L01_Read_Reg>
+     eee:	8b 83       	std	Y+3, r24	; 0x03
+	NRF24L01_Write_Reg( STATUS,l_Status );		//清中断标志
+     ef0:	87 e0       	ldi	r24, 0x07	; 7
+     ef2:	6b 81       	ldd	r22, Y+3	; 0x03
+     ef4:	d8 db       	rcall	.-2128   	; 0x6a6 <NRF24L01_Write_Reg>
+	if( l_Status & RX_OK)	//接收到数据
+     ef6:	8b 81       	ldd	r24, Y+3	; 0x03
+     ef8:	88 2f       	mov	r24, r24
+     efa:	90 e0       	ldi	r25, 0x00	; 0
+     efc:	80 74       	andi	r24, 0x40	; 64
+     efe:	90 70       	andi	r25, 0x00	; 0
+     f00:	00 97       	sbiw	r24, 0x00	; 0
+     f02:	79 f0       	breq	.+30     	; 0xf22 <NRF24L01_RxPacket+0xb2>
+	{
+		l_RxLength = NRF24L01_Read_Reg( R_RX_PL_WID );		//读取接收到的数据个数
+     f04:	80 e6       	ldi	r24, 0x60	; 96
+     f06:	74 db       	rcall	.-2328   	; 0x5f0 <NRF24L01_Read_Reg>
+     f08:	8a 83       	std	Y+2, r24	; 0x02
+		NRF24L01_Read_Buf( RD_RX_PLOAD,rxbuf,l_RxLength );	//接收到数据 
+     f0a:	2c 81       	ldd	r18, Y+4	; 0x04
+     f0c:	3d 81       	ldd	r19, Y+5	; 0x05
+     f0e:	81 e6       	ldi	r24, 0x61	; 97
+     f10:	b9 01       	movw	r22, r18
+     f12:	4a 81       	ldd	r20, Y+2	; 0x02
+     f14:	8c db       	rcall	.-2280   	; 0x62e <NRF24L01_Read_Buf>
+		NRF24L01_Write_Reg( FLUSH_RX,0xff );				//清除RX FIFO
+     f16:	82 ee       	ldi	r24, 0xE2	; 226
+     f18:	6f ef       	ldi	r22, 0xFF	; 255
+     f1a:	c5 db       	rcall	.-2166   	; 0x6a6 <NRF24L01_Write_Reg>
+		return l_RxLength; 
+     f1c:	8a 81       	ldd	r24, Y+2	; 0x02
+     f1e:	8e 83       	std	Y+6, r24	; 0x06
+     f20:	01 c0       	rjmp	.+2      	; 0xf24 <NRF24L01_RxPacket+0xb4>
+	}	
+	
+	return 0;				//没有收到数据	
+     f22:	1e 82       	std	Y+6, r1	; 0x06
+     f24:	8e 81       	ldd	r24, Y+6	; 0x06
+}
+     f26:	27 96       	adiw	r28, 0x07	; 7
+     f28:	0f b6       	in	r0, 0x3f	; 63
+     f2a:	f8 94       	cli
+     f2c:	de bf       	out	0x3e, r29	; 62
+     f2e:	0f be       	out	0x3f, r0	; 63
+     f30:	cd bf       	out	0x3d, r28	; 61
+     f32:	cf 91       	pop	r28
+     f34:	df 91       	pop	r29
+     f36:	08 95       	ret
+
+00000f38 <NRF24L01_Gpio_Init>:
+  * @param :无
+  * @note  :无
+  * @retval:无
+  */ 
+void NRF24L01_Gpio_Init( void )
+{
+     f38:	df 93       	push	r29
+     f3a:	cf 93       	push	r28
+     f3c:	cd b7       	in	r28, 0x3d	; 61
+     f3e:	de b7       	in	r29, 0x3e	; 62
+	//CE 配置为输出 IRQ配置为上拉输入
+	RF24L01_CE_GPIO_ODR |= 0x01 << RF24L01_CE_GPIO_BIT;
+     f40:	a7 e3       	ldi	r26, 0x37	; 55
+     f42:	b0 e0       	ldi	r27, 0x00	; 0
+     f44:	e7 e3       	ldi	r30, 0x37	; 55
+     f46:	f0 e0       	ldi	r31, 0x00	; 0
+     f48:	80 81       	ld	r24, Z
+     f4a:	80 68       	ori	r24, 0x80	; 128
+     f4c:	8c 93       	st	X, r24
+	RF24L01_CE_GPIO_PORT |= 0x01 << RF24L01_CE_GPIO_BIT;		//置高,关闭24L01
+     f4e:	a8 e3       	ldi	r26, 0x38	; 56
+     f50:	b0 e0       	ldi	r27, 0x00	; 0
+     f52:	e8 e3       	ldi	r30, 0x38	; 56
+     f54:	f0 e0       	ldi	r31, 0x00	; 0
+     f56:	80 81       	ld	r24, Z
+     f58:	80 68       	ori	r24, 0x80	; 128
+     f5a:	8c 93       	st	X, r24
+	
+	RF24L01_IRQ_GPIO_ODR &= (uint8_t)( ~( 0x01 << RF24L01_IRQ_GPIO_BIT ));
+     f5c:	a7 e3       	ldi	r26, 0x37	; 55
+     f5e:	b0 e0       	ldi	r27, 0x00	; 0
+     f60:	e7 e3       	ldi	r30, 0x37	; 55
+     f62:	f0 e0       	ldi	r31, 0x00	; 0
+     f64:	80 81       	ld	r24, Z
+     f66:	8f 7b       	andi	r24, 0xBF	; 191
+     f68:	8c 93       	st	X, r24
+	RF24L01_IRQ_GPIO_PORT |= 0x01 << RF24L01_IRQ_GPIO_BIT;		//上拉
+     f6a:	a8 e3       	ldi	r26, 0x38	; 56
+     f6c:	b0 e0       	ldi	r27, 0x00	; 0
+     f6e:	e8 e3       	ldi	r30, 0x38	; 56
+     f70:	f0 e0       	ldi	r31, 0x00	; 0
+     f72:	80 81       	ld	r24, Z
+     f74:	80 64       	ori	r24, 0x40	; 64
+     f76:	8c 93       	st	X, r24
+	
+	RF24L01_SET_CE_LOW( );		//使能24L01
+     f78:	a8 e3       	ldi	r26, 0x38	; 56
+     f7a:	b0 e0       	ldi	r27, 0x00	; 0
+     f7c:	e8 e3       	ldi	r30, 0x38	; 56
+     f7e:	f0 e0       	ldi	r31, 0x00	; 0
+     f80:	80 81       	ld	r24, Z
+     f82:	8f 77       	andi	r24, 0x7F	; 127
+     f84:	8c 93       	st	X, r24
+	RF24L01_SET_CS_HIGH( );		//取消SPI片选
+     f86:	a8 e3       	ldi	r26, 0x38	; 56
+     f88:	b0 e0       	ldi	r27, 0x00	; 0
+     f8a:	e8 e3       	ldi	r30, 0x38	; 56
+     f8c:	f0 e0       	ldi	r31, 0x00	; 0
+     f8e:	80 81       	ld	r24, Z
+     f90:	84 60       	ori	r24, 0x04	; 4
+     f92:	8c 93       	st	X, r24
+}
+     f94:	cf 91       	pop	r28
+     f96:	df 91       	pop	r29
+     f98:	08 95       	ret
+
+00000f9a <RF24L01_Init>:
+  * @param :无
+  * @note  :无
+  * @retval:无
+  */
+void RF24L01_Init( void )
+{
+     f9a:	df 93       	push	r29
+     f9c:	cf 93       	push	r28
+     f9e:	cd b7       	in	r28, 0x3d	; 61
+     fa0:	de b7       	in	r29, 0x3e	; 62
+     fa2:	2a 97       	sbiw	r28, 0x0a	; 10
+     fa4:	0f b6       	in	r0, 0x3f	; 63
+     fa6:	f8 94       	cli
+     fa8:	de bf       	out	0x3e, r29	; 62
+     faa:	0f be       	out	0x3f, r0	; 63
+     fac:	cd bf       	out	0x3d, r28	; 61
+    uint8_t addr[5] = {INIT_ADDR};
+     fae:	ce 01       	movw	r24, r28
+     fb0:	01 96       	adiw	r24, 0x01	; 1
+     fb2:	9f 83       	std	Y+7, r25	; 0x07
+     fb4:	8e 83       	std	Y+6, r24	; 0x06
+     fb6:	e3 e9       	ldi	r30, 0x93	; 147
+     fb8:	f0 e0       	ldi	r31, 0x00	; 0
+     fba:	f9 87       	std	Y+9, r31	; 0x09
+     fbc:	e8 87       	std	Y+8, r30	; 0x08
+     fbe:	f5 e0       	ldi	r31, 0x05	; 5
+     fc0:	fa 87       	std	Y+10, r31	; 0x0a
+     fc2:	e8 85       	ldd	r30, Y+8	; 0x08
+     fc4:	f9 85       	ldd	r31, Y+9	; 0x09
+     fc6:	00 80       	ld	r0, Z
+     fc8:	88 85       	ldd	r24, Y+8	; 0x08
+     fca:	99 85       	ldd	r25, Y+9	; 0x09
+     fcc:	01 96       	adiw	r24, 0x01	; 1
+     fce:	99 87       	std	Y+9, r25	; 0x09
+     fd0:	88 87       	std	Y+8, r24	; 0x08
+     fd2:	ee 81       	ldd	r30, Y+6	; 0x06
+     fd4:	ff 81       	ldd	r31, Y+7	; 0x07
+     fd6:	00 82       	st	Z, r0
+     fd8:	8e 81       	ldd	r24, Y+6	; 0x06
+     fda:	9f 81       	ldd	r25, Y+7	; 0x07
+     fdc:	01 96       	adiw	r24, 0x01	; 1
+     fde:	9f 83       	std	Y+7, r25	; 0x07
+     fe0:	8e 83       	std	Y+6, r24	; 0x06
+     fe2:	9a 85       	ldd	r25, Y+10	; 0x0a
+     fe4:	91 50       	subi	r25, 0x01	; 1
+     fe6:	9a 87       	std	Y+10, r25	; 0x0a
+     fe8:	ea 85       	ldd	r30, Y+10	; 0x0a
+     fea:	ee 23       	and	r30, r30
+     fec:	51 f7       	brne	.-44     	; 0xfc2 <RF24L01_Init+0x28>
+
+    RF24L01_SET_CE_HIGH( );
+     fee:	a8 e3       	ldi	r26, 0x38	; 56
+     ff0:	b0 e0       	ldi	r27, 0x00	; 0
+     ff2:	e8 e3       	ldi	r30, 0x38	; 56
+     ff4:	f0 e0       	ldi	r31, 0x00	; 0
+     ff6:	80 81       	ld	r24, Z
+     ff8:	80 68       	ori	r24, 0x80	; 128
+     ffa:	8c 93       	st	X, r24
+    NRF24L01_Clear_IRQ_Flag( IRQ_ALL );
+     ffc:	80 e7       	ldi	r24, 0x70	; 112
+     ffe:	20 dc       	rcall	.-1984   	; 0x840 <NRF24L01_Clear_IRQ_Flag>
+#if DYNAMIC_PACKET == 1
+
+    NRF24L01_Write_Reg( DYNPD, ( 1 << 0 ) ); 	//使能通道1动态数据长度
+    1000:	8c e1       	ldi	r24, 0x1C	; 28
+    1002:	61 e0       	ldi	r22, 0x01	; 1
+    1004:	50 db       	rcall	.-2400   	; 0x6a6 <NRF24L01_Write_Reg>
+    NRF24L01_Write_Reg( FEATRUE, 0x07 );
+    1006:	8d e1       	ldi	r24, 0x1D	; 29
+    1008:	67 e0       	ldi	r22, 0x07	; 7
+    100a:	4d db       	rcall	.-2406   	; 0x6a6 <NRF24L01_Write_Reg>
+    NRF24L01_Read_Reg( DYNPD );
+    100c:	8c e1       	ldi	r24, 0x1C	; 28
+    100e:	f0 da       	rcall	.-2592   	; 0x5f0 <NRF24L01_Read_Reg>
+    NRF24L01_Read_Reg( FEATRUE );
+    1010:	8d e1       	ldi	r24, 0x1D	; 29
+    1012:	ee da       	rcall	.-2596   	; 0x5f0 <NRF24L01_Read_Reg>
+    
+    L01_WriteSingleReg( L01REG_RX_PW_P0, FIXED_PACKET_LEN );	//固定数据长度
+	
+#endif	//DYNAMIC_PACKET
+
+    NRF24L01_Write_Reg( CONFIG, /*( 1<<MASK_RX_DR ) |*/		//接收中断
+    1014:	80 e0       	ldi	r24, 0x00	; 0
+    1016:	6a e0       	ldi	r22, 0x0A	; 10
+    1018:	46 db       	rcall	.-2420   	; 0x6a6 <NRF24L01_Write_Reg>
+                                      ( 1 << EN_CRC ) |     //使能CRC 1个字节
+                                      ( 1 << PWR_UP ) );    //开启设备
+    NRF24L01_Write_Reg( EN_AA, ( 1 << ENAA_P0 ) );   		//通道0自动应答
+    101a:	81 e0       	ldi	r24, 0x01	; 1
+    101c:	61 e0       	ldi	r22, 0x01	; 1
+    101e:	43 db       	rcall	.-2426   	; 0x6a6 <NRF24L01_Write_Reg>
+    NRF24L01_Write_Reg( EN_RXADDR, ( 1 << ERX_P0 ) );		//通道0接收
+    1020:	82 e0       	ldi	r24, 0x02	; 2
+    1022:	61 e0       	ldi	r22, 0x01	; 1
+    1024:	40 db       	rcall	.-2432   	; 0x6a6 <NRF24L01_Write_Reg>
+    NRF24L01_Write_Reg( SETUP_AW, AW_5BYTES );     			//地址宽度 5个字节
+    1026:	83 e0       	ldi	r24, 0x03	; 3
+    1028:	63 e0       	ldi	r22, 0x03	; 3
+    102a:	3d db       	rcall	.-2438   	; 0x6a6 <NRF24L01_Write_Reg>
+    NRF24L01_Write_Reg( SETUP_RETR, ARD_4000US |
+    102c:	84 e0       	ldi	r24, 0x04	; 4
+    102e:	6f ef       	ldi	r22, 0xFF	; 255
+    1030:	3a db       	rcall	.-2444   	; 0x6a6 <NRF24L01_Write_Reg>
+                        ( REPEAT_CNT & 0x0F ) );         	//重复等待时间 250us
+    NRF24L01_Write_Reg( RF_CH, 60 );             			//初始化通道
+    1032:	85 e0       	ldi	r24, 0x05	; 5
+    1034:	6c e3       	ldi	r22, 0x3C	; 60
+    1036:	37 db       	rcall	.-2450   	; 0x6a6 <NRF24L01_Write_Reg>
+    NRF24L01_Write_Reg( RF_SETUP, 0x26 );
+    1038:	86 e0       	ldi	r24, 0x06	; 6
+    103a:	66 e2       	ldi	r22, 0x26	; 38
+    103c:	34 db       	rcall	.-2456   	; 0x6a6 <NRF24L01_Write_Reg>
+
+    NRF24L01_Set_TxAddr( &addr[0], 5 );                      //设置TX地址
+    103e:	ce 01       	movw	r24, r28
+    1040:	01 96       	adiw	r24, 0x01	; 1
+    1042:	65 e0       	ldi	r22, 0x05	; 5
+    1044:	45 dd       	rcall	.-1398   	; 0xad0 <NRF24L01_Set_TxAddr>
+    NRF24L01_Set_RxAddr( 0, &addr[0], 5 );                   //设置RX地址
+    1046:	80 e0       	ldi	r24, 0x00	; 0
+    1048:	9e 01       	movw	r18, r28
+    104a:	2f 5f       	subi	r18, 0xFF	; 255
+    104c:	3f 4f       	sbci	r19, 0xFF	; 255
+    104e:	b9 01       	movw	r22, r18
+    1050:	45 e0       	ldi	r20, 0x05	; 5
+    1052:	5d dd       	rcall	.-1350   	; 0xb0e <NRF24L01_Set_RxAddr>
+}
+    1054:	2a 96       	adiw	r28, 0x0a	; 10
+    1056:	0f b6       	in	r0, 0x3f	; 63
+    1058:	f8 94       	cli
+    105a:	de bf       	out	0x3e, r29	; 62
+    105c:	0f be       	out	0x3f, r0	; 63
+    105e:	cd bf       	out	0x3d, r28	; 61
+    1060:	cf 91       	pop	r28
+    1062:	df 91       	pop	r29
+    1064:	08 95       	ret
+
+00001066 <_exit>:
+    1066:	f8 94       	cli
+
+00001068 <__stop_program>:
+    1068:	ff cf       	rjmp	.-2      	; 0x1068 <__stop_program>

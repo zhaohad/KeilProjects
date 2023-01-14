@@ -1,0 +1,39 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              06/26/2022 18:08:58 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: d:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "uart.h"
+   2          #include <reg51.h>
+   3          #include "delay.h"
+   4          
+   5          sbit P32 = P3 ^ 2;
+   6          sbit P33 = P3 ^ 3;
+   7          
+   8          void main() {
+   9   1        P32 = 0;
+  10   1        while (1) {
+  11   2          delay_ms(1000);
+  12   2          UART_sendByte(0x12);
+  13   2          P32 = ~P32;
+  14   2        }
+  15   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     16    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

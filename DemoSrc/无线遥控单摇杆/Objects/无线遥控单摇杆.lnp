@@ -1,0 +1,11 @@
+".\Objects\STARTUP.obj",
+".\Objects\delay.obj",
+".\Objects\G01_S.obj",
+".\Objects\main.obj",
+".\Objects\spi.obj",
+".\Objects\I2CBus.obj",
+".\Objects\HandleControl.obj",
+".\Objects\SteeringSG90.obj" 
+TO ".\Objects\无线遥控单摇杆" 
+PRINT(".\Listings\无线遥控单摇杆.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

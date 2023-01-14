@@ -1,0 +1,102 @@
+C51 COMPILER V9.60.0.0   STC8A_TIMER                                                       08/01/2022 01:38:24 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE STC8A_TIMER
+OBJECT MODULE PLACED IN .\Objects\STC8A_Timer.obj
+COMPILER INVOKED BY: d:\Keil_v5\C51\BIN\C51.EXE src\stc\STC8A_Timer.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\src) DEBUG OBJEC
+                    -TEXTEND PRINT(.\Listings\STC8A_Timer.lst) TABS(2) OBJECT(.\Objects\STC8A_Timer.obj)
+
+line level    source
+
+   1          /*---------------------------------------------------------------------*/
+   2          /* --- STC MCU Limited ------------------------------------------------*/
+   3          /* --- STC 1T Series MCU Demo Programme -------------------------------*/
+   4          /* --- Mobile: (86)13922805190 ----------------------------------------*/
+   5          /* --- Fax: 86-0513-55012956,55012947,55012969 ------------------------*/
+   6          /* --- Tel: 86-0513-55012928,55012929,55012966 ------------------------*/
+   7          /* --- Web: www.STCMCU.com --------------------------------------------*/
+   8          /* --- Web: www.STCMCUDATA.com  ---------------------------------------*/
+   9          /* --- QQ:  800003751 -------------------------------------------------*/
+  10          /* Èç¹ûÒªÔÚ³ÌÐòÖÐÊ¹ÓÃ´Ë´úÂë,ÇëÔÚ³ÌÐòÖÐ×¢Ã÷Ê¹ÓÃÁËSTCµÄ×ÊÁÏ¼°³ÌÐò            */
+  11          /*---------------------------------------------------------------------*/
+  12          
+  13          #include  "STC8A_Timer.h"
+*** ERROR C129 IN LINE 19 OF d:\Keil_v5\C51\Inc\intrins.h: missing ';' before 'extern'
+  14          
+  15          //========================================================================
+  16          // º¯Êý: u8 Timer_Inilize(u8 TIM, TIM_InitTypeDef *TIMx)
+  17          // ÃèÊö: ¶¨Ê±Æ÷³õÊ¼»¯³ÌÐò.
+  18          // ²ÎÊý: TIMx: ½á¹¹²ÎÊý,Çë²Î¿¼timer.hÀïµÄ¶¨Òå.
+  19          // ·µ»Ø: ³É¹¦·µ»Ø SUCCESS, ´íÎó·µ»Ø FAIL.
+  20          // °æ±¾: V1.0, 2012-10-22
+  21          //========================================================================
+  22          u8  Timer_Inilize(u8 TIM, TIM_InitTypeDef *TIMx)
+  23          {
+  24            if(TIM == Timer0)
+  25            {
+  26              Timer0_Stop();    //Í£Ö¹¼ÆÊý
+  27              if(TIMx->TIM_Mode >= TIM_16BitAutoReloadNoMask) return FAIL;  //´íÎó
+  28              TMOD = (TMOD & ~0x03) | TIMx->TIM_Mode; //¹¤×÷Ä£Ê½,0: 16Î»×Ô¶¯ÖØ×°, 1: 16Î»¶¨Ê±/¼ÆÊý, 2: 8Î»×Ô¶¯ÖØ×°, 3:
+             - ²»¿ÉÆÁ±Î16Î»×Ô¶¯ÖØ×°
+  29              if(TIMx->TIM_ClkSource >  TIM_CLOCK_Ext)  return FAIL;
+  30              Timer0_CLK_Select(TIMx->TIM_ClkSource); //¶ÔÍâ¼ÆÊý»ò·ÖÆµ, ¶¨Ê±12T/1T
+  31              Timer0_CLK_Output(TIMx->TIM_ClkOut);    //Êä³öÊ±ÖÓÊ¹ÄÜ
+  32              T0_Load(TIMx->TIM_Value);
+  33              Timer0_Run(TIMx->TIM_Run);
+  34              return  SUCCESS;    //³É¹¦
+  35            }
+  36          
+  37            if(TIM == Timer1)
+  38            {
+  39              Timer1_Stop();    //Í£Ö¹¼ÆÊý
+  40              if(TIMx->TIM_Mode >= TIM_16BitAutoReloadNoMask) return FAIL;  //´íÎó
+  41              TMOD = (TMOD & ~0x30) | (TIMx->TIM_Mode << 4);  //¹¤×÷Ä£Ê½,0: 16Î»×Ô¶¯ÖØ×°, 1: 16Î»¶¨Ê±/¼ÆÊý, 2: 8Î»×Ô¶¯Ö
+             -Ø×°, 3: Í£Ö¹¹¤×÷
+  42              if(TIMx->TIM_ClkSource >  TIM_CLOCK_Ext)  return FAIL;
+  43              Timer1_CLK_Select(TIMx->TIM_ClkSource); //¶ÔÍâ¼ÆÊý»ò·ÖÆµ, ¶¨Ê±12T/1T
+  44              Timer1_CLK_Output(TIMx->TIM_ClkOut);    //Êä³öÊ±ÖÓÊ¹ÄÜ
+  45              T1_Load(TIMx->TIM_Value);
+  46              Timer1_Run(TIMx->TIM_Run);
+  47              return  SUCCESS;    //³É¹¦
+  48            }
+  49          
+  50            if(TIM == Timer2)   //Timer2,¹Ì¶¨Îª16Î»×Ô¶¯ÖØ×°, ÖÐ¶ÏÎÞÓÅÏÈ¼¶
+  51            {
+C51 COMPILER V9.60.0.0   STC8A_TIMER                                                       08/01/2022 01:38:24 PAGE 2   
+
+  52              Timer2_Stop();  //Í£Ö¹¼ÆÊý
+  53              Timer2_CLK_Select(TIMx->TIM_ClkSource); //¶ÔÍâ¼ÆÊý»ò·ÖÆµ, ¶¨Ê±12T/1T
+  54              Timer2_CLK_Output(TIMx->TIM_ClkOut);    //Êä³öÊ±ÖÓÊ¹ÄÜ
+  55          
+  56              T2_Load(TIMx->TIM_Value);
+  57              Timer2_Run(TIMx->TIM_Run);
+  58              return  SUCCESS;    //³É¹¦
+  59            }
+  60          
+  61            if(TIM == Timer3)   //Timer3,¹Ì¶¨Îª16Î»×Ô¶¯ÖØ×°, ÖÐ¶ÏÎÞÓÅÏÈ¼¶
+  62            {
+  63              Timer3_Stop();  //Í£Ö¹¼ÆÊý
+  64              if(TIMx->TIM_ClkSource >  TIM_CLOCK_Ext)  return FAIL;
+  65              Timer3_CLK_Select(TIMx->TIM_ClkSource); //¶ÔÍâ¼ÆÊý»ò·ÖÆµ, ¶¨Ê±12T/1T
+  66              Timer3_CLK_Output(TIMx->TIM_ClkOut);    //Êä³öÊ±ÖÓÊ¹ÄÜ
+  67          
+  68              T3_Load(TIMx->TIM_Value);
+  69              Timer3_Run(TIMx->TIM_Run);
+  70              return  SUCCESS;    //³É¹¦
+  71            }
+  72          
+  73            if(TIM == Timer4)   //Timer3,¹Ì¶¨Îª16Î»×Ô¶¯ÖØ×°, ÖÐ¶ÏÎÞÓÅÏÈ¼¶
+  74            {
+  75              Timer4_Stop();  //Í£Ö¹¼ÆÊý
+  76              if(TIMx->TIM_ClkSource >  TIM_CLOCK_Ext)  return FAIL;
+  77              Timer4_CLK_Select(TIMx->TIM_ClkSource); //¶ÔÍâ¼ÆÊý»ò·ÖÆµ, ¶¨Ê±12T/1T
+  78              Timer4_CLK_Output(TIMx->TIM_ClkOut);    //Êä³öÊ±ÖÓÊ¹ÄÜ
+  79          
+  80              T4_Load(TIMx->TIM_Value);
+  81              Timer4_Run(TIMx->TIM_Run);
+  82              return  SUCCESS;    //³É¹¦
+  83            }
+  84            return FAIL;  //´íÎó
+  85          }
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  1 ERROR(S)

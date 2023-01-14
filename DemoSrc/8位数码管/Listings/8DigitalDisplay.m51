@@ -1,0 +1,208 @@
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    05/07/2022  11:21:50  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
+D:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\STARTUP.obj, .\Objects\main.obj, .\Objects\DigitalDisplay_8.obj TO .\Objects\8Digi
+>> talDisplay PRINT (.\Listings\8DigitalDisplay.m51) RAMSIZE (256) DISABLEWARNING (16)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\STARTUP.obj (?C_STARTUP)
+  .\Objects\main.obj (MAIN)
+  .\Objects\DigitalDisplay_8.obj (DIGITALDISPLAY_8)
+  D:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+  D:\KEIL_V5\C51\LIB\C51S.LIB (?C?COPY)
+  D:\KEIL_V5\C51\LIB\C51S.LIB (?C?CLDOPTR)
+
+
+LINK MAP OF MODULE:  .\Objects\8DigitalDisplay (?C_STARTUP)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0022H     UNIT         ?DT?DIGITALDISPLAY_8
+            DATA    002AH     0014H     UNIT         _DATA_GROUP_
+            IDATA   003EH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     07FDH                  *** GAP ***
+            CODE    0800H     0123H     UNIT         ?C?LIB_CODE
+            CODE    0923H     008CH     UNIT         ?C_C51STARTUP
+            CODE    09AFH     004BH     UNIT         ?PR?_DIGITALDISPLAY_8_DISPLAY?DIGITALDISPLAY_8
+            CODE    09FAH     0042H     UNIT         ?PR?_DIGITALDISPLAY_8_SET?DIGITALDISPLAY_8
+            CODE    0A3CH     003EH     UNIT         ?PR?MAIN?MAIN
+            CODE    0A7AH     001EH     UNIT         ?C_INITSEG
+            CODE    0A98H     0010H     UNIT         ?CO?MAIN
+            CODE    0AA8H     000BH     UNIT         ?PR?DIGITALDISPLAY_8_LOOP?DIGITALDISPLAY_8
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\8DigitalDisplay (?C_STARTUP)
+
+
+SEGMENT                                            DATA_GROUP 
+  +--> CALLED SEGMENT                            START    LENGTH
+----------------------------------------------------------------
+?C_C51STARTUP                                    -----    -----
+  +--> ?PR?MAIN?MAIN
+  +--> ?C_INITSEG
+
+?PR?MAIN?MAIN                                    002AH    0010H
+  +--> ?CO?MAIN
+  +--> ?PR?_DIGITALDISPLAY_8_SET?DIGITALDISP...
+  +--> ?PR?_DIGITALDISPLAY_8_DISPLAY?DIGITAL...
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/07/2022  11:21:50  PAGE 2
+
+
+?PR?_DIGITALDISPLAY_8_SET?DIGITALDISP...         003AH    0004H
+
+?PR?_DIGITALDISPLAY_8_DISPLAY?DIGITAL...         003AH    0004H
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\8DigitalDisplay (?C_STARTUP)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        ?C_STARTUP
+  C:0923H         SEGMENT       ?C_C51STARTUP
+  I:003EH         SEGMENT       ?STACK
+  C:0000H         PUBLIC        ?C_STARTUP
+  D:00E0H         SYMBOL        ACC
+  D:00F0H         SYMBOL        B
+  D:0083H         SYMBOL        DPH
+  D:0082H         SYMBOL        DPL
+  N:0000H         SYMBOL        IBPSTACK
+  N:0100H         SYMBOL        IBPSTACKTOP
+  N:0080H         SYMBOL        IDATALEN
+  C:0926H         SYMBOL        IDATALOOP
+  N:0000H         SYMBOL        PBPSTACK
+  N:0100H         SYMBOL        PBPSTACKTOP
+  N:0000H         SYMBOL        PDATALEN
+  N:0000H         SYMBOL        PDATASTART
+  N:0000H         SYMBOL        PPAGE
+  N:0000H         SYMBOL        PPAGEENABLE
+  D:00A0H         SYMBOL        PPAGE_SFR
+  D:0081H         SYMBOL        SP
+  C:0923H         SYMBOL        STARTUP1
+  N:0000H         SYMBOL        XBPSTACK
+  N:0000H         SYMBOL        XBPSTACKTOP
+  N:0000H         SYMBOL        XDATALEN
+  N:0000H         SYMBOL        XDATASTART
+  C:0000H         LINE#         126
+  C:0923H         LINE#         133
+  C:0925H         LINE#         134
+  C:0926H         LINE#         135
+  C:0927H         LINE#         136
+  C:0929H         LINE#         185
+  C:092CH         LINE#         196
+  -------         ENDMOD        ?C_STARTUP
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:0A3CH         PUBLIC        main
+  C:0A98H         SYMBOL        _?ix1000
+  C:0AA0H         SYMBOL        _?ix1001
+  -------         PROC          MAIN
+  -------         DO            
+  D:002AH         SYMBOL        n
+  D:0032H         SYMBOL        m
+  -------         ENDDO         
+  C:0A3CH         LINE#         4
+  C:0A3CH         LINE#         5
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/07/2022  11:21:50  PAGE 3
+
+
+  C:0A4FH         LINE#         6
+  C:0A62H         LINE#         7
+  C:0A6DH         LINE#         8
+  C:0A6DH         LINE#         10
+  C:0A78H         LINE#         11
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        MAIN
+
+  -------         MODULE        DIGITALDISPLAY_8
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:00A0H         PUBLIC        P2
+  D:0008H         PUBLIC        g_cnt
+  B:00A0H.7       PUBLIC        latch_frag
+  B:00A0H.6       PUBLIC        latch_bit
+  C:0AA8H         PUBLIC        DigitalDisplay_8_Loop
+  C:09FAH         PUBLIC        _DigitalDisplay_8_Set
+  D:0009H         PUBLIC        g_numbers
+  D:0011H         PUBLIC        BIT_CODE
+  C:09AFH         PUBLIC        _DigitalDisplay_8_Display
+  D:0019H         PUBLIC        DIGITAL_CODE
+  -------         PROC          DIGITALDISPLAY_8_LOOP
+  C:0AA8H         LINE#         18
+  C:0AA8H         LINE#         19
+  -------         ENDPROC       DIGITALDISPLAY_8_LOOP
+  -------         PROC          _DIGITALDISPLAY_8_SET
+  D:003AH         SYMBOL        nums
+  D:003DH         SYMBOL        cnt
+  -------         DO            
+  D:0006H         SYMBOL        i
+  -------         ENDDO         
+  C:09FAH         LINE#         22
+  C:0A02H         LINE#         23
+  C:0A05H         LINE#         24
+  C:0A0FH         LINE#         25
+  C:0A12H         LINE#         26
+  C:0A12H         LINE#         28
+  C:0A15H         LINE#         29
+  C:0A20H         LINE#         30
+  C:0A34H         LINE#         31
+  C:0A3BH         LINE#         32
+  -------         ENDPROC       _DIGITALDISPLAY_8_SET
+  -------         PROC          _DIGITALDISPLAY_8_DISPLAY
+  D:003AH         SYMBOL        nums
+  D:003DH         SYMBOL        cnt
+  -------         DO            
+  D:0006H         SYMBOL        i
+  -------         ENDDO         
+  C:09AFH         LINE#         34
+  C:09B7H         LINE#         35
+  C:09BAH         LINE#         36
+  C:09BCH         LINE#         37
+  C:09BEH         LINE#         38
+  C:09C9H         LINE#         39
+  C:09CCH         LINE#         40
+  C:09CEH         LINE#         41
+  C:09D0H         LINE#         43
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/07/2022  11:21:50  PAGE 4
+
+
+  C:09D7H         LINE#         44
+  C:09D9H         LINE#         45
+  C:09DBH         LINE#         47
+  C:09EEH         LINE#         48
+  C:09F0H         LINE#         49
+  C:09F2H         LINE#         50
+  C:09F9H         LINE#         51
+  -------         ENDPROC       _DIGITALDISPLAY_8_DISPLAY
+  -------         ENDMOD        DIGITALDISPLAY_8
+
+  -------         MODULE        ?C?COPY
+  C:08D0H         PUBLIC        ?C?COPY
+  -------         ENDMOD        ?C?COPY
+
+  -------         MODULE        ?C?CLDOPTR
+  C:08F6H         PUBLIC        ?C?CLDOPTR
+  -------         ENDMOD        ?C?CLDOPTR
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0112H BYTE (13%) *
+******************************************************************************
+
+Program Size: data=63.0 xdata=0 code=694
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

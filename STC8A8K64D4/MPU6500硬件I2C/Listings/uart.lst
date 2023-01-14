@@ -1,0 +1,96 @@
+C51 COMPILER V9.60.0.0   UART                                                              09/10/2022 16:24:57 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE UART
+OBJECT MODULE PLACED IN .\Objects\uart.obj
+COMPILER INVOKED BY: d:\Keil_v5\C51\BIN\C51.EXE uart.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\uart
+                    -.lst) TABS(2) OBJECT(.\Objects\uart.obj)
+
+line level    source
+
+   1          #include "uart.h"
+   2          
+   3          bit busyT;
+   4          
+   5          UART_onRec g_UART_callback = 0;
+   6          
+   7          // 4800bps@24.000MHz 8位自动重装
+   8          void UART_Init_24MHz_4800bps(UART_onRec cb) {
+   9   1        PCON &= 0x7F;   //波特率不倍速
+  10   1        SCON = 0x50;    //8位数据,可变波特率
+  11   1        AUXR &= 0xBF;   //定时器时钟12T模式
+  12   1        AUXR &= 0xFE;   //串口1选择定时器1为波特率发生器
+  13   1        TMOD &= 0x0F;   //设置定时器模式
+  14   1        TMOD |= 0x20;   //设置定时器模式
+  15   1        TL1 = 0xF3;   //设置定时初始值
+  16   1        TH1 = 0xF3;   //设置定时重载值
+  17   1        ET1 = 0;    //禁止定时器%d中断
+  18   1        TR1 = 1;    //定时器1开始计时
+  19   1        
+  20   1        EA = 1;
+  21   1        ES = 1;
+  22   1        g_UART_callback = cb;
+  23   1      }
+  24          
+  25          // 9600bps@11.0592MHz
+  26          void UART_Init_110592MHz_9600bps(UART_onRec cb) {
+  27   1        PCON &= 0x7F; //波特率不倍速
+  28   1        SCON = 0x50; //8位数据,可变波特率
+  29   1        AUXR &= 0xBF; //定时器时钟12T模式
+  30   1        AUXR &= 0xFE; //串口1选择定时器1为波特率发生器
+  31   1        TMOD &= 0x0F; //设置定时器模式
+  32   1        TMOD |= 0x20; //设置定时器模式
+  33   1        TL1 = 0xFD; //设置定时初始值
+  34   1        TH1 = 0xFD; //设置定时重载值
+  35   1        ET1 = 0; //禁止定时器%d中断
+  36   1        TR1 = 1; //定时器1开始计时
+  37   1        EA = 1;
+  38   1        ES = 1;
+  39   1        
+  40   1        g_UART_callback = cb;
+  41   1      }
+  42          
+  43          void UART_sendByte(char c) {
+  44   1        while(busyT);
+  45   1        SBUF = c;
+  46   1        busyT = 1;
+  47   1      }
+  48          
+  49          void UART_sendStr(char * s) {
+  50   1        while(*s) {
+  51   2          UART_sendByte(*s++);
+  52   2        }
+  53   1      }
+  54          
+C51 COMPILER V9.60.0.0   UART                                                              09/10/2022 16:24:57 PAGE 2   
+
+  55          void s_interruption() interrupt 4 {
+  56   1        if (RI) {
+  57   2          u8 u;
+  58   2          RI = 0;
+  59   2          P2 = SBUF;
+  60   2          
+  61   2          u = P2;
+  62   2          if (g_UART_callback) {
+  63   3            g_UART_callback(u);
+  64   3          }
+  65   2        }
+  66   1        if (TI) {
+  67   2          TI = 0;
+  68   2          busyT = 0;
+  69   2        }
+  70   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    216    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      3       4
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

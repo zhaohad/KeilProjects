@@ -1,0 +1,97 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              05/11/2022 22:00:15 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: d:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <reg51.h>
+   2          
+   3          sbit p01 = P0 ^ 1;
+   4          
+   5          #define TIMERCNT_20MS 200
+   6          #define TIMERCNT_0D   5
+   7          #define TIMERCNT_180D 25
+   8          #define TIMERCNT_ANY(D) D * (TIMERCNT_180D - TIMERCNT_0D) / TIMERCNT_180D + TIMERCNT_0D
+   9          
+  10          unsigned char g_timercnt;
+  11          unsigned char g_cntH = 25;
+  12          
+  13          /*
+  14           * 12T 8位自动重载
+  15           * 100us
+  16           */
+  17          void initPWMTimer() {
+  18   1        TMOD &= 0x0F;   //设置定时器模式
+  19   1        TMOD |= 0x20;   //设置定时器模式
+  20   1        TL1 = 0x9C;   //设置定时初始值
+  21   1        TH1 = 0x9C;   //设置定时重载值
+  22   1        TF1 = 0;    //清除TF0标志
+  23   1        TR1 = 1;    //定时器0开始计时
+  24   1        ET1 = 1;
+  25   1        EA = 1;
+  26   1        g_timercnt = 0;
+  27   1      }
+  28          
+  29          void setDegree(int d) {
+  30   1        g_cntH = d / 9 + 5;
+  31   1      }
+  32           
+  33          unsigned char DutyRatio = 10;
+  34          sbit P_PWM = P0 ^ 0;
+  35          
+  36          void main() {
+  37   1        int d = 0;
+  38   1        int f = 1;
+  39   1        P_PWM = 0;
+  40   1        p01 = 0;
+  41   1        initPWMTimer();
+  42   1        
+  43   1        setDegree(90);
+  44   1        while (1) {
+  45   2          /*int i;
+  46   2          if (d >= 180) {
+  47   2            f = -1;
+  48   2          }
+  49   2          if (d <= 0) {
+  50   2            f = 1;
+  51   2          }
+  52   2          
+  53   2          setDegree(d);
+  54   2          d += f;
+C51 COMPILER V9.60.0.0   MAIN                                                              05/11/2022 22:00:15 PAGE 2   
+
+  55   2          for (i = 512; i > 0; --i);*/
+  56   2        }
+  57   1      }
+  58          
+  59          void tm1_isr() interrupt 3 {
+  60   1        ++g_timercnt;
+  61   1        if (g_timercnt <= g_cntH) {
+  62   2          P_PWM = 1;
+  63   2        } else {
+  64   2          P_PWM = 0;
+  65   2        }
+  66   1        
+  67   1        if (g_timercnt >= TIMERCNT_20MS) {
+  68   2          g_timercnt = 0;
+  69   2          p01 = ~p01;
+  70   2        }
+  71   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    103    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      3       4
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

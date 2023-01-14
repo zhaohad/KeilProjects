@@ -1,0 +1,10 @@
+".\Objects\STARTUP.obj",
+".\Objects\delay.obj",
+".\Objects\main.obj",
+".\Objects\STC8A_GPIO.obj",
+".\Objects\STC8A_PWM15bit.obj",
+".\Objects\STC8A_PWM15bit_Isr.obj",
+".\Objects\STC8A_ADC.obj" 
+TO ".\Objects\Ó²¼þADC" 
+PRINT(".\Listings\Ó²¼þADC.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

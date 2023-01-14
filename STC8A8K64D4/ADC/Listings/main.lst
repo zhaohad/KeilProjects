@@ -1,0 +1,108 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              12/31/2022 22:06:20 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: d:\Keil_v5\C51\BIN\C51.EXE src\main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\
+                    -main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "stc8a8k64d4.H"
+   2          #include "stc8a_gpio.H"
+   3          #include "stc8a_spi.h"
+   4          #include "stc8a_nvic.h"
+   5          #include "typedef.h"
+   6          #include "oled12864.h"
+   7          #include "stc8a_adc.h"
+   8          #include "stc8a_switch.h"
+   9          
+  10          void GPIO_Config() {
+  11   1        GPIO_InitTypeDef conf;
+  12   1        conf.Mode = GPIO_OUT_PP;
+  13   1        conf.Pin = GPIO_Pin_All;
+  14   1        GPIO_Inilize(GPIO_P4, &conf);
+  15   1      }
+  16          
+  17          void GPIO_Config1() {
+  18   1        GPIO_InitTypeDef conf;
+  19   1        conf.Mode = GPIO_OUT_PP;
+  20   1        conf.Pin = GPIO_Pin_All;
+  21   1        GPIO_Inilize(GPIO_P1, &conf);
+  22   1      }
+  23          
+  24          void SPI_Config() {
+  25   1        SPI_InitTypeDef conf;
+  26   1        conf.SPI_Enable = ENABLE; //SPI启动 ENABLE, DISABLE
+  27   1        conf.SPI_SSIG = ENABLE; //片选位 ENABLE, DISABLE
+  28   1        conf.SPI_FirstBit = SPI_MSB; //移位方向 SPI_MSB, SPI_LSB
+  29   1        conf.SPI_Mode = SPI_Mode_Master; //主从选择 SPI_Mode_Master, SPI_Mode_Slave
+  30   1        conf.SPI_CPOL = SPI_CPOL_Low; //时钟相位   SPI_CPOL_High,   SPI_CPOL_Low
+  31   1        conf.SPI_CPHA = SPI_CPHA_2Edge; //数据边沿   SPI_CPHA_1Edge, SPI_CPHA_2Edge
+  32   1        conf.SPI_Speed = SPI_Speed_64; //SPI速度    SPI_Speed_4, SPI_Speed_16, SPI_Speed_64, SPI_Speed_2
+  33   1        SPI_Init(&conf);
+  34   1        
+  35   1        P_SW1 = 0x00; // 使用 SS:P12 MOSI:P13 MISO:P14 SCLK:P15
+  36   1        NVIC_SPI_Init(ENABLE, Priority_0); //中断使能, ENABLE/DISABLE; 优先级(低到高) Priority_0,Priority_1,Prior
+             -ity_2,Priority_3
+  37   1      }
+  38          
+  39          void ADC_GPIO_Config() {
+  40   1        GPIO_InitTypeDef conf;
+  41   1        conf.Mode = GPIO_PullUp;
+  42   1        conf.Pin = GPIO_Pin_0;
+  43   1        GPIO_Inilize(GPIO_P0, &conf);
+  44   1      }
+  45          
+  46          void ADC_config(void) {
+  47   1        ADC_InitTypeDef ADC_InitStructure;    //结构定义
+  48   1        ADC_GPIO_Config();
+  49   1        ADC_InitStructure.ADC_SMPduty = 31;   //ADC 模拟信号采样时间控制, 0~31（注意： SMPDUTY 一定不能设置小于 10
+             -）
+  50   1        ADC_InitStructure.ADC_CsSetup = 0;    //ADC 通道选择时间控制 0(默认),1
+  51   1        ADC_InitStructure.ADC_CsHold = 1;   //ADC 通道选择保持时间控制 0,1(默认),2,3
+  52   1        ADC_InitStructure.ADC_Speed = ADC_SPEED_2X1T;   //设置 ADC 工作时钟频率 ADC_SPEED_2X1T~ADC_SPEED_2X16T
+C51 COMPILER V9.60.0.0   MAIN                                                              12/31/2022 22:06:20 PAGE 2   
+
+  53   1        ADC_InitStructure.ADC_AdjResult = ADC_RIGHT_JUSTIFIED;  //ADC结果调整,  ADC_LEFT_JUSTIFIED,ADC_RIGHT_JUSTIF
+             -IED
+  54   1        ADC_Inilize(&ADC_InitStructure);    //初始化
+  55   1        ADC_PowerControl(ENABLE);           //ADC电源开关, ENABLE或DISABLE
+  56   1        // NVIC_ADC_Init(DISABLE, Priority_0);    //中断使能, ENABLE/DISABLE; 优先级(低到高) Priority_0,Priority_1,
+             -Priority_2,Priority_3
+  57   1      }
+  58          
+  59          
+  60          void main() {
+  61   1        u16 i = 0;
+  62   1        GPIO_Config();
+  63   1        OLED_Init();
+  64   1        ADC_config();
+  65   1        GPIO_Config1();
+  66   1        P14 = 1;
+  67   1        P15 = 0;
+  68   1        // OLED_ShowString(0, 0, "121212121212");
+  69   1        while(1) {
+  70   2          u16 adc = Get_ADCResult(ADC_CHANEL);
+  71   2          float r;
+  72   2          u8 str[10];
+  73   2          r = adc / 4096.f * 100.f;
+  74   2          sprintf(str, "%u   %.2f", adc, (float) r);
+  75   2          OLED_ShowString(0, 0, str);
+  76   2          delay_ms(1000);
+  77   2        }
+  78   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    233    ----
+   CONSTANT SIZE    =     10    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      36
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

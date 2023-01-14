@@ -1,0 +1,4 @@
+".\Objects\STARTUP.obj",
+".\Objects\main.obj" 
+TO ".\Objects\dowloadtest_89c52rc" 
+PRINT(".\Listings\dowloadtest_89c52rc.m51") RAMSIZE(256) 

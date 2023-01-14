@@ -1,0 +1,76 @@
+C51 COMPILER V9.60.0.0   SERVO                                                             08/27/2022 13:13:28 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE SERVO
+OBJECT MODULE PLACED IN .\Objects\servo.obj
+COMPILER INVOKED BY: d:\Keil_v5\C51\BIN\C51.EXE src\servo.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings
+                    -\servo.lst) TABS(2) OBJECT(.\Objects\servo.obj)
+
+line level    source
+
+   1          #include "servo.h"
+   2          #include "stc8a_timer.h"
+   3          #include "stc8a_nvic.h"
+   4          
+   5          xdata int g_servo_timer;
+   6          xdata int g_target_timer;
+   7          
+   8          // 11.0592 MHz 8bit auto load. value: 0x91 for 10us
+   9          void Timer_config() {
+  10   1        TIM_InitTypeDef TIM_InitStructure;            //结构定义
+  11   1        TIM_InitStructure.TIM_Mode = TIM_8BitAutoReload;  //指定工作模式,   TIM_16BitAutoReload,TIM_16Bit,TIM_8Bit
+             -AutoReload,TIM_16BitAutoReloadNoMask
+  12   1        TIM_InitStructure.TIM_ClkSource = TIM_CLOCK_1T;   //指定时钟源,     TIM_CLOCK_1T,TIM_CLOCK_12T,TIM_CLOCK_E
+             -xt
+  13   1        TIM_InitStructure.TIM_ClkOut = DISABLE;       //是否输出高速脉冲, ENABLE或DISABLE
+  14   1        TIM_InitStructure.TIM_Value = 65536UL - (MAIN_Fosc / 100000UL);   //初值,
+  15   1        TIM_InitStructure.TIM_Run = ENABLE;         //是否初始化后启动定时器, ENABLE或DISABLE
+  16   1        Timer_Inilize(Timer0, &TIM_InitStructure);          //初始化Timer0    Timer0,Timer1,Timer2,Timer3,Timer4
+  17   1        TL0 = 0x91;
+  18   1        TH0 = 0x91;
+  19   1        NVIC_Timer0_Init(ENABLE, Priority_0);   //中断使能, ENABLE/DISABLE; 优先级(低到高) Priority_0,Priority_1,P
+             -riority_2,Priority_3
+  20   1        
+  21   1        EA = 1;
+  22   1      }
+  23          
+  24          void Servo_Init() {
+  25   1        Timer_config();
+  26   1        g_target_timer = 0;
+  27   1        g_servo_timer = 0;
+  28   1      }
+  29          
+  30          void Servo_Set_Target_Degree(int td) {
+  31   1        g_target_timer = td * 10 / 9.0f + 50 + 0.000001f;
+  32   1      }
+  33          
+  34          void Servo_Timer_10us_Callback() {
+  35   1        if (g_servo_timer < g_target_timer) {
+  36   2          SET_CONTROL();
+  37   2          P21 = 0;
+  38   2        } else {
+  39   2          CLR_CONTROL();
+  40   2          P21 = 1;
+  41   2        }
+  42   1      
+  43   1        g_servo_timer++;
+  44   1        if (g_servo_timer > MAX_SERVO_TIMER_10US) {
+  45   2          g_servo_timer = 0;
+  46   2        }
+  47   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    180    ----
+C51 COMPILER V9.60.0.0   SERVO                                                             08/27/2022 13:13:28 PAGE 2   
+
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      4    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

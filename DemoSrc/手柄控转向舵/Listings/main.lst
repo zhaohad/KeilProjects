@@ -1,0 +1,102 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              05/11/2022 22:59:17 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: d:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <reg51.h>
+   2          #include <intrins.h>
+   3          #include "DigitalDisplay_8.h"
+   4          #include "I2CBus.h"
+   5          #include "SteeringSG90.h"
+   6          #include "HandleControl.h"
+   7          
+   8          sbit lastAck = P2 ^ 3;
+   9          sbit err = P2 ^ 2;
+  10          
+  11          unsigned char analog1 = 0;
+  12          unsigned char analog2 = 0;
+  13          unsigned char lastAnalog1 = 1;
+  14          unsigned char lastAnalog2 = 1;
+  15          
+  16          unsigned char nums[8];
+  17          
+  18          void Display_Analog();
+  19          
+  20          void main() {
+  21   1        err = 1;
+  22   1      
+  23   1        initSteeringPWMTimer();
+  24   1        while(1) {
+  25   2          I2CBus_Start();
+  26   2          lastAck = I2CBus_Write(0x90);
+  27   2          err &= ~lastAck;
+  28   2          lastAck = I2CBus_Write(0x41); // 0x41 Ò»Ö±±£³ÖÊä³ö×´Ì¬£¬·ñÔòLED»áÉÁË¸
+  29   2          err &= ~lastAck;
+  30   2          I2CBus_Stop();
+  31   2          I2CBus_Start(); // ¿ÉÒÔ²»StopÖ±½Óstart
+  32   2          lastAck = I2CBus_Write(0x91);
+  33   2          err &= ~lastAck;
+  34   2          analog2 = I2CBus_Read(1); // PCF8591TÊÇÏÈÒª½«Êý¾Ý·Åµ½ÆäÄÚ²¿buffer£¬Ã¿´Î´ÓÆäbufferÖÐ·¢ËÍÊý¾Ý£¬ËùÒÔÊý¾Ý»áÓ
+             -Ð´íÎ»
+  35   2          I2CBus_Stop();
+  36   2          
+  37   2          I2CBus_Start();
+  38   2          lastAck = I2CBus_Write(0x90);
+  39   2          err &= ~lastAck;
+  40   2          lastAck = I2CBus_Write(0x40); // 0x43 Ò»Ö±±£³ÖÊä³ö×´Ì¬£¬·ñÔòLED»áÉÁË¸
+  41   2          err &= ~lastAck;
+  42   2          I2CBus_Stop();
+  43   2          I2CBus_Start(); // ¿ÉÒÔ²»StopÖ±½Óstart
+  44   2          lastAck = I2CBus_Write(0x91);
+  45   2          err &= ~lastAck;
+  46   2          analog1 = I2CBus_Read(1);  // PCF8591TÊÇÏÈÒª½«Êý¾Ý·Åµ½ÆäÄÚ²¿buffer£¬Ã¿´Î´ÓÆäbufferÖÐ·¢ËÍÊý¾Ý£¬ËùÒÔÊý¾Ý»á
+             -ÓÐ´íÎ»
+  47   2          I2CBus_Stop();
+  48   2          
+  49   2          if (lastAnalog1 != analog1) {
+  50   3            lastAnalog1 = analog1;
+  51   3      
+  52   3            nums[0] = analog1 & 0x0f;
+C51 COMPILER V9.60.0.0   MAIN                                                              05/11/2022 22:59:17 PAGE 2   
+
+  53   3            nums[1] = analog1 >> 4;
+  54   3          }
+  55   2          if (lastAnalog2 != analog2) {
+  56   3            lastAnalog2 = analog2;
+  57   3            setSteeringDegree(calculateSteeringDegree(analog2));
+  58   3      
+  59   3            nums[2] = analog2 & 0x0f;
+  60   3            nums[3] = analog2 >> 4;
+  61   3          }
+  62   2          DigitalDisplay_8_Display(nums, 4);
+  63   2        }
+  64   1      }
+  65          
+  66          void Display_Analog() {
+  67   1        nums[2] = analog2 & 0x0f;
+  68   1        nums[3] = analog2 >> 4;
+  69   1        DigitalDisplay_8_Display(nums, 8);
+  70   1      }
+  71          
+  72          void tm1_isr() interrupt 3 {
+  73   1        SteeringPWMTimerInterruption();
+  74   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    270    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     12    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
