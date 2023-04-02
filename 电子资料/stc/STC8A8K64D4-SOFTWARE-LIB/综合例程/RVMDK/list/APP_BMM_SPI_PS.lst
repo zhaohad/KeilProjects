@@ -1,0 +1,306 @@
+C51 COMPILER V9.59.0.0   APP_BMM_SPI_PS                                                    06/10/2021 10:21:41 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE APP_BMM_SPI_PS
+OBJECT MODULE PLACED IN .\list\APP_BMM_SPI_PS.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\App\src\APP_BMM_SPI_PS.c LARGE OMF2 OPTIMIZE(8,SPEED) BROWSE INCDIR(.
+                    -.\Driver\inc;..\User;..\App\inc) DEBUG PRINT(.\list\APP_BMM_SPI_PS.lst) TABS(2) OBJECT(.\list\APP_BMM_SPI_PS.obj)
+
+line level    source
+
+   1          /*---------------------------------------------------------------------*/
+   2          /* --- STC MCU Limited ------------------------------------------------*/
+   3          /* --- STC 1T Series MCU Demo Programme -------------------------------*/
+   4          /* --- Mobile: (86)13922805190 ----------------------------------------*/
+   5          /* --- Fax: 86-0513-55012956,55012947,55012969 ------------------------*/
+   6          /* --- Tel: 86-0513-55012928,55012929,55012966 ------------------------*/
+   7          /* --- Web: www.STCMCU.com --------------------------------------------*/
+   8          /* --- Web: www.STCMCUDATA.com  ---------------------------------------*/
+   9          /* --- QQ:  800003751 -------------------------------------------------*/
+  10          /* 如果要在程序中使用此代码,请在程序中注明使用了STC的资料及程序            */
+  11          /*---------------------------------------------------------------------*/
+  12          
+  13          #include  "APP_BMM_SPI_PS.h"
+  14          #include  "STC8A_GPIO.h"
+  15          #include  "STC8A_SPI.h"
+  16          #include  "STC8A_UART.h"
+  17          #include  "STC8A_NVIC.h"
+  18          #include  "STC8A_BMM.h"
+  19          
+  20          /*************  功能说明  **************
+  21          
+  22          UART_BMM, M2M_BMM, SPI_BMM 综合使用演示例程.
+  23          
+  24          通过串口发送数据给MCU1，MCU1将接收到的数据由SPI发送给MCU2，MCU2再通过串口发送出去.
+  25          
+  26          通过串口发送数据给MCU2，MCU2将接收到的数据由SPI发送给MCU1，MCU1再通过串口发送出去.
+  27          
+  28          MCU1/MCU2: UART接收 -> UART Rx BMM -> M2M -> SPI Tx BMM -> SPI发送
+  29          
+  30          MCU2/MCU1: SPI接收 -> SPI Rx BMM -> M2M -> UART Tx BMM -> UART发送
+  31          
+  32                   MCU1                          MCU2
+  33            |-----------------|           |-----------------|
+  34            |            MISO |-----------| MISO            |
+  35          --| TX         MOSI |-----------| MOSI         TX |--
+  36            |            SCLK |-----------| SCLK            |
+  37          --| RX           SS |-----------| SS           RX |--
+  38            |-----------------|           |-----------------|
+  39          
+  40          
+  41          下载时, 选择时钟 22.1184MHz (可以在配置文件"config.h"中修改).
+  42          
+  43          ******************************************/
+  44          
+  45          //========================================================================
+  46          //                               本地常量声明 
+  47          //========================================================================
+  48          
+  49          #define BUF_LENGTH          107     //n+1
+  50          
+  51          //========================================================================
+  52          //                               本地变量声明
+  53          //========================================================================
+  54          
+C51 COMPILER V9.59.0.0   APP_BMM_SPI_PS                                                    06/10/2021 10:21:41 PAGE 2   
+
+  55          bit SpiTxFlag;
+  56          bit SpiRxFlag;
+  57          //bit UartTxFlag;
+  58          //bit UartRxFlag;
+  59          
+  60          bit u2sFlag;    //UART to SPI
+  61          bit s2uFlag;    //SPI to UART
+  62          
+  63          bit SpiSendFlag;
+  64          bit UartSendFlag;
+  65          
+  66          u8 xdata UartTxBuffer[256];
+  67          u8 xdata UartRxBuffer[256];
+  68          u8 xdata SpiTxBuffer[256];
+  69          u8 xdata SpiRxBuffer[256];
+  70          
+  71          //========================================================================
+  72          //                               本地函数声明
+  73          //========================================================================
+  74          
+  75          
+  76          //========================================================================
+  77          //                            外部函数和变量声明
+  78          //========================================================================
+  79          extern bit  BmmTx1Flag;   //UartTxFlag
+  80          extern bit  BmmRx1Flag;   //UartRxFlag
+  81          
+  82          //========================================================================
+  83          // 函数: BMM_SPI_PS_init
+  84          // 描述: 用户初始化程序.
+  85          // 参数: None.
+  86          // 返回: None.
+  87          // 版本: V1.0, 2021-05-27
+  88          //========================================================================
+  89          void BMM_SPI_PS_init(void)
+  90          {
+  91   1        SPI_InitTypeDef   SPI_InitStructure;
+  92   1        COMx_InitDefine   COMx_InitStructure;         //结构定义
+  93   1        BMM_M2M_InitTypeDef   BMM_M2M_InitStructure;    //结构定义
+  94   1        BMM_SPI_InitTypeDef   BMM_SPI_InitStructure;    //结构定义
+  95   1        BMM_UART_InitTypeDef  BMM_UART_InitStructure;   //结构定义
+  96   1      
+  97   1        //----------------------------------------------
+  98   1        P2_MODE_IO_PU(GPIO_Pin_All);    //P2 设置为准双向口
+  99   1        P3_MODE_IO_PU(GPIO_Pin_0 | GPIO_Pin_1);   //P3.0,P3.1 设置为准双向口
+ 100   1      
+ 101   1        SPI_SS_2 = 1;
+ 102   1      
+ 103   1        //----------------------------------------------
+ 104   1        COMx_InitStructure.UART_Mode      = UART_8bit_BRTx; //模式, UART_ShiftRight,UART_8bit_BRTx,UART_9bit,UART
+             -_9bit_BRTx
+ 105   1        COMx_InitStructure.UART_BRT_Use   = BRT_Timer1;     //使用波特率, BRT_Timer1, BRT_Timer2 (注意: 串口2固定使
+             -用BRT_Timer2)
+ 106   1        COMx_InitStructure.UART_BaudRate  = 115200ul;     //波特率, 一般 110 ~ 115200
+ 107   1        COMx_InitStructure.UART_RxEnable  = ENABLE;       //接收允许,   ENABLE或DISABLE
+ 108   1        COMx_InitStructure.BaudRateDouble = DISABLE;      //波特率加倍, ENABLE或DISABLE
+ 109   1        UART_Configuration(UART1, &COMx_InitStructure);   //初始化串口1 UART1,UART2,UART3,UART4
+ 110   1        NVIC_UART1_Init(ENABLE,Priority_1);   //中断使能, ENABLE/DISABLE; 优先级(低到高) Priority_0,Priority_1,Pri
+             -ority_2,Priority_3
+ 111   1        printf("STC8A8K64D4 UART1-BMM-SPI互为主从透传程序.\r\n");
+ 112   1      
+ 113   1        //----------------------------------------------
+C51 COMPILER V9.59.0.0   APP_BMM_SPI_PS                                                    06/10/2021 10:21:41 PAGE 3   
+
+ 114   1        SPI_InitStructure.SPI_Enable    = ENABLE;           //SPI启动    ENABLE, DISABLE
+ 115   1        SPI_InitStructure.SPI_SSIG      = ENABLE;           //片选位     ENABLE, DISABLE
+ 116   1        SPI_InitStructure.SPI_FirstBit  = SPI_MSB;          //移位方向   SPI_MSB, SPI_LSB
+ 117   1        SPI_InitStructure.SPI_Mode      = SPI_Mode_Slave;   //主从选择   SPI_Mode_Master, SPI_Mode_Slave
+ 118   1        SPI_InitStructure.SPI_CPOL      = SPI_CPOL_Low;     //时钟相位   SPI_CPOL_High,   SPI_CPOL_Low
+ 119   1        SPI_InitStructure.SPI_CPHA      = SPI_CPHA_1Edge;   //数据边沿   SPI_CPHA_1Edge,  SPI_CPHA_2Edge
+ 120   1        SPI_InitStructure.SPI_Speed     = SPI_Speed_64;     //SPI速度    SPI_Speed_4, SPI_Speed_16, SPI_Speed_64, S
+             -PI_Speed_2
+ 121   1        SPI_Init(&SPI_InitStructure);
+ 122   1        NVIC_SPI_Init(DISABLE,Priority_0);    //中断使能, ENABLE/DISABLE; 优先级(低到高) Priority_0,Priority_1,Prio
+             -rity_2,Priority_3
+ 123   1      
+ 124   1        //----------------------------------------------
+ 125   1        BMM_UART_InitStructure.BMM_TX_Length = BUF_LENGTH;  //BMM传输总字节数   (0~255) + 1
+ 126   1        BMM_UART_InitStructure.BMM_TX_Buffer = UartTxBuffer;  //发送数据存储地址
+ 127   1        BMM_UART_InitStructure.BMM_RX_Length = BUF_LENGTH;  //BMM传输总字节数   (0~255) + 1
+ 128   1        BMM_UART_InitStructure.BMM_RX_Buffer = UartRxBuffer;  //接收数据存储地址
+ 129   1        BMM_UART_InitStructure.BMM_TX_Enable = ENABLE;    //BMM使能   ENABLE,DISABLE
+ 130   1        BMM_UART_InitStructure.BMM_RX_Enable = ENABLE;    //BMM使能   ENABLE,DISABLE
+ 131   1        BMM_UART_Inilize(UART1, &BMM_UART_InitStructure); //初始化
+ 132   1      
+ 133   1        NVIC_BMM_UART1_Tx_Init(ENABLE,Priority_0,Priority_0);   //中断使能, ENABLE/DISABLE; 优先级(低到高) Priorit
+             -y_0~Priority_3; 总线优先级(低到高) Priority_0~Priority_3
+ 134   1        NVIC_BMM_UART1_Rx_Init(ENABLE,Priority_0,Priority_0);   //中断使能, ENABLE/DISABLE; 优先级(低到高) Priorit
+             -y_0~Priority_3; 总线优先级(低到高) Priority_0~Priority_3
+ 135   1        BMM_UR1R_TRIG();  //触发UART1接收功能
+ 136   1      
+ 137   1        //----------------------------------------------
+ 138   1        BMM_M2M_InitStructure.BMM_Enable = ENABLE;      //BMM使能   ENABLE,DISABLE
+ 139   1        BMM_M2M_InitStructure.BMM_Length = BUF_LENGTH;      //BMM传输总字节数   (0~255) + 1
+ 140   1        BMM_M2M_InitStructure.BMM_Tx_Buffer = UartRxBuffer; //发送数据存储地址
+ 141   1        BMM_M2M_InitStructure.BMM_Rx_Buffer = SpiTxBuffer;  //接收数据存储地址
+ 142   1        BMM_M2M_InitStructure.BMM_SRC_Dir = M2M_ADDR_INC;   //数据源地址改变方向    M2M_ADDR_INC,M2M_ADDR_DEC
+ 143   1        BMM_M2M_InitStructure.BMM_DEST_Dir = M2M_ADDR_INC;  //数据目标地址改变方向  M2M_ADDR_INC,M2M_ADDR_DEC
+ 144   1        BMM_M2M_Inilize(&BMM_M2M_InitStructure);    //初始化
+ 145   1        NVIC_BMM_M2M_Init(ENABLE,Priority_0,Priority_0);    //中断使能, ENABLE/DISABLE; 优先级(低到高) Priority_0~P
+             -riority_3; 总线优先级(低到高) Priority_0~Priority_3
+ 146   1      
+ 147   1        //----------------------------------------------
+ 148   1        BMM_SPI_InitStructure.BMM_Enable = DISABLE;         //BMM使能   ENABLE,DISABLE
+ 149   1        BMM_SPI_InitStructure.BMM_Tx_Enable = ENABLE;       //BMM发送数据使能   ENABLE,DISABLE
+ 150   1        BMM_SPI_InitStructure.BMM_Rx_Enable = ENABLE;       //BMM接收数据使能   ENABLE,DISABLE
+ 151   1        BMM_SPI_InitStructure.BMM_Length = BUF_LENGTH;      //BMM传输总字节数   (0~255) + 1
+ 152   1        BMM_SPI_InitStructure.BMM_Tx_Buffer = SpiTxBuffer;  //发送数据存储地址
+ 153   1        BMM_SPI_InitStructure.BMM_Rx_Buffer = SpiRxBuffer;  //接收数据存储地址
+ 154   1        BMM_SPI_InitStructure.BMM_SS_Sel = SPI_SS_P22;      //自动控制SS脚选择  SPI_SS_P12,SPI_SS_P22,SPI_SS_P74,SPI
+             -_SS_P35
+ 155   1        BMM_SPI_InitStructure.BMM_AUTO_SS = DISABLE;        //自动控制SS脚使能    ENABLE,DISABLE
+ 156   1        BMM_SPI_Inilize(&BMM_SPI_InitStructure);    //初始化
+ 157   1        SET_BMM_SPI_CR(BMM_ENABLE | SPI_TRIG_S | CLR_FIFO); //bit7 1:使能 SPI_BMM, bit5 1:开始 SPI_BMM 从机模式, 
+             -bit0 1:清除 SPI_BMM FIFO
+ 158   1        NVIC_BMM_SPI_Init(ENABLE,Priority_0,Priority_0);    //中断使能, ENABLE/DISABLE; 优先级(低到高) Priority_0~P
+             -riority_3; 总线优先级(低到高) Priority_0~Priority_3
+ 159   1      }
+ 160          
+ 161          void M2M_UART_SPI(void)
+ 162          {
+ 163   1        BMM_M2M_CLR_STA();
+ 164   1        SET_M2M_TX_FIFO(UartRxBuffer);
+ 165   1        SET_M2M_RX_FIFO(SpiTxBuffer);
+ 166   1        BMM_M2M_TRIG();
+ 167   1      }
+C51 COMPILER V9.59.0.0   APP_BMM_SPI_PS                                                    06/10/2021 10:21:41 PAGE 4   
+
+ 168          
+ 169          void M2M_SPI_UART(void)
+ 170          {
+ 171   1        BMM_M2M_CLR_STA();
+ 172   1        SET_M2M_TX_FIFO(SpiRxBuffer);
+ 173   1        SET_M2M_RX_FIFO(UartTxBuffer);
+ 174   1        BMM_M2M_TRIG();
+ 175   1      }
+ 176          
+ 177          void UART_BMM_Tx(void)
+ 178          {
+ 179   1        BMM_UR1T_TRIG();
+ 180   1      }
+ 181          
+ 182          void UART_BMM_Rx(void)
+ 183          {
+ 184   1        BMM_UR1R_TRIG();
+ 185   1      }
+ 186          
+ 187          void SPI_BMM_Master(void)
+ 188          {
+ 189   1        SET_BMM_SPI_CR(0);
+ 190   1        _nop_();
+ 191   1        _nop_();
+ 192   1        _nop_();
+ 193   1        _nop_();
+ 194   1        _nop_();
+ 195   1        _nop_();
+ 196   1        SPI_SS_2 = 0;
+ 197   1        SPCTL = 0xd2;   //使能 SPI 主机模式，忽略SS引脚功能
+ 198   1        SET_BMM_SPI_CR(BMM_ENABLE | SPI_TRIG_M);  //bit7 1:使能 SPI_BMM, bit6 1:开始 SPI_BMM 主机模式
+ 199   1      }
+ 200          
+ 201          void SPI_BMM_Slave(void)
+ 202          {
+ 203   1        SET_BMM_SPI_CR(0);
+ 204   1        _nop_();
+ 205   1        _nop_();
+ 206   1        _nop_();
+ 207   1        _nop_();
+ 208   1        _nop_();
+ 209   1        _nop_();
+ 210   1        SPCTL = 0x42;  //重新设置为从机待机
+ 211   1        SET_BMM_SPI_CR(BMM_ENABLE | SPI_TRIG_S);  //bit7 1:使能 SPI_BMM, bit5 1:开始 SPI_BMM 从机模式
+ 212   1      }
+ 213          
+ 214          //========================================================================
+ 215          // 函数: Sample_BMM_SPI_PS
+ 216          // 描述: 用户应用程序.
+ 217          // 参数: None.
+ 218          // 返回: None.
+ 219          // 版本: V1.0, 2021-05-27
+ 220          //========================================================================
+ 221          void Sample_BMM_SPI_PS(void)
+ 222          {
+ 223   1        //UART接收 -> UART BMM -> SPI BMM -> SPI发送
+ 224   1        if(BmmRx1Flag)
+ 225   1        {
+ 226   2          BmmRx1Flag = 0;
+ 227   2          u2sFlag = 1;
+ 228   2          M2M_UART_SPI();     //UART Memory -> SPI Memory
+ 229   2        }
+C51 COMPILER V9.59.0.0   APP_BMM_SPI_PS                                                    06/10/2021 10:21:41 PAGE 5   
+
+ 230   1      
+ 231   1        if(SpiSendFlag)
+ 232   1        {
+ 233   2          SpiSendFlag = 0;
+ 234   2          UART_BMM_Rx();      //UART Recive Continue
+ 235   2          SPI_BMM_Master();   //SPI Send Memory
+ 236   2        }
+ 237   1      
+ 238   1        if(SpiTxFlag)
+ 239   1        {
+ 240   2          SpiTxFlag = 0;
+ 241   2          SPI_BMM_Slave();    //SPI Slave Mode
+ 242   2        }
+ 243   1      
+ 244   1        
+ 245   1        //SPI接收 -> SPI BMM -> UART BMM -> UART发送
+ 246   1        if(SpiRxFlag)
+ 247   1        {
+ 248   2          SpiRxFlag = 0;
+ 249   2          s2uFlag = 1;
+ 250   2          M2M_SPI_UART();     //SPI Memory -> UART Memory
+ 251   2        }
+ 252   1      
+ 253   1        if(UartSendFlag)
+ 254   1        {
+ 255   2          UartSendFlag = 0;
+ 256   2          SPI_BMM_Slave();    //SPI Slave Mode
+ 257   2          UART_BMM_Tx();      //UART Send Memory
+ 258   2        }
+ 259   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    563    ----
+   CONSTANT SIZE    =     45    ----
+   XDATA SIZE       =   1024      42
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      6    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

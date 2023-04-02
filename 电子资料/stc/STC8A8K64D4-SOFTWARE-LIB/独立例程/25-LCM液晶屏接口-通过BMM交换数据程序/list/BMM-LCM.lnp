@@ -1,0 +1,11 @@
+".\list\isr.obj",
+".\list\main.obj",
+".\list\STC8A_GPIO.obj",
+".\list\STC8A_NVIC.obj",
+".\list\STC8A_BMM.obj",
+".\list\STC8A_BMM_Isr.obj",
+".\list\STC8A_Delay.obj",
+".\list\STC8A_LCM.obj" 
+TO ".\list\BMM-LCM" 
+
+PRINT(".\list\BMM-LCM.map") REMOVEUNUSED 

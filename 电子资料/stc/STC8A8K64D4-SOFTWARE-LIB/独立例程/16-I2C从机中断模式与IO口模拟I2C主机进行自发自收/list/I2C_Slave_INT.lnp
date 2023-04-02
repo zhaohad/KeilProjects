@@ -1,0 +1,11 @@
+".\list\main.obj",
+".\list\STC8A_GPIO.obj",
+".\list\STC8A_I2C.obj",
+".\list\STC8A_I2C_Isr.obj",
+".\list\STC8A_NVIC.obj",
+".\list\STC8A_Soft_I2C.obj",
+".\list\STC8A_Timer.obj",
+".\list\STC8A_Timer_Isr.obj" 
+TO ".\list\I2C_Slave_INT" 
+
+PRINT(".\list\I2C_Slave_INT.map") REMOVEUNUSED 

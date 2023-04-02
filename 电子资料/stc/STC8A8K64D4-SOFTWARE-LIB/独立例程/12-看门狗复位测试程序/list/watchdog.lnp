@@ -1,0 +1,7 @@
+".\list\main.obj",
+".\list\STC8A_Delay.obj",
+".\list\STC8A_GPIO.obj",
+".\list\STC8A_WDT.obj" 
+TO ".\list\watchdog" 
+
+PRINT(".\list\watchdog.map") REMOVEUNUSED 

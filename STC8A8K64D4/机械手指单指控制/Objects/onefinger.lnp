@@ -1,0 +1,13 @@
+".\Objects\STARTUP.obj",
+".\Objects\main.obj",
+".\Objects\RZ7899.obj",
+".\Objects\STC8A_GPIO.obj",
+".\Objects\oled12864.obj",
+".\Objects\delay.obj",
+".\Objects\STC8A_ADC.obj",
+".\Objects\STC8A_ADC_Isr.obj",
+".\Objects\rotationCounter.obj",
+".\Objects\dtos.obj" 
+TO ".\Objects\onefinger" 
+PRINT(".\Listings\onefinger.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

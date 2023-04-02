@@ -1,0 +1,227 @@
+C51 COMPILER V9.59.0.0   STC8A_BMM_ISR                                                     06/10/2021 10:21:49 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE STC8A_BMM_ISR
+OBJECT MODULE PLACED IN .\list\STC8A_BMM_Isr.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\Driver\isr\STC8A_BMM_Isr.c LARGE OMF2 OPTIMIZE(8,SPEED) BROWSE INCDIR
+                    -(..\Driver\inc;..\User;..\App\inc) DEBUG PRINT(.\list\STC8A_BMM_Isr.lst) TABS(2) OBJECT(.\list\STC8A_BMM_Isr.obj)
+
+line level    source
+
+   1          /*---------------------------------------------------------------------*/
+   2          /* --- STC MCU Limited ------------------------------------------------*/
+   3          /* --- STC 1T Series MCU Demo Programme -------------------------------*/
+   4          /* --- Mobile: (86)13922805190 ----------------------------------------*/
+   5          /* --- Fax: 86-0513-55012956,55012947,55012969 ------------------------*/
+   6          /* --- Tel: 86-0513-55012928,55012929,55012966 ------------------------*/
+   7          /* --- Web: www.STCMCU.com --------------------------------------------*/
+   8          /* --- Web: www.STCMCUDATA.com  ---------------------------------------*/
+   9          /* --- QQ:  800003751 -------------------------------------------------*/
+  10          /* 如果要在程序中使用此代码,请在程序中注明使用了STC的资料及程序            */
+  11          /*---------------------------------------------------------------------*/
+  12          
+  13          #include "STC8A_BMM.h"
+  14          #include "STC8A_SPI.h"
+  15          #include "STC8A_LCM.h"
+  16          
+  17          //========================================================================
+  18          // 函数: BMM_ISR_Handler
+  19          // 描述: BMM中断函数.
+  20          // 参数: none.
+  21          // 返回: none.
+  22          // 版本: V1.0, 2021-05-25
+  23          //========================================================================
+  24          void BMM_ISR_Handler (void) interrupt 13
+  25          {
+  26   1        char store;
+  27   1        
+  28   1        store = P_SW2;
+  29   1        P_SW2 |= 0x80;    //使能扩展SFR(XSFR)访问
+  30   1      
+  31   1        // TODO: 在此处添加用户代码
+  32   1        
+  33   1        //----------- BMM ADC --------------
+  34   1        if(BMM_ADC_STA & 0x01)  //AD转换完成
+  35   1        {
+  36   2          BMM_ADC_STA &= ~0x01; //清标志位
+  37   2          BmmADCFlag = 1;
+  38   2        }
+  39   1      
+  40   1        //----------- BMM M2M --------------
+  41   1        if(BMM_M2M_STA & 0x01)  //M2M传输完成
+  42   1        {
+  43   2          BMM_M2M_STA &= ~0x01; //清标志位
+  44   2          BmmM2MFlag = 1;
+  45   2          if(u2sFlag)
+  46   2          {
+  47   3            u2sFlag = 0;
+  48   3            SpiSendFlag = 1;
+  49   3          }
+  50   2          if(s2uFlag)
+  51   2          {
+  52   3            s2uFlag = 0;
+  53   3            UartSendFlag = 1;
+  54   3          }
+C51 COMPILER V9.59.0.0   STC8A_BMM_ISR                                                     06/10/2021 10:21:49 PAGE 2   
+
+  55   2        }
+  56   1      
+  57   1        //---------- BMM UART1 -------------
+  58   1        if (BMM_UR1T_STA & 0x01)  //发送完成
+  59   1        {
+  60   2          BMM_UR1T_STA &= ~0x01;  //清标志位
+  61   2          BmmTx1Flag = 1;
+  62   2        }
+  63   1        if (BMM_UR1T_STA & 0x04)  //数据覆盖
+  64   1        {
+  65   2          BMM_UR1T_STA &= ~0x04;  //清标志位
+  66   2        }
+  67   1        
+  68   1        if (BMM_UR1R_STA & 0x01)  //接收完成
+  69   1        {
+  70   2          BMM_UR1R_STA &= ~0x01;  //清标志位
+  71   2          BmmRx1Flag = 1;
+  72   2        }
+  73   1        if (BMM_UR1R_STA & 0x02)  //数据丢弃
+  74   1        {
+  75   2          BMM_UR1R_STA &= ~0x02;  //清标志位
+  76   2        }
+  77   1        //---------- BMM UART2 -------------
+  78   1        if (BMM_UR2T_STA & 0x01)  //发送完成
+  79   1        {
+  80   2          BMM_UR2T_STA &= ~0x01;  //清标志位
+  81   2          BmmTx2Flag = 1;
+  82   2        }
+  83   1        if (BMM_UR2T_STA & 0x04)  //数据覆盖
+  84   1        {
+  85   2          BMM_UR2T_STA &= ~0x04;  //清标志位
+  86   2        }
+  87   1        
+  88   1        if (BMM_UR2R_STA & 0x01)  //接收完成
+  89   1        {
+  90   2          BMM_UR2R_STA &= ~0x01;  //清标志位
+  91   2          BmmRx2Flag = 1;
+  92   2        }
+  93   1        if (BMM_UR2R_STA & 0x02)  //数据丢弃
+  94   1        {
+  95   2          BMM_UR2R_STA &= ~0x02;  //清标志位
+  96   2        }
+  97   1        //---------- BMM UART3 -------------
+  98   1        if (BMM_UR3T_STA & 0x01)  //发送完成
+  99   1        {
+ 100   2          BMM_UR3T_STA &= ~0x01;  //清标志位
+ 101   2          BmmTx3Flag = 1;
+ 102   2        }
+ 103   1        if (BMM_UR3T_STA & 0x04)  //数据覆盖
+ 104   1        {
+ 105   2          BMM_UR3T_STA &= ~0x04;  //清标志位
+ 106   2        }
+ 107   1        
+ 108   1        if (BMM_UR3R_STA & 0x01)  //接收完成
+ 109   1        {
+ 110   2          BMM_UR3R_STA &= ~0x01;  //清标志位
+ 111   2          BmmRx3Flag = 1;
+ 112   2        }
+ 113   1        if (BMM_UR3R_STA & 0x02)  //数据丢弃
+ 114   1        {
+ 115   2          BMM_UR3R_STA &= ~0x02;  //清标志位
+ 116   2        }
+C51 COMPILER V9.59.0.0   STC8A_BMM_ISR                                                     06/10/2021 10:21:49 PAGE 3   
+
+ 117   1        //---------- BMM UART4 -------------
+ 118   1        if (BMM_UR4T_STA & 0x01)  //发送完成
+ 119   1        {
+ 120   2          BMM_UR4T_STA &= ~0x01;  //清标志位
+ 121   2          BmmTx4Flag = 1;
+ 122   2        }
+ 123   1        if (BMM_UR4T_STA & 0x04)  //数据覆盖
+ 124   1        {
+ 125   2          BMM_UR4T_STA &= ~0x04;  //清标志位
+ 126   2        }
+ 127   1        
+ 128   1        if (BMM_UR4R_STA & 0x01)  //接收完成
+ 129   1        {
+ 130   2          BMM_UR4R_STA &= ~0x01;  //清标志位
+ 131   2          BmmRx4Flag = 1;
+ 132   2        }
+ 133   1        if (BMM_UR4R_STA & 0x02)  //数据丢弃
+ 134   1        {
+ 135   2          BMM_UR4R_STA &= ~0x02;  //清标志位
+ 136   2        }
+ 137   1      
+ 138   1        //---------- BMM SPI -------------
+ 139   1        if(BMM_SPI_STA & 0x01)  //通信完成
+ 140   1        {
+ 141   2          BMM_SPI_STA &= ~0x01; //清标志位
+ 142   2          if(SPCTL & 0x10) 
+ 143   2          { //主机模式
+ 144   3            SpiTxFlag = 1;
+ 145   3            SPI_SS_2 = 1;
+ 146   3          }
+ 147   2          else 
+ 148   2          { //从机模式
+ 149   3            SpiRxFlag = 1;
+ 150   3          }
+ 151   2        }
+ 152   1        if(BMM_SPI_STA & 0x02)  //数据丢弃
+ 153   1        {
+ 154   2          BMM_SPI_STA &= ~0x02; //清标志位
+ 155   2        }
+ 156   1        if(BMM_SPI_STA & 0x04)  //数据覆盖
+ 157   1        {
+ 158   2          BMM_SPI_STA &= ~0x04; //清标志位
+ 159   2        }
+ 160   1      
+ 161   1        //------------- LCM --------------
+ 162   1        if(LCMIFSTA & 0x01)
+ 163   1        {
+ 164   2          LCMIFSTA = 0x00;
+ 165   2          LcmFlag = 0;
+ 166   2        }
+ 167   1        
+ 168   1        //---------- BMM LCM -------------
+ 169   1        if(BMM_LCM_STA & 0x01)
+ 170   1        {
+ 171   2          if(BmmLcmFlag)
+ 172   2          {
+ 173   3            BmmLcmFlag = 0;
+ 174   3            BMM_LCM_CR = 0;
+ 175   3          }
+ 176   2          else
+ 177   2          {
+ 178   3            LCM_Cnt--;
+C51 COMPILER V9.59.0.0   STC8A_BMM_ISR                                                     06/10/2021 10:21:49 PAGE 4   
+
+ 179   3            if(LCM_Cnt == 0)
+ 180   3            {
+ 181   4              BMM_LCM_CR = 0;
+ 182   4              LCD_CS=1;
+ 183   4            }
+ 184   3            else
+ 185   3            {
+ 186   4              BMM_LCM_CR = 0xa0;  //Write dat
+ 187   4            }
+ 188   3          }
+ 189   2          BMM_LCM_STA = 0;    //清标志位
+ 190   2        }
+ 191   1        
+ 192   1        P_SW2 = store;
+ 193   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    379    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

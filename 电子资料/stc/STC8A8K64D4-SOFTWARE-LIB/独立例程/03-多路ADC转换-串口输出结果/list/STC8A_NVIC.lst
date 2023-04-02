@@ -1,0 +1,685 @@
+C51 COMPILER V9.59.0.0   STC8A_NVIC                                                        06/08/2021 15:37:09 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE STC8A_NVIC
+OBJECT MODULE PLACED IN .\list\STC8A_NVIC.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE STC8A_NVIC.c OMF2 OPTIMIZE(8,SPEED) BROWSE DEBUG PRINT(.\list\STC8A_NVIC
+                    -.lst) TABS(2) OBJECT(.\list\STC8A_NVIC.obj)
+
+line level    source
+
+   1          /*---------------------------------------------------------------------*/
+   2          /* --- STC MCU Limited ------------------------------------------------*/
+   3          /* --- STC 1T Series MCU Demo Programme -------------------------------*/
+   4          /* --- Mobile: (86)13922805190 ----------------------------------------*/
+   5          /* --- Fax: 86-0513-55012956,55012947,55012969 ------------------------*/
+   6          /* --- Tel: 86-0513-55012928,55012929,55012966 ------------------------*/
+   7          /* --- Web: www.STCMCU.com --------------------------------------------*/
+   8          /* --- Web: www.STCMCUDATA.com  ---------------------------------------*/
+   9          /* --- QQ:  800003751 -------------------------------------------------*/
+  10          /* 如果要在程序中使用此代码,请在程序中注明使用了STC的资料及程序            */
+  11          /*---------------------------------------------------------------------*/
+  12          
+  13          #include  "STC8A_NVIC.h"
+  14          
+  15          //========================================================================
+  16          // 函数: NVIC_Timer0_Init
+  17          // 描述: Timer0嵌套向量中断控制器初始化.
+  18          // 参数: State:    中断使能状态, ENABLE/DISABLE.
+  19          // 参数: Priority: 中断优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+  20          // 返回: 执行结果 SUCCESS/FAIL.
+  21          // 版本: V1.0, 2020-09-29
+  22          //========================================================================
+  23          u8 NVIC_Timer0_Init(u8 State, u8 Priority)
+  24          {
+  25   1        if(State <= ENABLE) Timer0_Interrupt(State);
+  26   1        if(Priority <= Priority_3) Timer0_Priority(Priority);
+  27   1        return SUCCESS;
+  28   1      }
+  29          
+  30          //========================================================================
+  31          // 函数: NVIC_Timer1_Init
+  32          // 描述: Timer1嵌套向量中断控制器初始化.
+  33          // 参数: State:    中断使能状态, ENABLE/DISABLE.
+  34          // 参数: Priority: 中断优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+  35          // 返回: 执行结果 SUCCESS/FAIL.
+  36          // 版本: V1.0, 2020-09-29
+  37          //========================================================================
+  38          u8 NVIC_Timer1_Init(u8 State, u8 Priority)
+  39          {
+  40   1        if(State <= ENABLE) Timer1_Interrupt(State);
+  41   1        if(Priority <= Priority_3) Timer1_Priority(Priority);
+  42   1        return SUCCESS;
+  43   1      }
+  44          
+  45          //========================================================================
+  46          // 函数: NVIC_Timer2_Init
+  47          // 描述: Timer2嵌套向量中断控制器初始化.
+  48          // 参数: State:    中断使能状态, ENABLE/DISABLE.
+  49          // 参数: Priority: 中断优先级, NULL.
+  50          // 返回: 执行结果 SUCCESS/FAIL.
+  51          // 版本: V1.0, 2020-09-29
+  52          //========================================================================
+  53          u8 NVIC_Timer2_Init(u8 State, u8 Priority)
+  54          {
+C51 COMPILER V9.59.0.0   STC8A_NVIC                                                        06/08/2021 15:37:09 PAGE 2   
+
+  55   1        if(State <= ENABLE) Timer2_Interrupt(State);
+  56   1        Priority = NULL;
+  57   1        return SUCCESS;
+  58   1      }
+  59          
+  60          //========================================================================
+  61          // 函数: NVIC_Timer3_Init
+  62          // 描述: Timer3嵌套向量中断控制器初始化.
+  63          // 参数: State:    中断使能状态, ENABLE/DISABLE.
+  64          // 参数: Priority: 中断优先级, NULL.
+  65          // 返回: 执行结果 SUCCESS/FAIL.
+  66          // 版本: V1.0, 2020-09-29
+  67          //========================================================================
+  68          u8 NVIC_Timer3_Init(u8 State, u8 Priority)
+  69          {
+  70   1        if(State <= ENABLE) Timer3_Interrupt(State);
+  71   1        Priority = NULL;
+  72   1        return SUCCESS;
+  73   1      }
+  74          
+  75          //========================================================================
+  76          // 函数: NVIC_Timer4_Init
+  77          // 描述: Timer4嵌套向量中断控制器初始化.
+  78          // 参数: State:    中断使能状态, ENABLE/DISABLE.
+  79          // 参数: Priority: 中断优先级, NULL.
+  80          // 返回: 执行结果 SUCCESS/FAIL.
+  81          // 版本: V1.0, 2020-09-29
+  82          //========================================================================
+  83          u8 NVIC_Timer4_Init(u8 State, u8 Priority)
+  84          {
+  85   1        if(State <= ENABLE) Timer4_Interrupt(State);
+  86   1        Priority = NULL;
+  87   1        return SUCCESS;
+  88   1      }
+  89          
+  90          //========================================================================
+  91          // 函数: NVIC_INT0_Init
+  92          // 描述: INT0嵌套向量中断控制器初始化.
+  93          // 参数: State:    中断使能状态, ENABLE/DISABLE.
+  94          // 参数: Priority: 中断优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+  95          // 返回: 执行结果 SUCCESS/FAIL.
+  96          // 版本: V1.0, 2020-09-29
+  97          //========================================================================
+  98          u8 NVIC_INT0_Init(u8 State, u8 Priority)
+  99          {
+ 100   1        if(State <= ENABLE) INT0_Interrupt(State);
+ 101   1        if(Priority <= Priority_3) INT0_Priority(Priority);
+ 102   1        return SUCCESS;
+ 103   1      }
+ 104          
+ 105          //========================================================================
+ 106          // 函数: NVIC_INT1_Init
+ 107          // 描述: INT1嵌套向量中断控制器初始化.
+ 108          // 参数: State:    中断使能状态, ENABLE/DISABLE.
+ 109          // 参数: Priority: 中断优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 110          // 返回: 执行结果 SUCCESS/FAIL.
+ 111          // 版本: V1.0, 2020-09-29
+ 112          //========================================================================
+ 113          u8 NVIC_INT1_Init(u8 State, u8 Priority)
+ 114          {
+ 115   1        if(State <= ENABLE) INT1_Interrupt(State);
+ 116   1        if(Priority <= Priority_3) INT1_Priority(Priority);
+C51 COMPILER V9.59.0.0   STC8A_NVIC                                                        06/08/2021 15:37:09 PAGE 3   
+
+ 117   1        return SUCCESS;
+ 118   1      }
+ 119          
+ 120          //========================================================================
+ 121          // 函数: NVIC_INT2_Init
+ 122          // 描述: INT2嵌套向量中断控制器初始化.
+ 123          // 参数: State:    中断使能状态, ENABLE/DISABLE.
+ 124          // 参数: Priority: 中断优先级, NULL.
+ 125          // 返回: 执行结果 SUCCESS/FAIL.
+ 126          // 版本: V1.0, 2020-09-29
+ 127          //========================================================================
+ 128          u8 NVIC_INT2_Init(u8 State, u8 Priority)
+ 129          {
+ 130   1        if(State <= ENABLE) INT2_Interrupt(State);
+ 131   1        Priority = NULL;
+ 132   1        return SUCCESS;
+ 133   1      }
+ 134          
+ 135          //========================================================================
+ 136          // 函数: NVIC_INT3_Init
+ 137          // 描述: INT3嵌套向量中断控制器初始化.
+ 138          // 参数: State:    中断使能状态, ENABLE/DISABLE.
+ 139          // 参数: Priority: 中断优先级, NULL.
+ 140          // 返回: 执行结果 SUCCESS/FAIL.
+ 141          // 版本: V1.0, 2020-09-29
+ 142          //========================================================================
+ 143          u8 NVIC_INT3_Init(u8 State, u8 Priority)
+ 144          {
+ 145   1        if(State <= ENABLE) INT3_Interrupt(State);
+ 146   1        Priority = NULL;
+ 147   1        return SUCCESS;
+ 148   1      }
+ 149          
+ 150          //========================================================================
+ 151          // 函数: NVIC_INT4_Init
+ 152          // 描述: INT4嵌套向量中断控制器初始化.
+ 153          // 参数: State:    中断使能状态, ENABLE/DISABLE.
+ 154          // 参数: Priority: 中断优先级, NULL.
+ 155          // 返回: 执行结果 SUCCESS/FAIL.
+ 156          // 版本: V1.0, 2020-09-29
+ 157          //========================================================================
+ 158          u8 NVIC_INT4_Init(u8 State, u8 Priority)
+ 159          {
+ 160   1        if(State <= ENABLE) INT4_Interrupt(State);
+ 161   1        Priority = NULL;
+ 162   1        return SUCCESS;
+ 163   1      }
+ 164          
+ 165          //========================================================================
+ 166          // 函数: NVIC_ADC_Init
+ 167          // 描述: ADC嵌套向量中断控制器初始化.
+ 168          // 参数: State:    中断使能状态, ENABLE/DISABLE.
+ 169          // 参数: Priority: 中断优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 170          // 返回: 执行结果 SUCCESS/FAIL.
+ 171          // 版本: V1.0, 2020-09-29
+ 172          //========================================================================
+ 173          u8 NVIC_ADC_Init(u8 State, u8 Priority)
+ 174          {
+ 175   1        if(State <= ENABLE) ADC_Interrupt(State);
+ 176   1        if(Priority <= Priority_3) ADC_Priority(Priority);
+ 177   1        return SUCCESS;
+ 178   1      }
+C51 COMPILER V9.59.0.0   STC8A_NVIC                                                        06/08/2021 15:37:09 PAGE 4   
+
+ 179          
+ 180          //========================================================================
+ 181          // 函数: NVIC_CMP_Init
+ 182          // 描述: 比较器嵌套向量中断控制器初始化.
+ 183          // 参数: State:    中断使能状态, RISING_EDGE/FALLING_EDGE/DISABLE.
+ 184          // 参数: Priority: 中断优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 185          // 返回: 执行结果 SUCCESS/FAIL.
+ 186          // 版本: V1.0, 2020-09-29
+ 187          //========================================================================
+ 188          u8 NVIC_CMP_Init(u8 State, u8 Priority)
+ 189          {
+ 190   1        if(State > RISING_EDGE) return FAIL;
+ 191   1        if(State & RISING_EDGE) CMPCR1 |= PIE;      //允许上升沿中断
+ 192   1        else  CMPCR1 &= ~PIE;     //禁止上升沿中断
+ 193   1        if(State & FALLING_EDGE)  CMPCR1 |= NIE;    //允许下降沿中断
+ 194   1        else  CMPCR1 &= ~NIE;     //禁止上升沿中断
+ 195   1        if(Priority <= Priority_3) CMP_Priority(Priority);
+ 196   1        return SUCCESS;
+ 197   1      }
+ 198          
+ 199          //========================================================================
+ 200          // 函数: NVIC_I2C_Init
+ 201          // 描述: I2C嵌套向量中断控制器初始化.
+ 202          // 参数: Mode:     模式, I2C_Mode_Master/I2C_Mode_Slave.
+ 203          // 参数: State:    中断使能状态, I2C_Mode_Master: ENABLE/DISABLE.
+ 204          //                              I2C_Mode_Slave: I2C_ESTAI/I2C_ERXI/I2C_ETXI/I2C_ESTOI/DISABLE.
+ 205          // 参数: Priority: 中断优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 206          // 返回: 执行结果 SUCCESS/FAIL.
+ 207          // 版本: V1.0, 2020-09-29
+ 208          //========================================================================
+ 209          u8 NVIC_I2C_Init(u8 Mode, u8 State, u8 Priority)
+ 210          {
+ 211   1        if(Mode > 1) return FAIL;
+ 212   1        EAXSFR();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展SFR(XSFR) */
+ 213   1        if(Mode == 1) //I2C_Mode_Master
+ 214   1        {
+ 215   2          I2C_Master_Inturrupt(State);
+ 216   2        }
+ 217   1        else if(Mode == 0)  //I2C_Mode_Slave
+ 218   1        {
+ 219   2          I2CSLCR = (I2CSLCR & ~0x78) | State;
+ 220   2        }
+ 221   1      //  EAXRAM();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展RAM(XRAM) */
+ 222   1        if(Priority <= Priority_3) CMP_Priority(Priority);
+ 223   1        return SUCCESS;
+ 224   1      }
+ 225          
+ 226          //========================================================================
+ 227          // 函数: NVIC_UART1_Init
+ 228          // 描述: UART1嵌套向量中断控制器初始化.
+ 229          // 参数: State:    中断使能状态, ENABLE/DISABLE.
+ 230          // 参数: Priority: 中断优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 231          // 返回: 执行结果 SUCCESS/FAIL.
+ 232          // 版本: V1.0, 2020-09-29
+ 233          //========================================================================
+ 234          u8 NVIC_UART1_Init(u8 State, u8 Priority)
+ 235          {
+ 236   1        if(State <= ENABLE) UART1_Interrupt(State);
+ 237   1        if(Priority <= Priority_3) UART1_Priority(Priority);
+ 238   1        return SUCCESS;
+ 239   1      }
+ 240          
+C51 COMPILER V9.59.0.0   STC8A_NVIC                                                        06/08/2021 15:37:09 PAGE 5   
+
+ 241          //========================================================================
+ 242          // 函数: NVIC_UART2_Init
+ 243          // 描述: UART2嵌套向量中断控制器初始化.
+ 244          // 参数: State:    中断使能状态, ENABLE/DISABLE.
+ 245          // 参数: Priority: 中断优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 246          // 返回: 执行结果 SUCCESS/FAIL.
+ 247          // 版本: V1.0, 2020-09-29
+ 248          //========================================================================
+ 249          u8 NVIC_UART2_Init(u8 State, u8 Priority)
+ 250          {
+ 251   1        if(State <= ENABLE) UART2_Interrupt(State);
+ 252   1        if(Priority <= Priority_3) UART2_Priority(Priority);
+ 253   1        return SUCCESS;
+ 254   1      }
+ 255          
+ 256          //========================================================================
+ 257          // 函数: NVIC_UART3_Init
+ 258          // 描述: UART3嵌套向量中断控制器初始化.
+ 259          // 参数: State:    中断使能状态, ENABLE/DISABLE.
+ 260          // 参数: Priority: 中断优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 261          // 返回: 执行结果 SUCCESS/FAIL.
+ 262          // 版本: V1.0, 2020-09-29
+ 263          //========================================================================
+ 264          u8 NVIC_UART3_Init(u8 State, u8 Priority)
+ 265          {
+ 266   1        if(State <= ENABLE) UART3_Interrupt(State);
+ 267   1        if(Priority <= Priority_3) UART3_Priority(Priority);
+ 268   1        return SUCCESS;
+ 269   1      }
+ 270          
+ 271          //========================================================================
+ 272          // 函数: NVIC_UART4_Init
+ 273          // 描述: UART4嵌套向量中断控制器初始化.
+ 274          // 参数: State:    中断使能状态, ENABLE/DISABLE.
+ 275          // 参数: Priority: 中断优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 276          // 返回: 执行结果 SUCCESS/FAIL.
+ 277          // 版本: V1.0, 2020-09-29
+ 278          //========================================================================
+ 279          u8 NVIC_UART4_Init(u8 State, u8 Priority)
+ 280          {
+ 281   1        if(State <= ENABLE) UART4_Interrupt(State);
+ 282   1        if(Priority <= Priority_3) UART4_Priority(Priority);
+ 283   1        return SUCCESS;
+ 284   1      }
+ 285          
+ 286          //========================================================================
+ 287          // 函数: NVIC_SPI_Init
+ 288          // 描述: SPI嵌套向量中断控制器初始化.
+ 289          // 参数: State:    中断使能状态, ENABLE/DISABLE.
+ 290          // 参数: Priority: 中断优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 291          // 返回: 执行结果 SUCCESS/FAIL.
+ 292          // 版本: V1.0, 2020-09-29
+ 293          //========================================================================
+ 294          u8 NVIC_SPI_Init(u8 State, u8 Priority)
+ 295          {
+ 296   1        if(State <= ENABLE) SPI_Interrupt(State);
+ 297   1        if(Priority <= Priority_3) SPI_Priority(Priority);
+ 298   1        return SUCCESS;
+ 299   1      }
+ 300          
+ 301          //========================================================================
+ 302          // 函数: NVIC_PCA_Init
+C51 COMPILER V9.59.0.0   STC8A_NVIC                                                        06/08/2021 15:37:09 PAGE 6   
+
+ 303          // 描述: PCA嵌套向量中断控制器初始化.
+ 304          // 参数: Channel:  通道, PCA0/PCA1/PCA2/PCA_Counter.
+ 305          // 参数: State:    中断使能状态, PCA_ECOM/PCA_CCAPP/PCA_CCAPN/PCA_MAT/PCA_TOG/PCA_PWM/PCA_ECCF/DISABLE.
+ 306          // 参数: Priority: 中断优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 307          // 返回: 执行结果 SUCCESS/FAIL.
+ 308          // 版本: V1.0, 2020-09-29
+ 309          //========================================================================
+ 310          u8 NVIC_PCA_Init(u8 Channel, u8 State, u8 Priority)
+ 311          {
+ 312   1      //  if(Channel > PCA_Counter) return FAIL;
+ 313   1        if(Priority <= Priority_3) PCA_Priority(Priority);
+ 314   1        switch(Channel)
+ 315   1        {
+ 316   2          case 0:   //PCA0
+ 317   2            CCAPM0 = State;
+ 318   2          break;
+ 319   2      
+ 320   2          case 1:   //PCA1
+ 321   2            CCAPM1 = State;
+ 322   2          break;
+ 323   2      
+ 324   2          case 2:   //PCA2
+ 325   2            CCAPM2 = State;
+ 326   2          break;
+ 327   2      
+ 328   2          case 3:   //PCA3
+ 329   2            EAXSFR();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展SFR(XSFR) */
+ 330   2            CCAPM3 = State;
+ 331   2            EAXRAM();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展RAM(XRAM) */
+ 332   2          break;
+ 333   2      
+ 334   2          case 4:   //PCA_Counter
+ 335   2            CMOD = (CMOD  & ~1) | (State & 1);
+ 336   2          break;
+ 337   2        }
+ 338   1        return SUCCESS;
+ 339   1      }
+ 340          
+ 341          //========================================================================
+ 342          // 函数: NVIC_BMM_ADC_Init
+ 343          // 描述: BMM ADC嵌套向量中断控制器初始化.
+ 344          // 参数: State:    中断使能状态, ENABLE/DISABLE.
+ 345          // 参数: Priority: 中断优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 346          // 参数: Bus_Priority: 数据总线访问优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 347          // 返回: 执行结果 SUCCESS/FAIL.
+ 348          // 版本: V1.0, 2021-05-21
+ 349          //========================================================================
+ 350          u8 NVIC_BMM_ADC_Init(u8 State, u8 Priority, u8 Bus_Priority)
+ 351          {
+ 352   1        EAXSFR();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展SFR(XSFR) */
+ 353   1        BMM_ADC_CFG &= ~0x0f;
+ 354   1        if(Priority <= Priority_3) BMM_ADC_CFG |= Priority << 2;
+ 355   1        if(Bus_Priority <= Priority_3) BMM_ADC_CFG |= Bus_Priority; //数据总线访问优先级
+ 356   1        if(State == ENABLE)
+ 357   1          BMM_ADC_CFG |= 0x80;    //bit7 1:Enable Interrupt
+ 358   1        else
+ 359   1          BMM_ADC_CFG &= ~0x80;   //bit7 0:Disable Interrupt
+ 360   1        EAXRAM();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展RAM(XRAM) */
+ 361   1        return SUCCESS;
+ 362   1      }
+ 363          
+ 364          //========================================================================
+C51 COMPILER V9.59.0.0   STC8A_NVIC                                                        06/08/2021 15:37:09 PAGE 7   
+
+ 365          // 函数: NVIC_BMM_M2M_Init
+ 366          // 描述: BMM M2M嵌套向量中断控制器初始化.
+ 367          // 参数: State:    中断使能状态, ENABLE/DISABLE.
+ 368          // 参数: Priority: 中断优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 369          // 参数: Bus_Priority: 数据总线访问优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 370          // 返回: 执行结果 SUCCESS/FAIL.
+ 371          // 版本: V1.0, 2021-05-21
+ 372          //========================================================================
+ 373          u8 NVIC_BMM_M2M_Init(u8 State, u8 Priority, u8 Bus_Priority)
+ 374          {
+ 375   1        EAXSFR();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展SFR(XSFR) */
+ 376   1        BMM_M2M_CFG &= ~0x0f;
+ 377   1        if(Priority <= Priority_3) BMM_M2M_CFG |= Priority << 2;
+ 378   1        if(Bus_Priority <= Priority_3) BMM_M2M_CFG |= Bus_Priority; //数据总线访问优先级
+ 379   1        if(State == ENABLE)
+ 380   1          BMM_M2M_CFG |= 0x80;    //bit7 1:Enable Interrupt
+ 381   1        else
+ 382   1          BMM_M2M_CFG &= ~0x80;   //bit7 0:Disable Interrupt
+ 383   1        EAXRAM();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展RAM(XRAM) */
+ 384   1        return SUCCESS;
+ 385   1      }
+ 386          
+ 387          //========================================================================
+ 388          // 函数: NVIC_BMM_SPI_Init
+ 389          // 描述: BMM SPI嵌套向量中断控制器初始化.
+ 390          // 参数: State:    中断使能状态, ENABLE/DISABLE.
+ 391          // 参数: Priority: 中断优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 392          // 参数: Bus_Priority: 数据总线访问优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 393          // 返回: 执行结果 SUCCESS/FAIL.
+ 394          // 版本: V1.0, 2021-05-27
+ 395          //========================================================================
+ 396          u8 NVIC_BMM_SPI_Init(u8 State, u8 Priority, u8 Bus_Priority)
+ 397          {
+ 398   1        EAXSFR();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展SFR(XSFR) */
+ 399   1        BMM_SPI_CFG &= ~0x0f;
+ 400   1        if(Priority <= Priority_3) BMM_SPI_CFG |= Priority << 2;
+ 401   1        if(Bus_Priority <= Priority_3) BMM_SPI_CFG |= Bus_Priority; //数据总线访问优先级
+ 402   1        if(State == ENABLE)
+ 403   1          BMM_SPI_CFG |= 0x80;    //bit7 1:Enable Interrupt
+ 404   1        else
+ 405   1          BMM_SPI_CFG &= ~0x80;   //bit7 0:Disable Interrupt
+ 406   1        EAXRAM();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展RAM(XRAM) */
+ 407   1        return SUCCESS;
+ 408   1      }
+ 409          
+ 410          //========================================================================
+ 411          // 函数: NVIC_BMM_UART1_Tx_Init
+ 412          // 描述: BMM UART1 Tx嵌套向量中断控制器初始化.
+ 413          // 参数: State:    中断使能状态, ENABLE/DISABLE.
+ 414          // 参数: Priority: 中断优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 415          // 参数: Bus_Priority: 数据总线访问优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 416          // 返回: 执行结果 SUCCESS/FAIL.
+ 417          // 版本: V1.0, 2021-05-21
+ 418          //========================================================================
+ 419          u8 NVIC_BMM_UART1_Tx_Init(u8 State, u8 Priority, u8 Bus_Priority)
+ 420          {
+ 421   1        EAXSFR();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展SFR(XSFR) */
+ 422   1        BMM_UR1T_CFG &= ~0x0f;
+ 423   1        if(Priority <= Priority_3) BMM_UR1T_CFG |= Priority << 2;
+ 424   1        if(Bus_Priority <= Priority_3) BMM_UR1T_CFG |= Bus_Priority;  //数据总线访问优先级
+ 425   1        if(State == ENABLE)
+ 426   1          BMM_UR1T_CFG |= 0x80;   //bit7 1:Enable Interrupt
+C51 COMPILER V9.59.0.0   STC8A_NVIC                                                        06/08/2021 15:37:09 PAGE 8   
+
+ 427   1        else
+ 428   1          BMM_UR1T_CFG &= ~0x80;  //bit7 0:Disable Interrupt
+ 429   1        EAXRAM();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展RAM(XRAM) */
+ 430   1        return SUCCESS;
+ 431   1      }
+ 432          
+ 433          //========================================================================
+ 434          // 函数: NVIC_BMM_UART1_Rx_Init
+ 435          // 描述: BMM UART1 Rx嵌套向量中断控制器初始化.
+ 436          // 参数: State:    中断使能状态, ENABLE/DISABLE.
+ 437          // 参数: Priority: 中断优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 438          // 参数: Bus_Priority: 数据总线访问优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 439          // 返回: 执行结果 SUCCESS/FAIL.
+ 440          // 版本: V1.0, 2021-05-21
+ 441          //========================================================================
+ 442          u8 NVIC_BMM_UART1_Rx_Init(u8 State, u8 Priority, u8 Bus_Priority)
+ 443          {
+ 444   1        EAXSFR();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展SFR(XSFR) */
+ 445   1        BMM_UR1R_CFG &= ~0x0f;
+ 446   1        if(Priority <= Priority_3) BMM_UR1R_CFG |= Priority << 2;
+ 447   1        if(Bus_Priority <= Priority_3) BMM_UR1R_CFG |= Bus_Priority;  //数据总线访问优先级
+ 448   1        if(State == ENABLE)
+ 449   1          BMM_UR1R_CFG |= 0x80;   //bit7 1:Enable Interrupt
+ 450   1        else
+ 451   1          BMM_UR1R_CFG &= ~0x80;  //bit7 0:Disable Interrupt
+ 452   1        EAXRAM();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展RAM(XRAM) */
+ 453   1        return SUCCESS;
+ 454   1      }
+ 455          
+ 456          //========================================================================
+ 457          // 函数: NVIC_BMM_UART2_Tx_Init
+ 458          // 描述: BMM UART2 Tx嵌套向量中断控制器初始化.
+ 459          // 参数: State:    中断使能状态, ENABLE/DISABLE.
+ 460          // 参数: Priority: 中断优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 461          // 参数: Bus_Priority: 数据总线访问优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 462          // 返回: 执行结果 SUCCESS/FAIL.
+ 463          // 版本: V1.0, 2021-05-21
+ 464          //========================================================================
+ 465          u8 NVIC_BMM_UART2_Tx_Init(u8 State, u8 Priority, u8 Bus_Priority)
+ 466          {
+ 467   1        EAXSFR();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展SFR(XSFR) */
+ 468   1        BMM_UR2T_CFG &= ~0x0f;
+ 469   1        if(Priority <= Priority_3) BMM_UR2T_CFG |= Priority << 2;
+ 470   1        if(Bus_Priority <= Priority_3) BMM_UR2T_CFG |= Bus_Priority;  //数据总线访问优先级
+ 471   1        if(State == ENABLE)
+ 472   1          BMM_UR2T_CFG |= 0x80;   //bit7 1:Enable Interrupt
+ 473   1        else
+ 474   1          BMM_UR2T_CFG &= ~0x80;  //bit7 0:Disable Interrupt
+ 475   1        EAXRAM();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展RAM(XRAM) */
+ 476   1        return SUCCESS;
+ 477   1      }
+ 478          
+ 479          //========================================================================
+ 480          // 函数: NVIC_BMM_UART2_Rx_Init
+ 481          // 描述: BMM UART2 Rx嵌套向量中断控制器初始化.
+ 482          // 参数: State:    中断使能状态, ENABLE/DISABLE.
+ 483          // 参数: Priority: 中断优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 484          // 参数: Bus_Priority: 数据总线访问优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 485          // 返回: 执行结果 SUCCESS/FAIL.
+ 486          // 版本: V1.0, 2021-05-21
+ 487          //========================================================================
+ 488          u8 NVIC_BMM_UART2_Rx_Init(u8 State, u8 Priority, u8 Bus_Priority)
+C51 COMPILER V9.59.0.0   STC8A_NVIC                                                        06/08/2021 15:37:09 PAGE 9   
+
+ 489          {
+ 490   1        EAXSFR();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展SFR(XSFR) */
+ 491   1        BMM_UR2R_CFG &= ~0x0f;
+ 492   1        if(Priority <= Priority_3) BMM_UR2R_CFG |= Priority << 2;
+ 493   1        if(Bus_Priority <= Priority_3) BMM_UR2R_CFG |= Bus_Priority;  //数据总线访问优先级
+ 494   1        if(State == ENABLE)
+ 495   1          BMM_UR2R_CFG |= 0x80;   //bit7 1:Enable Interrupt
+ 496   1        else
+ 497   1          BMM_UR2R_CFG &= ~0x80;  //bit7 0:Disable Interrupt
+ 498   1        EAXRAM();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展RAM(XRAM) */
+ 499   1        return SUCCESS;
+ 500   1      }
+ 501          
+ 502          //========================================================================
+ 503          // 函数: NVIC_BMM_UART3_Tx_Init
+ 504          // 描述: BMM UART3 Tx嵌套向量中断控制器初始化.
+ 505          // 参数: State:    中断使能状态, ENABLE/DISABLE.
+ 506          // 参数: Priority: 中断优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 507          // 参数: Bus_Priority: 数据总线访问优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 508          // 返回: 执行结果 SUCCESS/FAIL.
+ 509          // 版本: V1.0, 2021-05-21
+ 510          //========================================================================
+ 511          u8 NVIC_BMM_UART3_Tx_Init(u8 State, u8 Priority, u8 Bus_Priority)
+ 512          {
+ 513   1        EAXSFR();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展SFR(XSFR) */
+ 514   1        BMM_UR3T_CFG &= ~0x0f;
+ 515   1        if(Priority <= Priority_3) BMM_UR3T_CFG |= Priority << 2;
+ 516   1        if(Bus_Priority <= Priority_3) BMM_UR3T_CFG |= Bus_Priority;  //数据总线访问优先级
+ 517   1        if(State == ENABLE)
+ 518   1          BMM_UR3T_CFG |= 0x80;   //bit7 1:Enable Interrupt
+ 519   1        else
+ 520   1          BMM_UR3T_CFG &= ~0x80;  //bit7 0:Disable Interrupt
+ 521   1        EAXRAM();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展RAM(XRAM) */
+ 522   1        return SUCCESS;
+ 523   1      }
+ 524          
+ 525          //========================================================================
+ 526          // 函数: NVIC_BMM_UART3_Rx_Init
+ 527          // 描述: BMM UART3 Rx嵌套向量中断控制器初始化.
+ 528          // 参数: State:    中断使能状态, ENABLE/DISABLE.
+ 529          // 参数: Priority: 中断优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 530          // 参数: Bus_Priority: 数据总线访问优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 531          // 返回: 执行结果 SUCCESS/FAIL.
+ 532          // 版本: V1.0, 2021-05-21
+ 533          //========================================================================
+ 534          u8 NVIC_BMM_UART3_Rx_Init(u8 State, u8 Priority, u8 Bus_Priority)
+ 535          {
+ 536   1        EAXSFR();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展SFR(XSFR) */
+ 537   1        BMM_UR3R_CFG &= ~0x0f;
+ 538   1        if(Priority <= Priority_3) BMM_UR3R_CFG |= Priority << 2;
+ 539   1        if(Bus_Priority <= Priority_3) BMM_UR3R_CFG |= Bus_Priority;  //数据总线访问优先级
+ 540   1        if(State == ENABLE)
+ 541   1          BMM_UR3R_CFG |= 0x80;   //bit7 1:Enable Interrupt
+ 542   1        else
+ 543   1          BMM_UR3R_CFG &= ~0x80;  //bit7 0:Disable Interrupt
+ 544   1        EAXRAM();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展RAM(XRAM) */
+ 545   1        return SUCCESS;
+ 546   1      }
+ 547          
+ 548          //========================================================================
+ 549          // 函数: NVIC_BMM_UART4_Tx_Init
+ 550          // 描述: BMM UART4 Tx嵌套向量中断控制器初始化.
+C51 COMPILER V9.59.0.0   STC8A_NVIC                                                        06/08/2021 15:37:09 PAGE 10  
+
+ 551          // 参数: State:    中断使能状态, ENABLE/DISABLE.
+ 552          // 参数: Priority: 中断优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 553          // 参数: Bus_Priority: 数据总线访问优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 554          // 返回: 执行结果 SUCCESS/FAIL.
+ 555          // 版本: V1.0, 2021-05-21
+ 556          //========================================================================
+ 557          u8 NVIC_BMM_UART4_Tx_Init(u8 State, u8 Priority, u8 Bus_Priority)
+ 558          {
+ 559   1        EAXSFR();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展SFR(XSFR) */
+ 560   1        BMM_UR4T_CFG &= ~0x0f;
+ 561   1        if(Priority <= Priority_3) BMM_UR4T_CFG |= Priority << 2;
+ 562   1        if(Bus_Priority <= Priority_3) BMM_UR4T_CFG |= Bus_Priority;  //数据总线访问优先级
+ 563   1        if(State == ENABLE)
+ 564   1          BMM_UR4T_CFG |= 0x80;   //bit7 1:Enable Interrupt
+ 565   1        else
+ 566   1          BMM_UR4T_CFG &= ~0x80;  //bit7 0:Disable Interrupt
+ 567   1        EAXRAM();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展RAM(XRAM) */
+ 568   1        return SUCCESS;
+ 569   1      }
+ 570          
+ 571          //========================================================================
+ 572          // 函数: NVIC_BMM_UART4_Rx_Init
+ 573          // 描述: BMM UART4 Rx嵌套向量中断控制器初始化.
+ 574          // 参数: State:    中断使能状态, ENABLE/DISABLE.
+ 575          // 参数: Priority: 中断优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 576          // 参数: Bus_Priority: 数据总线访问优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 577          // 返回: 执行结果 SUCCESS/FAIL.
+ 578          // 版本: V1.0, 2021-05-21
+ 579          //========================================================================
+ 580          u8 NVIC_BMM_UART4_Rx_Init(u8 State, u8 Priority, u8 Bus_Priority)
+ 581          {
+ 582   1        EAXSFR();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展SFR(XSFR) */
+ 583   1        BMM_UR4R_CFG &= ~0x0f;
+ 584   1        if(Priority <= Priority_3) BMM_UR4R_CFG |= Priority << 2;
+ 585   1        if(Bus_Priority <= Priority_3) BMM_UR4R_CFG |= Bus_Priority;  //数据总线访问优先级
+ 586   1        if(State == ENABLE)
+ 587   1          BMM_UR4R_CFG |= 0x80;   //bit7 1:Enable Interrupt
+ 588   1        else
+ 589   1          BMM_UR4R_CFG &= ~0x80;  //bit7 0:Disable Interrupt
+ 590   1        EAXRAM();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展RAM(XRAM) */
+ 591   1        return SUCCESS;
+ 592   1      }
+ 593          
+ 594          //========================================================================
+ 595          // 函数: NVIC_BMM_LCM_Init
+ 596          // 描述: BMM LCM嵌套向量中断控制器初始化.
+ 597          // 参数: State:    中断使能状态, ENABLE/DISABLE.
+ 598          // 参数: Priority: 中断优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 599          // 参数: Bus_Priority: 数据总线访问优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 600          // 返回: 执行结果 SUCCESS/FAIL.
+ 601          // 版本: V1.0, 2021-05-21
+ 602          //========================================================================
+ 603          u8 NVIC_BMM_LCM_Init(u8 State, u8 Priority, u8 Bus_Priority)
+ 604          {
+ 605   1        EAXSFR();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展SFR(XSFR) */
+ 606   1        BMM_LCM_CFG &= ~0x0f;
+ 607   1        if(Priority <= Priority_3) BMM_LCM_CFG |= Priority << 2;
+ 608   1        if(Bus_Priority <= Priority_3) BMM_LCM_CFG |= Bus_Priority; //数据总线访问优先级
+ 609   1        if(State == ENABLE)
+ 610   1          BMM_LCM_CFG |= 0x80;    //bit7 1:Enable Interrupt
+ 611   1        else
+ 612   1          BMM_LCM_CFG &= ~0x80;   //bit7 0:Disable Interrupt
+C51 COMPILER V9.59.0.0   STC8A_NVIC                                                        06/08/2021 15:37:09 PAGE 11  
+
+ 613   1        EAXRAM();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展RAM(XRAM) */
+ 614   1        return SUCCESS;
+ 615   1      }
+ 616          
+ 617          //========================================================================
+ 618          // 函数: NVIC_LCM_Init
+ 619          // 描述: LCM嵌套向量中断控制器初始化.
+ 620          // 参数: State:    中断使能状态, ENABLE/DISABLE.
+ 621          // 参数: Priority: 中断优先级, Priority_0,Priority_1,Priority_2,Priority_3.
+ 622          // 返回: 执行结果 SUCCESS/FAIL.
+ 623          // 版本: V1.0, 2021-05-21
+ 624          //========================================================================
+ 625          u8 NVIC_LCM_Init(u8 State, u8 Priority)
+ 626          {
+ 627   1        EAXSFR();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展SFR(XSFR) */
+ 628   1        LCMIFCFG &= ~0x30;
+ 629   1        if(Priority <= Priority_3) LCMIFCFG |= Priority << 4;
+ 630   1        if(State == ENABLE)
+ 631   1          LCMIFCFG |= 0x80;   //bit7 1:Enable Interrupt
+ 632   1        else
+ 633   1          LCMIFCFG &= ~0x80;    //bit7 0:Disable Interrupt
+ 634   1        EAXRAM();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展RAM(XRAM) */
+ 635   1        return SUCCESS;
+ 636   1      }
+ 637          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   2181    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

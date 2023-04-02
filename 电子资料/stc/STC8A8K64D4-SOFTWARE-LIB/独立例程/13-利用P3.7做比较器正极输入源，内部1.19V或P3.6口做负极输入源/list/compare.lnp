@@ -1,0 +1,8 @@
+".\list\main.obj",
+".\list\STC8A_Compare.obj",
+".\list\STC8A_Compare_Isr.obj",
+".\list\STC8A_GPIO.obj",
+".\list\STC8A_NVIC.obj" 
+TO ".\list\compare" 
+
+PRINT(".\list\compare.map") REMOVEUNUSED 

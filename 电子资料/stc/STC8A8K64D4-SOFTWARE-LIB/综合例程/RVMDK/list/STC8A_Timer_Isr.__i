@@ -1,0 +1,1 @@
+"..\Driver\isr\STC8A_Timer_Isr.c" LARGE OMF2 OPTIMIZE (8,SPEED) BROWSE INCDIR(..\Driver\inc;..\User;..\App\inc) DEBUG PRINT(.\list\STC8A_Timer_Isr.lst) TABS (2) OBJECT(.\list\STC8A_Timer_Isr.obj)

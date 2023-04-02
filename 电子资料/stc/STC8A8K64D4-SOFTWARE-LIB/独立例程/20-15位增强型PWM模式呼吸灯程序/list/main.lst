@@ -1,0 +1,156 @@
+C51 COMPILER V9.59.0.0   MAIN                                                              06/10/2021 15:57:27 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\list\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c LARGE OMF2 OPTIMIZE(8,SPEED) BROWSE DEBUG PRINT(.\list\main.lst) 
+                    -TABS(2) OBJECT(.\list\main.obj)
+
+line level    source
+
+   1          /*---------------------------------------------------------------------*/
+   2          /* --- STC MCU Limited ------------------------------------------------*/
+   3          /* --- STC 1T Series MCU Demo Programme -------------------------------*/
+   4          /* --- Mobile: (86)13922805190 ----------------------------------------*/
+   5          /* --- Fax: 86-0513-55012956,55012947,55012969 ------------------------*/
+   6          /* --- Tel: 86-0513-55012928,55012929,55012966 ------------------------*/
+   7          /* --- Web: www.STCMCU.com --------------------------------------------*/
+   8          /* --- Web: www.STCMCUDATA.com  ---------------------------------------*/
+   9          /* --- QQ:  800003751 -------------------------------------------------*/
+  10          /* 如果要在程序中使用此代码,请在程序中注明使用了STC的资料及程序            */
+  11          /*---------------------------------------------------------------------*/
+  12          
+  13          #include  "config.h"
+  14          #include  "STC8A_GPIO.h"
+  15          #include  "STC8A_Delay.h"
+  16          #include  "STC8A_PWM15bit.h"
+  17          
+  18          /*************   功能说明   ***************
+  19          
+  20          输出4路PWM信号：
+  21          PWM0  输出"呼吸灯"效果PWM.
+  22          PWM1  循环输出1秒钟PWM，1秒钟高电平，1秒钟低电平.
+  23          PWM2,PWM3  固定PWM.
+  24          
+  25          下载时, 选择时钟 24MHz (用户可在"config.h"修改频率).
+  26          
+  27          ******************************************/
+  28          
+  29          /*************  本地常量声明  **************/
+  30          
+  31          
+  32          /*************  本地变量声明  **************/
+  33          
+  34          u16 pwm0,pwm1;
+  35          bit B_PWM0_Dir; //方向, 0为+, 1为-.
+  36          
+  37          /*************  本地函数声明  **************/
+  38          
+  39          
+  40          /*************  外部函数和变量声明 *****************/
+  41          
+  42          
+  43          /******************** IO口配置 ********************/
+  44          void  GPIO_config(void)
+  45          {
+  46   1        GPIO_InitTypeDef  GPIO_InitStructure;       //结构定义
+  47   1      
+  48   1        GPIO_InitStructure.Pin  = GPIO_Pin_All;     //指定要初始化的IO, GPIO_Pin_0 ~ GPIO_Pin_7, 或操作
+  49   1        GPIO_InitStructure.Mode = GPIO_PullUp;      //指定IO的输入或输出方式,GPIO_PullUp,GPIO_HighZ,GPIO_OUT_OD,GPIO
+             -_OUT_PP
+  50   1        GPIO_Inilize(GPIO_P2,&GPIO_InitStructure);  //初始化
+  51   1      }
+  52          
+  53          /******************** PWM15配置 ********************/
+C51 COMPILER V9.59.0.0   MAIN                                                              06/10/2021 15:57:27 PAGE 2   
+
+  54          void  PWM15_config(void)
+  55          {
+  56   1        PWM15_InitTypeDef   PWM15_InitStructure;
+  57   1      
+  58   1        PWM15_InitStructure.PWM_Enable    = ENABLE;   //PWM使能,  ENABLE, DISABLE
+  59   1        PWM15_InitStructure.PWM_Period    = 0x1000;   //PWM周期,  0~0x7fff
+  60   1        PWM15_InitStructure.PWM_Clock_Sel = PWM_CLK_SYS;    //时钟源选择,  PWM_CLK_SYS, PWM_CLK_TM2
+  61   1        PWM15_InitStructure.PWM_Clock_PS  = 0;        //系统时钟分频参数(PS+1分频),  0~15
+  62   1        PWM15_InitStructure.PWM_CInt      = DISABLE;  //计数器归零中断使能,  ENABLE, DISABLE
+  63   1        PWM15_InitStructure.PWM_Counter   = ENABLE;   //计数器使能,  ENABLE, DISABLE
+  64   1        PWM15_Init(&PWM15_InitStructure);
+  65   1        
+  66   1        PWM15Duty(PWM15_0,0x000,0x200);   //PWM_ID, 输出低电平位置, 输出高电平位置
+  67   1        PWM15Duty(PWM15_1,0x200,0xc00);   //PWM_ID, 输出低电平位置, 输出高电平位置
+  68   1        PWM15Duty(PWM15_2,0x400,0x800);   //PWM_ID, 输出低电平位置, 输出高电平位置
+  69   1        PWM15Duty(PWM15_3,0x800,0xe00);   //PWM_ID, 输出低电平位置, 输出高电平位置
+  70   1        PWMChannelCtrl(PWM15_0,ENABLE,0,DISABLE,DISABLE,DISABLE); //PWM_ID, 输出使能, 初始电平, PWM中断, 第二个触
+             -发点中断, 第一触发点中断
+  71   1        PWMChannelCtrl(PWM15_1,ENABLE,0,DISABLE,DISABLE,DISABLE); //PWM_ID, 输出使能, 初始电平, PWM中断, 第二个触
+             -发点中断, 第一触发点中断
+  72   1        PWMChannelCtrl(PWM15_2,ENABLE,0,DISABLE,DISABLE,DISABLE); //PWM_ID, 输出使能, 初始电平, PWM中断, 第二个触
+             -发点中断, 第一触发点中断
+  73   1        PWMChannelCtrl(PWM15_3,ENABLE,0,DISABLE,DISABLE,DISABLE); //PWM_ID, 输出使能, 初始电平, PWM中断, 第二个触
+             -发点中断, 第一触发点中断
+  74   1      }
+  75          
+  76          /******************** task A **************************/
+  77          void main(void)
+  78          {
+  79   1        GPIO_config();
+  80   1        PWM15_config();
+  81   1        pwm0 = 0;
+  82   1        pwm1 = 0;
+  83   1        B_PWM0_Dir = 0;
+  84   1      
+  85   1      //  EA = 1;
+  86   1        
+  87   1        while (1)
+  88   1        {
+  89   2          delay_ms(1);
+  90   2      
+  91   2          if(B_PWM0_Dir)
+  92   2          {
+  93   3            if(--pwm0 <= 0x100) B_PWM0_Dir = 0; //PWM0
+  94   3          }
+  95   2          else  if(++pwm0 >= 0xf00) B_PWM0_Dir = 1; //PWM0
+  96   2          PWM15Duty(PWM15_0,0,pwm0);
+  97   2      
+  98   2          if(pwm1 >= 3000)
+  99   2          {
+ 100   3            pwm1 = 0;
+ 101   3          }
+ 102   2          else  if(pwm1 >= 2000)
+ 103   2          {
+ 104   3            PWMLevelSet(PWM15_1,ENABLE,DISABLE);  //PWM_ID, 强制输出低电平, 强制输出高电平
+ 105   3          }
+ 106   2          else  if(pwm1 >= 1000)
+ 107   2          {
+ 108   3            PWMLevelSet(PWM15_1,DISABLE,ENABLE);  //PWM_ID, 强制输出低电平, 强制输出高电平
+ 109   3          }
+ 110   2          else
+ 111   2          {
+C51 COMPILER V9.59.0.0   MAIN                                                              06/10/2021 15:57:27 PAGE 3   
+
+ 112   3            PWMLevelSet(PWM15_1,DISABLE,DISABLE); //PWM_ID, 强制输出低电平, 强制输出高电平
+ 113   3          }
+ 114   2          pwm1++;
+ 115   2        }
+ 116   1      }
+ 117          
+ 118          
+ 119          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    348    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      4       9
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,289 @@
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    06/10/2021  13:05:32  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE .\list\main.obj TO .\list\PCA-PWM PRINT (.\list\PCA-PWM.m51) RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\list\main.obj (MAIN)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_STARTUP)
+
+
+LINK MAP OF MODULE:  .\list\PCA-PWM (MAIN)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0006H     UNIT         ?DT?MAIN
+            DATA    000EH     0005H     UNIT         _DATA_GROUP_
+                    0013H     000DH                  *** GAP ***
+            BIT     0020H.0   0000H.3   UNIT         ?BI?MAIN
+                    0020H.3   0000H.5                *** GAP ***
+            IDATA   0021H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     00E4H     UNIT         ?PR?MAIN?MAIN
+            CODE    00E7H     008CH     UNIT         ?PR?PCA_CONFIG?MAIN
+            CODE    0173H     000CH     UNIT         ?C_C51STARTUP
+            CODE    017FH     000AH     UNIT         ?PR?GPIO_CONFIG?MAIN
+
+
+
+OVERLAY MAP OF MODULE:   .\list\PCA-PWM (MAIN)
+
+
+SEGMENT                          DATA_GROUP 
+  +--> CALLED SEGMENT          START    LENGTH
+----------------------------------------------
+?C_C51STARTUP                  -----    -----
+  +--> ?PR?MAIN?MAIN
+
+?PR?MAIN?MAIN                  -----    -----
+  +--> ?PR?GPIO_CONFIG?MAIN
+  +--> ?PR?PCA_CONFIG?MAIN
+
+?PR?PCA_CONFIG?MAIN            000EH    0005H
+
+
+
+UNRESOLVED EXTERNAL SYMBOLS:
+   _DELAY_MS
+   _NVIC_PCA_INIT
+   _PCA_INIT
+   _UPDATEPCAPWM
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  06/10/2021  13:05:32  PAGE 2
+
+
+
+
+
+SYMBOL TABLE OF MODULE:  .\list\PCA-PWM (MAIN)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0092H         PUBLIC        P1M0
+  D:0091H         PUBLIC        P1M1
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  D:00C0H         PUBLIC        P4
+  D:00C8H         PUBLIC        P5
+  D:0008H         PUBLIC        pwm0
+  B:00A8H.7       PUBLIC        EA
+  D:00E8H         PUBLIC        P6
+  D:000AH         PUBLIC        pwm1
+  D:00F8H         PUBLIC        P7
+  D:000CH         PUBLIC        pwm2
+  C:017FH         PUBLIC        GPIO_config
+  D:00A2H         PUBLIC        P_SW1
+  D:00A8H         PUBLIC        IE
+  D:00B8H         PUBLIC        IP
+  D:00D8H         PUBLIC        CCON
+  C:0003H         PUBLIC        main
+  C:00E7H         PUBLIC        PCA_config
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  D:00F0H         PUBLIC        B
+  D:00E0H         PUBLIC        ACC
+  B:0020H.0       PUBLIC        B_PWM0_Dir
+  B:0020H.1       PUBLIC        B_PWM1_Dir
+  B:0020H.2       PUBLIC        B_PWM2_Dir
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          GPIO_CONFIG
+  C:017FH         LINE#         48
+  C:017FH         LINE#         49
+  C:017FH         LINE#         50
+  C:0185H         LINE#         51
+  C:0188H         LINE#         52
+  -------         ENDPROC       GPIO_CONFIG
+  -------         PROC          PCA_CONFIG
+  -------         DO            
+  D:000EH         SYMBOL        PCA_InitStructure
+  -------         ENDDO         
+  C:00E7H         LINE#         55
+  C:00E7H         LINE#         56
+  C:00E7H         LINE#         59
+  C:00EAH         LINE#         60
+  C:00EDH         LINE#         61
+  C:00F7H         LINE#         63
+  C:00FAH         LINE#         64
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  06/10/2021  13:05:32  PAGE 3
+
+
+  C:0100H         LINE#         65
+  C:010BH         LINE#         67
+  C:010EH         LINE#         68
+  C:0114H         LINE#         69
+  C:011FH         LINE#         71
+  C:0122H         LINE#         72
+  C:0128H         LINE#         73
+  C:0133H         LINE#         75
+  C:0136H         LINE#         76
+  C:013CH         LINE#         77
+  C:0147H         LINE#         79
+  C:0150H         LINE#         80
+  C:0158H         LINE#         81
+  C:0161H         LINE#         82
+  C:016AH         LINE#         83
+  -------         ENDPROC       PCA_CONFIG
+  -------         PROC          MAIN
+  C:0003H         LINE#         88
+  C:0003H         LINE#         89
+  C:0003H         LINE#         90
+  C:0006H         LINE#         91
+  C:0009H         LINE#         92
+  C:000FH         LINE#         93
+  C:0015H         LINE#         94
+  C:001BH         LINE#         95
+  C:001DH         LINE#         96
+  C:001FH         LINE#         97
+  C:0021H         LINE#         99
+  C:002AH         LINE#         100
+  C:0033H         LINE#         101
+  C:003CH         LINE#         102
+  C:003EH         LINE#         104
+  C:003EH         LINE#         105
+  C:003EH         LINE#         106
+  C:0045H         LINE#         108
+  C:0048H         LINE#         109
+  C:0048H         LINE#         110
+  C:005CH         LINE#         111
+  C:005EH         LINE#         112
+  C:0071H         LINE#         113
+  C:007AH         LINE#         115
+  C:007DH         LINE#         116
+  C:007DH         LINE#         117
+  C:0091H         LINE#         118
+  C:0093H         LINE#         119
+  C:00A6H         LINE#         120
+  C:00AFH         LINE#         122
+  C:00B2H         LINE#         123
+  C:00B2H         LINE#         124
+  C:00C6H         LINE#         125
+  C:00C8H         LINE#         126
+  C:00DBH         LINE#         127
+  C:00E4H         LINE#         128
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        MAIN
+
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  06/10/2021  13:05:32  PAGE 4
+
+
+    SYMBOL:  _UPDATEPCAPWM
+    MODULE:  .\list\main.obj (MAIN)
+
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _PCA_INIT
+    MODULE:  .\list\main.obj (MAIN)
+
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _DELAY_MS
+    MODULE:  .\list\main.obj (MAIN)
+
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _NVIC_PCA_INIT
+    MODULE:  .\list\main.obj (MAIN)
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _PCA_INIT
+    MODULE:  .\list\main.obj (MAIN)
+    ADDRESS: 00F5H
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _PCA_INIT
+    MODULE:  .\list\main.obj (MAIN)
+    ADDRESS: 0109H
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _PCA_INIT
+    MODULE:  .\list\main.obj (MAIN)
+    ADDRESS: 011DH
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _PCA_INIT
+    MODULE:  .\list\main.obj (MAIN)
+    ADDRESS: 0131H
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _PCA_INIT
+    MODULE:  .\list\main.obj (MAIN)
+    ADDRESS: 0145H
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _NVIC_PCA_INIT
+    MODULE:  .\list\main.obj (MAIN)
+    ADDRESS: 014EH
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _NVIC_PCA_INIT
+    MODULE:  .\list\main.obj (MAIN)
+    ADDRESS: 0156H
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _NVIC_PCA_INIT
+    MODULE:  .\list\main.obj (MAIN)
+    ADDRESS: 015FH
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _NVIC_PCA_INIT
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  06/10/2021  13:05:32  PAGE 5
+
+
+    MODULE:  .\list\main.obj (MAIN)
+    ADDRESS: 0168H
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _NVIC_PCA_INIT
+    MODULE:  .\list\main.obj (MAIN)
+    ADDRESS: 0171H
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _UPDATEPCAPWM
+    MODULE:  .\list\main.obj (MAIN)
+    ADDRESS: 0028H
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _UPDATEPCAPWM
+    MODULE:  .\list\main.obj (MAIN)
+    ADDRESS: 0031H
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _UPDATEPCAPWM
+    MODULE:  .\list\main.obj (MAIN)
+    ADDRESS: 003AH
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _DELAY_MS
+    MODULE:  .\list\main.obj (MAIN)
+    ADDRESS: 0043H
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _UPDATEPCAPWM
+    MODULE:  .\list\main.obj (MAIN)
+    ADDRESS: 0078H
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _UPDATEPCAPWM
+    MODULE:  .\list\main.obj (MAIN)
+    ADDRESS: 00ADH
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _UPDATEPCAPWM
+    MODULE:  .\list\main.obj (MAIN)
+    ADDRESS: 00E2H
+
+Program Size: data=20.3 xdata=0 code=393
+LINK/LOCATE RUN COMPLETE.  21 WARNING(S),  0 ERROR(S)

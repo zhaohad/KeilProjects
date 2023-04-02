@@ -1,0 +1,372 @@
+C51 COMPILER V9.59.0.0   MAIN                                                              06/10/2021 10:10:12 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\list\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OMF2 OPTIMIZE(8,SPEED) BROWSE DEBUG PRINT(.\list\main.lst) TABS(2
+                    -) OBJECT(.\list\main.obj)
+
+line level    source
+
+   1          /*---------------------------------------------------------------------*/
+   2          /* --- STC MCU Limited ------------------------------------------------*/
+   3          /* --- STC 1T Series MCU Demo Programme -------------------------------*/
+   4          /* --- Mobile: (86)13922805190 ----------------------------------------*/
+   5          /* --- Fax: 86-0513-55012956,55012947,55012969 ------------------------*/
+   6          /* --- Tel: 86-0513-55012928,55012929,55012966 ------------------------*/
+   7          /* --- Web: www.STCMCU.com --------------------------------------------*/
+   8          /* --- Web: www.STCMCUDATA.com  ---------------------------------------*/
+   9          /* --- QQ:  800003751 -------------------------------------------------*/
+  10          /* 如果要在程序中使用此代码,请在程序中注明使用了STC的资料及程序            */
+  11          /*---------------------------------------------------------------------*/
+  12          
+  13          #include  "config.h"
+  14          #include  "STC8A_I2C.h"
+  15          #include  "STC8A_GPIO.h"
+  16          #include  "STC8A_NVIC.h"
+  17          #include  "STC8A_Timer.h"
+  18          #include  "STC8A_Switch.h"
+  19          
+  20          /*************  功能说明  **************
+  21          
+  22          读写RTC, IC为PCF8563.
+  23          
+  24          用STC的MCU的IO方式驱动8位数码管。
+  25          
+  26          使用Timer0的16位自动重装来产生1ms节拍,程序运行于这个节拍下, 用户修改MCU主时钟频率时,自动定时于1ms.
+  27          
+  28          8位数码管显示时间(小时-分钟-秒).
+  29          
+  30          行列扫描按键键码为17~32.
+  31          
+  32          按键只支持单键按下, 不支持多键同时按下, 那样将会有不可预知的结果.
+  33          
+  34          键按下超过1秒后,将以10键/秒的速度提供重键输出. 用户只需要检测KeyCode是否非0来判断键是否按下.
+  35          
+  36          调整时间键:
+  37          键码17: 小时+.
+  38          键码18: 小时-.
+  39          键码19: 分钟+.
+  40          键码20: 分钟-.
+  41          
+  42          下载时, 选择时钟 24MHz (可以在配置文件"config.h"中修改).
+  43          
+  44          ******************************************/
+  45          
+  46          /*************  本地常量声明  **************/
+  47          #define DIS_DOT     0x20
+  48          #define DIS_BLACK   0x10
+  49          #define DIS_        0x11
+  50          
+  51          u8 code t_display[]={                       //标准字库
+  52          //   0    1    2    3    4    5    6    7    8    9    A    B    C    D    E    F
+  53              0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,0x7F,0x6F,0x77,0x7C,0x39,0x5E,0x79,0x71,
+  54          //black  -     H    J    K    L    N    o   P    U     t    G    Q    r   M    y
+C51 COMPILER V9.59.0.0   MAIN                                                              06/10/2021 10:10:12 PAGE 2   
+
+  55              0x00,0x40,0x76,0x1E,0x70,0x38,0x37,0x5C,0x73,0x3E,0x78,0x3d,0x67,0x50,0x37,0x6e,
+  56              0xBF,0x86,0xDB,0xCF,0xE6,0xED,0xFD,0x87,0xFF,0xEF,0x46};    //0. 1. 2. 3. 4. 5. 6. 7. 8. 9. -1
+  57          
+  58          u8 code T_COM[]={0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80};      //位码
+  59          
+  60          /*************  本地变量声明  **************/
+  61          u8  LED8[8];        //显示缓冲
+  62          u8  display_index;  //显示位索引
+  63          bit B_1ms;          //1ms标志
+  64          
+  65          u8  IO_KeyState, IO_KeyState1, IO_KeyHoldCnt;    //行列键盘变量
+  66          u8  KeyHoldCnt; //键按下计时
+  67          u8  KeyCode;    //给用户使用的键码
+  68          u8  cnt50ms;
+  69          
+  70          u8  hour,minute,second; //RTC变量
+  71          u16 msecond;
+  72          
+  73          /*************  本地函数声明  **************/
+  74          
+  75          void IO_KeyScan(void);   //50ms call
+  76          void DisplayRTC(void);
+  77          void ReadRTC(void);
+  78          void WriteRTC(void);
+  79          void DisplayScan(void);
+  80          
+  81          /*************  外部函数和变量声明 *****************/
+  82          
+  83          
+  84          
+  85          /******************** IO口配置 ********************/
+  86          void  GPIO_config(void)
+  87          {
+  88   1        P0_MODE_IO_PU(GPIO_Pin_All);    //P0 设置为准双向口
+  89   1        P1_MODE_IO_PU(GPIO_Pin_4 | GPIO_Pin_5);   //P1.4,P1.5 设置为准双向口
+  90   1        P6_MODE_IO_PU(GPIO_Pin_All);    //P6 设置为准双向口
+  91   1        P7_MODE_IO_PU(GPIO_Pin_All);    //P7 设置为准双向口
+  92   1      }
+  93          
+  94          /************************ 定时器配置 ****************************/
+  95          void  Timer_config(void)
+  96          {
+  97   1        TIM_InitTypeDef   TIM_InitStructure;            //结构定义
+  98   1        TIM_InitStructure.TIM_Mode      = TIM_16BitAutoReload;  //指定工作模式,   TIM_16BitAutoReload,TIM_16Bit,TI
+             -M_8BitAutoReload,TIM_16BitAutoReloadNoMask
+  99   1        TIM_InitStructure.TIM_ClkSource = TIM_CLOCK_1T;   //指定时钟源,     TIM_CLOCK_1T,TIM_CLOCK_12T,TIM_CLOCK_E
+             -xt
+ 100   1        TIM_InitStructure.TIM_ClkOut    = DISABLE;        //是否输出高速脉冲, ENABLE或DISABLE
+ 101   1        TIM_InitStructure.TIM_Value     = 65536UL - (MAIN_Fosc / 1000UL);   //中断频率, 1000次/秒
+ 102   1        TIM_InitStructure.TIM_Run       = ENABLE;         //是否初始化后启动定时器, ENABLE或DISABLE
+ 103   1        Timer_Inilize(Timer0,&TIM_InitStructure);         //初始化Timer0    Timer0,Timer1,Timer2,Timer3,Timer4
+ 104   1        NVIC_Timer0_Init(ENABLE,Priority_0);    //中断使能, ENABLE/DISABLE; 优先级(低到高) Priority_0,Priority_1,Pr
+             -iority_2,Priority_3
+ 105   1      }
+ 106          
+ 107          /****************  I2C初始化函数 *****************/
+ 108          void  I2C_config(void)
+ 109          {
+ 110   1        I2C_InitTypeDef   I2C_InitStructure;
+ 111   1        I2C_InitStructure.I2C_Mode      = I2C_Mode_Master;  //主从选择   I2C_Mode_Master, I2C_Mode_Slave
+ 112   1        I2C_InitStructure.I2C_Enable    = ENABLE;           //I2C功能使能,   ENABLE, DISABLE
+ 113   1        I2C_InitStructure.I2C_MS_WDTA   = DISABLE;          //主机使能自动发送,  ENABLE, DISABLE
+C51 COMPILER V9.59.0.0   MAIN                                                              06/10/2021 10:10:12 PAGE 3   
+
+ 114   1        I2C_InitStructure.I2C_Speed     = 16;               //总线速度=Fosc/2/(Speed*2+4),      0~63
+ 115   1        I2C_Init(&I2C_InitStructure);
+ 116   1        NVIC_I2C_Init(I2C_Mode_Master,DISABLE,Priority_0);    //主从模式, I2C_Mode_Master, I2C_Mode_Slave; 中断使能
+             -, ENABLE/DISABLE; 优先级(低到高) Priority_0,Priority_1,Priority_2,Priority_3
+ 117   1      
+ 118   1        I2C_SW(I2C_P14_P15);          //I2C_P14_P15,I2C_P24_P25,I2C_P33_P32
+ 119   1      }
+ 120          
+ 121          /******************** task A **************************/
+ 122          void main(void)
+ 123          {
+ 124   1        u8  i;
+ 125   1        
+ 126   1        GPIO_config();
+ 127   1        Timer_config();
+ 128   1        I2C_config();
+ 129   1        EA = 1;
+ 130   1      
+ 131   1        display_index = 0;
+ 132   1        
+ 133   1        for(i=0; i<8; i++)  LED8[i] = 0x10; //上电消隐
+ 134   1      
+ 135   1        ReadRTC();
+ 136   1        F0 = 0;
+ 137   1        if(second >= 60)    F0 = 1; //错误
+ 138   1        if(minute >= 60)    F0 = 1; //错误
+ 139   1        if(hour   >= 24)    F0 = 1; //错误
+ 140   1        if(F0)  //有错误, 默认12:00:00
+ 141   1        {
+ 142   2          second = 0;
+ 143   2          minute = 0;
+ 144   2          hour  = 12;
+ 145   2          WriteRTC();
+ 146   2        }
+ 147   1      
+ 148   1        DisplayRTC();
+ 149   1        LED8[2] = DIS_;
+ 150   1        LED8[5] = DIS_;
+ 151   1      
+ 152   1        KeyHoldCnt = 0; //键按下计时
+ 153   1        KeyCode = 0;    //给用户使用的键码
+ 154   1      
+ 155   1        IO_KeyState = 0;
+ 156   1        IO_KeyState1 = 0;
+ 157   1        IO_KeyHoldCnt = 0;
+ 158   1        cnt50ms = 0;
+ 159   1      
+ 160   1        while (1)
+ 161   1        {
+ 162   2          if(B_1ms)
+ 163   2          {
+ 164   3            B_1ms = 0;
+ 165   3            DisplayScan();
+ 166   3            if(++msecond >= 1000)   //1秒到
+ 167   3            {
+ 168   4              msecond = 0;
+ 169   4              ReadRTC();
+ 170   4              DisplayRTC();
+ 171   4            }
+ 172   3      
+ 173   3            if(++cnt50ms >= 50)     //50ms扫描一次行列键盘
+ 174   3            {
+C51 COMPILER V9.59.0.0   MAIN                                                              06/10/2021 10:10:12 PAGE 4   
+
+ 175   4              cnt50ms = 0;
+ 176   4              IO_KeyScan();
+ 177   4            }
+ 178   3            
+ 179   3            if(KeyCode != 0)        //有键按下
+ 180   3            {
+ 181   4              if(KeyCode == 17)   //hour +1
+ 182   4              {
+ 183   5                if(++hour >= 24)    hour = 0;
+ 184   5                WriteRTC();
+ 185   5                DisplayRTC();
+ 186   5              }
+ 187   4              if(KeyCode == 18)   //hour -1
+ 188   4              {
+ 189   5                if(--hour >= 24)    hour = 23;
+ 190   5                WriteRTC();
+ 191   5                DisplayRTC();
+ 192   5              }
+ 193   4              if(KeyCode == 19)   //minute +1
+ 194   4              {
+ 195   5                second = 0;
+ 196   5                if(++minute >= 60)  minute = 0;
+ 197   5                WriteRTC();
+ 198   5                DisplayRTC();
+ 199   5              }
+ 200   4              if(KeyCode == 20)   //minute -1
+ 201   4              {
+ 202   5                second = 0;
+ 203   5                if(--minute >= 60)  minute = 59;
+ 204   5                WriteRTC();
+ 205   5                DisplayRTC();
+ 206   5              }
+ 207   4      
+ 208   4              KeyCode = 0;
+ 209   4            }
+ 210   3          }
+ 211   2        }
+ 212   1      }
+ 213          
+ 214          /********************** 显示时钟函数 ************************/
+ 215          void DisplayRTC(void)
+ 216          {
+ 217   1          if(hour >= 10)  LED8[0] = hour / 10;
+ 218   1          else            LED8[0] = DIS_BLACK;
+ 219   1          LED8[1] = hour % 10;
+ 220   1          LED8[2] = DIS_;
+ 221   1          LED8[3] = minute / 10;
+ 222   1          LED8[4] = minute % 10;
+ 223   1          LED8[6] = second / 10;
+ 224   1          LED8[7] = second % 10;
+ 225   1      }
+ 226          
+ 227          /********************** 读RTC函数 ************************/
+ 228          void ReadRTC(void)
+ 229          {
+ 230   1          u8  tmp[3];
+ 231   1      
+ 232   1          I2C_ReadNbyte(2, tmp, 3);
+ 233   1          second = ((tmp[0] >> 4) & 0x07) * 10 + (tmp[0] & 0x0f);
+ 234   1          minute = ((tmp[1] >> 4) & 0x07) * 10 + (tmp[1] & 0x0f);
+ 235   1          hour   = ((tmp[2] >> 4) & 0x03) * 10 + (tmp[2] & 0x0f);
+ 236   1      }
+C51 COMPILER V9.59.0.0   MAIN                                                              06/10/2021 10:10:12 PAGE 5   
+
+ 237          
+ 238          /********************** 写RTC函数 ************************/
+ 239          void WriteRTC(void)
+ 240          {
+ 241   1          u8  tmp[3];
+ 242   1      
+ 243   1          tmp[0] = ((second / 10) << 4) + (second % 10);
+ 244   1          tmp[1] = ((minute / 10) << 4) + (minute % 10);
+ 245   1          tmp[2] = ((hour / 10) << 4) + (hour % 10);
+ 246   1          I2C_WriteNbyte(2, tmp, 3);
+ 247   1      }
+ 248          
+ 249          
+ 250          /*****************************************************
+ 251              行列键扫描程序
+ 252              使用XY查找4x4键的方法，只能单键，速度快
+ 253          
+ 254             Y     P04      P05      P06      P07
+ 255                    |        |        |        |
+ 256          X         |        |        |        |
+ 257          P00 ---- K00 ---- K01 ---- K02 ---- K03 ----
+ 258                    |        |        |        |
+ 259          P01 ---- K04 ---- K05 ---- K06 ---- K07 ----
+ 260                    |        |        |        |
+ 261          P02 ---- K08 ---- K09 ---- K10 ---- K11 ----
+ 262                    |        |        |        |
+ 263          P03 ---- K12 ---- K13 ---- K14 ---- K15 ----
+ 264                    |        |        |        |
+ 265          ******************************************************/
+ 266          
+ 267          
+ 268          u8 code T_KeyTable[16] = {0,1,2,0,3,0,0,0,4,0,0,0,0,0,0,0};
+ 269          
+ 270          void IO_KeyDelay(void)
+ 271          {
+ 272   1          u8 i;
+ 273   1          i = 60;
+ 274   1          while(--i)  ;
+ 275   1      }
+ 276          
+ 277          void IO_KeyScan(void)    //50ms call
+ 278          {
+ 279   1          u8  j;
+ 280   1      
+ 281   1          j = IO_KeyState1;   //保存上一次状态
+ 282   1      
+ 283   1          P0 = 0xf0;  //X低，读Y
+ 284   1          IO_KeyDelay();
+ 285   1          IO_KeyState1 = P0 & 0xf0;
+ 286   1      
+ 287   1          P0 = 0x0f;  //Y低，读X
+ 288   1          IO_KeyDelay();
+ 289   1          IO_KeyState1 |= (P0 & 0x0f);
+ 290   1          IO_KeyState1 ^= 0xff;   //取反
+ 291   1          
+ 292   1          if(j == IO_KeyState1)   //连续两次读相等
+ 293   1          {
+ 294   2              j = IO_KeyState;
+ 295   2              IO_KeyState = IO_KeyState1;
+ 296   2              if(IO_KeyState != 0)    //有键按下
+ 297   2              {
+ 298   3                  F0 = 0;
+C51 COMPILER V9.59.0.0   MAIN                                                              06/10/2021 10:10:12 PAGE 6   
+
+ 299   3                  if(j == 0)  F0 = 1; //第一次按下
+ 300   3                  else if(j == IO_KeyState)
+ 301   3                  {
+ 302   4                      if(++IO_KeyHoldCnt >= 20)   //1秒后重键
+ 303   4                      {
+ 304   5                          IO_KeyHoldCnt = 18;
+ 305   5                          F0 = 1;
+ 306   5                      }
+ 307   4                  }
+ 308   3                  if(F0)
+ 309   3                  {
+ 310   4                      j = T_KeyTable[IO_KeyState >> 4];
+ 311   4                      if((j != 0) && (T_KeyTable[IO_KeyState& 0x0f] != 0)) 
+ 312   4                          KeyCode = (j - 1) * 4 + T_KeyTable[IO_KeyState & 0x0f] + 16;    //计算键码，17~32
+ 313   4                  }
+ 314   3              }
+ 315   2              else    IO_KeyHoldCnt = 0;
+ 316   2          }
+ 317   1          P0 = 0xff;
+ 318   1      }
+ 319          
+ 320          
+ 321          /********************** 显示扫描函数 ************************/
+ 322          void DisplayScan(void)
+ 323          {   
+ 324   1          P7 = ~T_COM[7-display_index];
+ 325   1          P6 = ~t_display[LED8[display_index]];
+ 326   1          if(++display_index >= 8)    display_index = 0;  //8位结束回0
+ 327   1      }
+ 328          
+ 329          
+ 330          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    776    ----
+   CONSTANT SIZE    =     67    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     20      18
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

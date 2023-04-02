@@ -1,0 +1,9 @@
+".\list\main.obj",
+".\list\STC8A_Delay.obj",
+".\list\STC8A_GPIO.obj",
+".\list\STC8A_NVIC.obj",
+".\list\STC8A_PCA.obj",
+".\list\STC8A_PCA_Isr.obj" 
+TO ".\list\PCA-PWM" 
+
+PRINT(".\list\PCA-PWM.map") REMOVEUNUSED 

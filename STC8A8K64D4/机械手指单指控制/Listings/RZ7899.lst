@@ -1,0 +1,69 @@
+C51 COMPILER V9.60.7.0   RZ7899                                                            04/02/2023 16:28:18 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE RZ7899
+OBJECT MODULE PLACED IN .\Objects\RZ7899.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\RZ7899.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listing
+                    -s\RZ7899.lst) TABS(2) OBJECT(.\Objects\RZ7899.obj)
+
+line level    source
+
+   1          #include "STC8A8K64D4.H"
+   2          #include "STC8A_GPIO.H"
+   3          #include "RZ7899.h"
+   4          
+   5          u8 g_RZ7899_State = RUN_STATE_NONE;
+   6          
+   7          // 根据使用的引脚不同需要对init方法进行修改
+   8          void RZ7899_Init() {
+   9   1        GPIO_InitTypeDef conf;
+  10   1        conf.Mode = GPIO_PullUp;
+  11   1        conf.Pin = GPIO_Pin_2 | GPIO_Pin_3;
+  12   1        GPIO_Inilize(GPIO_P2, &conf);
+  13   1      }
+  14          
+  15          u8 RZ7899_GetState() {
+  16   1        return g_RZ7899_State;
+  17   1      }
+  18          
+  19          void RZ7899_Run(u8 state) {
+  20   1        g_RZ7899_State = state;
+  21   1        switch (state) {
+  22   2          case RUN_STATE_NONE: {
+  23   3            PIN_BI = 0;
+  24   3            PIN_FI = 0;
+  25   3            break;
+  26   3          }
+  27   2          case RUN_STATE_NORM: {
+  28   3            PIN_BI = 0;
+  29   3            PIN_FI = 1;
+  30   3            break;
+  31   3          }
+  32   2          case RUN_STATE_INV: {
+  33   3            PIN_BI = 1;
+  34   3            PIN_FI = 0;
+  35   3            break;
+  36   3          }
+  37   2          case RUN_STATE_STOP: {
+  38   3            PIN_BI = 1;
+  39   3            PIN_FI = 1;
+  40   3            break;
+  41   3          }
+  42   2        }
+  43   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     55    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+C51 COMPILER V9.60.7.0   RZ7899                                                            04/02/2023 16:28:18 PAGE 2   
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

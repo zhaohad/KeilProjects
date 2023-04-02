@@ -1,0 +1,13 @@
+".\list\isr.obj",
+".\list\main.obj",
+".\list\STC8A_GPIO.obj",
+".\list\STC8A_NVIC.obj",
+".\list\STC8A_BMM.obj",
+".\list\STC8A_BMM_Isr.obj",
+".\list\STC8A_UART.obj",
+".\list\STC8A_UART_Isr.obj",
+".\list\STC8A_SPI.obj",
+".\list\STC8A_SPI_Isr.obj" 
+TO ".\list\BMM-SPI" 
+
+PRINT(".\list\BMM-SPI.map") REMOVEUNUSED 

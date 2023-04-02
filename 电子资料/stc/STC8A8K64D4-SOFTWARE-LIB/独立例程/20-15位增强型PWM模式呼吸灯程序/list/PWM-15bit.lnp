@@ -1,0 +1,9 @@
+".\list\main.obj",
+".\list\STC8A_Delay.obj",
+".\list\STC8A_GPIO.obj",
+".\list\STC8A_NVIC.obj",
+".\list\STC8A_PWM15bit.obj",
+".\list\STC8A_PWM15bit_Isr.obj" 
+TO ".\list\PWM-15bit" 
+
+PRINT(".\list\PWM-15bit.map") REMOVEUNUSED 

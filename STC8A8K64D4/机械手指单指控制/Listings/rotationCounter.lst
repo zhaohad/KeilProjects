@@ -1,0 +1,102 @@
+C51 COMPILER V9.60.7.0   ROTATIONCOUNTER                                                   04/02/2023 16:28:19 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE ROTATIONCOUNTER
+OBJECT MODULE PLACED IN .\Objects\rotationCounter.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\rotationCounter.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(
+                    -.\Listings\rotationCounter.lst) TABS(2) OBJECT(.\Objects\rotationCounter.obj)
+
+line level    source
+
+   1          #include "rotationCounter.h"
+   2          #include "typedef.h"
+   3          
+   4          xdata int __rotation_count__ = 0;
+   5          xdata unsigned char __rotation_counter_current_state = ROTATION_COUNTER_STATE_RAGION_INVALID;
+   6          xdata unsigned char __rotation_counter_last_state = ROTATION_COUNTER_STATE_RAGION_INVALID;
+   7          xdata unsigned char __rotation_counter_last_state2 = ROTATION_COUNTER_STATE_RAGION_INVALID;
+   8          
+   9          void RotationCounter_GPIO_Config() {
+  10   1        // 使用P00引脚
+  11   1        GPIO_InitTypeDef conf;
+  12   1        conf.Mode = GPIO_PullUp;
+  13   1        conf.Pin = GPIO_Pin_0;
+  14   1        GPIO_Inilize(GPIO_P0, &conf);
+  15   1      }
+  16          
+  17          void RotationCounter_ADC_config() {
+  18   1        ADC_InitTypeDef ADC_InitStructure;    //结构定义
+  19   1        ADC_InitStructure.ADC_SMPduty = 31;   //ADC 模拟信号采样时间控制, 0~31（注意： SMPDUTY 一定不能设置小于 10
+             -）
+  20   1        ADC_InitStructure.ADC_CsSetup = 0;    //ADC 通道选择时间控制 0(默认),1
+  21   1        ADC_InitStructure.ADC_CsHold = 1;   //ADC 通道选择保持时间控制 0,1(默认),2,3
+  22   1        ADC_InitStructure.ADC_Speed = ADC_SPEED_2X1T;   //设置 ADC 工作时钟频率 ADC_SPEED_2X1T~ADC_SPEED_2X16T
+  23   1        ADC_InitStructure.ADC_AdjResult = ADC_RIGHT_JUSTIFIED;  //ADC结果调整,  ADC_LEFT_JUSTIFIED,ADC_RIGHT_JUSTIF
+             -IED
+  24   1        ADC_Inilize(&ADC_InitStructure);    //初始化
+  25   1        ADC_PowerControl(ENABLE);           //ADC电源开关, ENABLE或DISABLE
+  26   1        // NVIC_ADC_Init(DISABLE, Priority_0);    //中断使能, ENABLE/DISABLE; 优先级(低到高) Priority_0,Priority_1,
+             -Priority_2,Priority_3
+  27   1      }
+  28          
+  29          void RotationCounter_init() {
+  30   1        RotationCounter_GPIO_Config();
+  31   1        RotationCounter_ADC_config();
+  32   1      }
+  33          
+  34          void RotationCounter_reset() {
+  35   1        __rotation_count__ = 0;
+  36   1      }
+  37          
+  38          int RotationCounter_getRotationCount() {
+  39   1        return __rotation_count__;
+  40   1      }
+  41          
+  42          void RotationCounter_countRotation(unsigned char ragionvalue) {
+  43   1        if (ragionvalue > RAGION_VALUE_L_L && ragionvalue < RAGION_VALUE_L_H) {
+  44   2          __rotation_counter_current_state = ROTATION_COUNTER_STATE_RAGION_L;
+  45   2        } else if (ragionvalue > RAGION_VALUE_M_L && ragionvalue < RAGION_VALUE_M_H) {
+  46   2          __rotation_counter_current_state = ROTATION_COUNTER_STATE_RAGION_M;
+  47   2        } else if (ragionvalue > RAGION_VALUE_H_L && ragionvalue < RAGION_VALUE_H_H) {
+  48   2          __rotation_counter_current_state = ROTATION_COUNTER_STATE_RAGION_H;
+  49   2        }
+  50   1        
+  51   1        if (__rotation_counter_current_state == ROTATION_COUNTER_STATE_RAGION_L) {
+C51 COMPILER V9.60.7.0   ROTATIONCOUNTER                                                   04/02/2023 16:28:19 PAGE 2   
+
+  52   2          if (__rotation_counter_last_state == ROTATION_COUNTER_STATE_RAGION_M &&
+  53   2            __rotation_counter_last_state2 == ROTATION_COUNTER_STATE_RAGION_H) {
+  54   3              --__rotation_count__;
+  55   3            }
+  56   2        } else if (__rotation_counter_current_state == ROTATION_COUNTER_STATE_RAGION_H) {
+  57   2          if (__rotation_counter_last_state == ROTATION_COUNTER_STATE_RAGION_M &&
+  58   2            __rotation_counter_last_state2 == ROTATION_COUNTER_STATE_RAGION_L) {
+  59   3              ++__rotation_count__;
+  60   3          }
+  61   2        }
+  62   1        if (__rotation_counter_current_state != __rotation_counter_last_state) {
+  63   2          __rotation_counter_last_state2 = __rotation_counter_last_state;
+  64   2          __rotation_counter_last_state = __rotation_counter_current_state;
+  65   2        }
+  66   1      }
+  67          
+  68          void RotationCounter_check() {
+  69   1          u16 adc = Get_ADCResult(ADC_CHANEL);
+  70   1          float r;
+  71   1          r = adc / 4096.f * 100.f;
+  72   1          RotationCounter_countRotation((unsigned char) r);
+  73   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    248    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      5    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       7
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,309 @@
+C51 COMPILER V9.59.0.0   SYSTEM_INIT                                                       06/10/2021 11:07:30 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE SYSTEM_INIT
+OBJECT MODULE PLACED IN .\list\system_init.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\User\system_init.c LARGE OMF2 OPTIMIZE(8,SPEED) BROWSE INCDIR(..\Driv
+                    -er\inc;..\User;..\App\inc) DEBUG PRINT(.\list\system_init.lst) TABS(2) OBJECT(.\list\system_init.obj)
+
+line level    source
+
+   1          /*---------------------------------------------------------------------*/
+   2          /* --- STC MCU Limited ------------------------------------------------*/
+   3          /* --- STC 1T Series MCU Demo Programme -------------------------------*/
+   4          /* --- Mobile: (86)13922805190 ----------------------------------------*/
+   5          /* --- Fax: 86-0513-55012956,55012947,55012969 ------------------------*/
+   6          /* --- Tel: 86-0513-55012928,55012929,55012966 ------------------------*/
+   7          /* --- Web: www.STCMCU.com --------------------------------------------*/
+   8          /* --- Web: www.STCMCUDATA.com  ---------------------------------------*/
+   9          /* --- QQ:  800003751 -------------------------------------------------*/
+  10          /* 如果要在程序中使用此代码,请在程序中注明使用了STC的资料及程序            */
+  11          /*---------------------------------------------------------------------*/
+  12          
+  13          #include  "config.h"
+  14          #include  "STC8A_GPIO.h"
+  15          #include  "STC8A_ADC.h"
+  16          #include  "STC8A_PCA.h"
+  17          #include  "STC8A_Exti.h"
+  18          #include  "STC8A_I2C.h"
+  19          #include  "STC8A_SPI.h"
+  20          #include  "STC8A_Timer.h"
+  21          #include  "STC8A_UART.h"
+  22          #include  "STC8A_Compare.h"
+  23          //#include  "STC8A_PWM15bit.h"
+  24          #include  "STC8A_Delay.h"
+  25          #include  "STC8A_Switch.h"
+  26          #include  "STC8A_WDT.h"
+  27          #include  "STC8A_NVIC.h"
+  28          #include  "app.h"
+  29          
+  30          //========================================================================
+  31          //                                IO口配置
+  32          //========================================================================
+  33          void  GPIO_config(void)
+  34          {
+  35   1        P0_MODE_IO_PU(GPIO_Pin_All);    //P0 设置为准双向口
+  36   1        P1_MODE_IN_HIZ(GPIO_Pin_LOW);   //P1.0~P1.3 设置为高阻输入
+  37   1        P1_MODE_OUT_OD(GPIO_Pin_4 | GPIO_Pin_5);    //P1.4,P1.5 设置为漏极开路
+  38   1        P2_MODE_IO_PU(GPIO_Pin_All);    //P2 设置为准双向口
+  39   1        P3_MODE_IO_PU(GPIO_Pin_LOW);    //P3.0~P3.3 设置为准双向口
+  40   1        P3_MODE_IO_PU(GPIO_Pin_HIGH);   //P3.4~P3.7 设置为准双向口
+  41   1      //  P3_MODE_IN_HIZ(GPIO_Pin_6 | GPIO_Pin_7);    //P3.6,P3.7 设置为高阻输入
+  42   1        P4_MODE_IO_PU(GPIO_Pin_0 | GPIO_Pin_6 | GPIO_Pin_7);  //P4.0,P4.6,P4.7 设置为准双向口
+  43   1        P6_MODE_IO_PU(GPIO_Pin_All);    //P6 设置为准双向口
+  44   1        P7_MODE_IO_PU(GPIO_Pin_All);    //P7 设置为准双向口
+  45   1        
+  46   1        P1_PULL_UP_ENABLE(GPIO_Pin_4 | GPIO_Pin_5); //P1.4,P1.5 开启内部上拉
+  47   1      }
+  48          
+  49          //========================================================================
+  50          //                               定时器配置
+  51          //========================================================================
+  52          void  Timer_config(void)
+  53          {
+  54   1        TIM_InitTypeDef   TIM_InitStructure;            //结构定义
+C51 COMPILER V9.59.0.0   SYSTEM_INIT                                                       06/10/2021 11:07:30 PAGE 2   
+
+  55   1        TIM_InitStructure.TIM_Mode      = TIM_16BitAutoReload;  //指定工作模式,   TIM_16BitAutoReload,TIM_16Bit,TI
+             -M_8BitAutoReload,TIM_16BitAutoReloadNoMask
+  56   1        TIM_InitStructure.TIM_ClkSource = TIM_CLOCK_1T;   //指定时钟源,     TIM_CLOCK_1T,TIM_CLOCK_12T,TIM_CLOCK_E
+             -xt
+  57   1        TIM_InitStructure.TIM_ClkOut    = DISABLE;        //是否输出高速脉冲, ENABLE或DISABLE
+  58   1        TIM_InitStructure.TIM_Value     = 65536UL - (MAIN_Fosc / 1000UL);   //中断频率, 1000次/秒
+  59   1        TIM_InitStructure.TIM_Run       = ENABLE;         //是否初始化后启动定时器, ENABLE或DISABLE
+  60   1        Timer_Inilize(Timer0,&TIM_InitStructure);         //初始化Timer0    Timer0,Timer1,Timer2,Timer3,Timer4
+  61   1        NVIC_Timer0_Init(ENABLE,Priority_0);    //中断使能, ENABLE/DISABLE; 优先级(低到高) Priority_0,Priority_1,Pr
+             -iority_2,Priority_3
+  62   1      
+  63   1      //  //定时器1做16位自动重装, 中断频率为20000HZ，中断函数从P6.6取反输出10KHZ方波信号.
+  64   1      //  TIM_InitStructure.TIM_Mode      = TIM_16BitAutoReload;  //指定工作模式,   TIM_16BitAutoReload,TIM_16Bit,
+             -TIM_8BitAutoReload,TIM_16BitAutoReloadNoMask
+  65   1      //  TIM_InitStructure.TIM_ClkSource = TIM_CLOCK_1T;   //指定时钟源, TIM_CLOCK_1T,TIM_CLOCK_12T,TIM_CLOCK_Ext
+  66   1      //  TIM_InitStructure.TIM_ClkOut    = DISABLE;        //是否输出高速脉冲, ENABLE或DISABLE
+  67   1      //  TIM_InitStructure.TIM_Value     = 65536UL - (MAIN_Fosc / 20000);      //中断频率, 20000次/秒
+  68   1      //  TIM_InitStructure.TIM_Run       = ENABLE;         //是否初始化后启动定时器, ENABLE或DISABLE
+  69   1      //  Timer_Inilize(Timer1,&TIM_InitStructure);         //初始化Timer1    Timer0,Timer1,Timer2,Timer3,Timer4
+  70   1      //  NVIC_Timer1_Init(ENABLE,Priority_0);    //中断使能, ENABLE/DISABLE; 优先级(低到高) Priority_0,Priority_1,
+             -Priority_2,Priority_3
+  71   1      
+  72   1      //  //定时器2做16位自动重装, 中断频率为10000HZ，中断函数从P6.5取反输出5KHZ方波信号.
+  73   1      //  TIM_InitStructure.TIM_ClkSource = TIM_CLOCK_1T;   //指定时钟源,     TIM_CLOCK_1T,TIM_CLOCK_12T,TIM_CLOCK
+             -_Ext
+  74   1      //  TIM_InitStructure.TIM_ClkOut    = DISABLE;        //是否输出高速脉冲, ENABLE或DISABLE
+  75   1      //  TIM_InitStructure.TIM_Value     = 65536UL - (MAIN_Fosc / 10000);        //初值
+  76   1      //  TIM_InitStructure.TIM_Run       = ENABLE;         //是否初始化后启动定时器, ENABLE或DISABLE
+  77   1      //  Timer_Inilize(Timer2,&TIM_InitStructure);         //初始化Timer2    Timer0,Timer1,Timer2,Timer3,Timer4
+  78   1      //  NVIC_Timer2_Init(ENABLE,NULL);    //中断使能, ENABLE/DISABLE; 无优先级
+  79   1      
+  80   1      //  //定时器3做16位自动重装, 中断频率为100HZ，中断函数从P6.4取反输出50HZ方波信号.
+  81   1      //  TIM_InitStructure.TIM_ClkSource = TIM_CLOCK_12T;  //指定时钟源,     TIM_CLOCK_1T,TIM_CLOCK_12T,TIM_CLOCK
+             -_Ext
+  82   1      //  TIM_InitStructure.TIM_ClkOut    = ENABLE;         //是否输出高速脉冲, ENABLE或DISABLE
+  83   1      //  TIM_InitStructure.TIM_Value     = 65536UL - (MAIN_Fosc / (100*12));   //初值
+  84   1      //  TIM_InitStructure.TIM_Run       = ENABLE;         //是否初始化后启动定时器, ENABLE或DISABLE
+  85   1      //  Timer_Inilize(Timer3,&TIM_InitStructure);         //初始化Timer3    Timer0,Timer1,Timer2,Timer3,Timer4
+  86   1      //  NVIC_Timer3_Init(ENABLE,NULL);    //中断使能, ENABLE/DISABLE; 无优先级
+  87   1      
+  88   1      //  //定时器4做16位自动重装, 中断频率为50HZ，中断函数从P6.3取反输出25HZ方波信号.
+  89   1      //  TIM_InitStructure.TIM_ClkSource = TIM_CLOCK_12T;  //指定时钟源,     TIM_CLOCK_1T,TIM_CLOCK_12T,TIM_CLOCK
+             -_Ext
+  90   1      //  TIM_InitStructure.TIM_ClkOut    = ENABLE;         //是否输出高速脉冲, ENABLE或DISABLE
+  91   1      //  TIM_InitStructure.TIM_Value     = 65536UL - (MAIN_Fosc / (50*12));    //初值
+  92   1      //  TIM_InitStructure.TIM_Run       = ENABLE;         //是否初始化后启动定时器, ENABLE或DISABLE
+  93   1      //  Timer_Inilize(Timer4,&TIM_InitStructure);         //初始化Timer4    Timer0,Timer1,Timer2,Timer3,Timer4
+  94   1      //  NVIC_Timer4_Init(ENABLE,NULL);    //中断使能, ENABLE/DISABLE; 无优先级
+  95   1      }
+  96          
+  97          //========================================================================
+  98          //                              ADC初始化
+  99          //========================================================================
+ 100          void  ADC_config(void)
+ 101          {
+ 102   1        ADC_InitTypeDef   ADC_InitStructure;    //结构定义
+ 103   1        ADC_InitStructure.ADC_SMPduty   = 31;   //ADC 模拟信号采样时间控制, 0~31（注意： SMPDUTY 一定不能设置小于 
+             -10）
+ 104   1        ADC_InitStructure.ADC_CsSetup   = 0;    //ADC 通道选择时间控制 0(默认),1
+ 105   1        ADC_InitStructure.ADC_CsHold    = 1;    //ADC 通道选择保持时间控制 0,1(默认),2,3
+ 106   1        ADC_InitStructure.ADC_Speed     = ADC_SPEED_2X1T;   //设置 ADC 工作时钟频率 ADC_SPEED_2X1T~ADC_SPEED_2X16T
+ 107   1        ADC_InitStructure.ADC_AdjResult = ADC_RIGHT_JUSTIFIED;  //ADC结果调整,  ADC_LEFT_JUSTIFIED,ADC_RIGHT_JUSTIF
+C51 COMPILER V9.59.0.0   SYSTEM_INIT                                                       06/10/2021 11:07:30 PAGE 3   
+
+             -IED
+ 108   1        ADC_Inilize(&ADC_InitStructure);    //初始化
+ 109   1        ADC_PowerControl(ENABLE);           //ADC电源开关, ENABLE或DISABLE
+ 110   1        NVIC_ADC_Init(DISABLE,Priority_0);    //中断使能, ENABLE/DISABLE; 优先级(低到高) Priority_0,Priority_1,Prio
+             -rity_2,Priority_3
+ 111   1      }
+ 112          
+ 113          //========================================================================
+ 114          //                              串口初始化
+ 115          //========================================================================
+ 116          void  UART_config(void)
+ 117          {
+ 118   1        COMx_InitDefine   COMx_InitStructure;         //结构定义
+ 119   1      
+ 120   1        COMx_InitStructure.UART_Mode      = UART_8bit_BRTx; //模式, UART_ShiftRight,UART_8bit_BRTx,UART_9bit,UART
+             -_9bit_BRTx
+ 121   1        COMx_InitStructure.UART_BRT_Use   = BRT_Timer1;     //使用波特率, BRT_Timer1, BRT_Timer2 (注意: 串口2固定使
+             -用BRT_Timer2)
+ 122   1        COMx_InitStructure.UART_BaudRate  = 115200ul;     //波特率, 一般 110 ~ 115200
+ 123   1        COMx_InitStructure.UART_RxEnable  = ENABLE;       //接收允许,   ENABLE或DISABLE
+ 124   1        COMx_InitStructure.BaudRateDouble = DISABLE;      //波特率加倍, ENABLE或DISABLE
+ 125   1        UART_Configuration(UART1, &COMx_InitStructure);   //初始化串口1 UART1,UART2,UART3,UART4
+ 126   1        NVIC_UART1_Init(ENABLE,Priority_1);   //中断使能, ENABLE/DISABLE; 优先级(低到高) Priority_0,Priority_1,Pri
+             -ority_2,Priority_3
+ 127   1      
+ 128   1      //  COMx_InitStructure.UART_Mode      = UART_8bit_BRTx;   //模式,   UART_ShiftRight,UART_8bit_BRTx,UART_9bit
+             -,UART_9bit_BRTx
+ 129   1      //  COMx_InitStructure.UART_BaudRate  = 115200ul;     //波特率,     110 ~ 115200
+ 130   1      //  COMx_InitStructure.UART_RxEnable  = ENABLE;       //接收允许,   ENABLE或DISABLE
+ 131   1      //  UART_Configuration(UART2, &COMx_InitStructure);   //初始化串口2 USART1,USART2,USART3,USART4
+ 132   1      //  NVIC_UART2_Init(ENABLE,Priority_1);   //中断使能, ENABLE/DISABLE; 优先级(低到高) Priority_0,Priority_1,P
+             -riority_2,Priority_3
+ 133   1      }
+ 134          
+ 135          //========================================================================
+ 136          //                               I2C初始化
+ 137          //========================================================================
+ 138          void  I2C_config(void)
+ 139          {
+ 140   1        I2C_InitTypeDef   I2C_InitStructure;
+ 141   1        I2C_InitStructure.I2C_Mode      = I2C_Mode_Master;  //主从选择   I2C_Mode_Master, I2C_Mode_Slave
+ 142   1        I2C_InitStructure.I2C_Enable    = ENABLE;           //I2C功能使能,   ENABLE, DISABLE
+ 143   1        I2C_InitStructure.I2C_MS_WDTA   = DISABLE;          //主机使能自动发送,  ENABLE, DISABLE
+ 144   1        I2C_InitStructure.I2C_Speed     = 16;               //总线速度=Fosc/2/(Speed*2+4),      0~63
+ 145   1        I2C_Init(&I2C_InitStructure);
+ 146   1        NVIC_I2C_Init(I2C_Mode_Master,DISABLE,Priority_0);    //主从模式, I2C_Mode_Master, I2C_Mode_Slave; 中断使能
+             -, ENABLE/DISABLE; 优先级(低到高) Priority_0,Priority_1,Priority_2,Priority_3
+ 147   1      }
+ 148          
+ 149          //========================================================================
+ 150          //                               SPI初始化
+ 151          //========================================================================
+ 152          void  SPI_config(void)
+ 153          {
+ 154   1        SPI_InitTypeDef   SPI_InitStructure;
+ 155   1        SPI_InitStructure.SPI_Enable    = ENABLE;           //SPI启动    ENABLE, DISABLE
+ 156   1        SPI_InitStructure.SPI_SSIG      = ENABLE;           //片选位     ENABLE, DISABLE
+ 157   1        SPI_InitStructure.SPI_FirstBit  = SPI_MSB;          //移位方向   SPI_MSB, SPI_LSB
+ 158   1        SPI_InitStructure.SPI_Mode      = SPI_Mode_Slave;   //主从选择   SPI_Mode_Master, SPI_Mode_Slave
+ 159   1        SPI_InitStructure.SPI_CPOL      = SPI_CPOL_Low;     //时钟相位   SPI_CPOL_High,   SPI_CPOL_Low
+ 160   1        SPI_InitStructure.SPI_CPHA      = SPI_CPHA_2Edge;   //数据边沿   SPI_CPHA_1Edge,  SPI_CPHA_2Edge
+ 161   1        SPI_InitStructure.SPI_Speed     = SPI_Speed_4;      //SPI速度    SPI_Speed_4, SPI_Speed_16, SPI_Speed_64, SP
+C51 COMPILER V9.59.0.0   SYSTEM_INIT                                                       06/10/2021 11:07:30 PAGE 4   
+
+             -I_Speed_128
+ 162   1        SPI_Init(&SPI_InitStructure);
+ 163   1        NVIC_SPI_Init(ENABLE,Priority_3);   //中断使能, ENABLE/DISABLE; 优先级(低到高) Priority_0,Priority_1,Prior
+             -ity_2,Priority_3
+ 164   1      }
+ 165          
+ 166          //========================================================================
+ 167          //                             比较器初始化
+ 168          //========================================================================
+ 169          void  CMP_config(void)
+ 170          {
+ 171   1        CMP_InitDefine CMP_InitStructure;           //结构定义
+ 172   1        CMP_InitStructure.CMP_EN = ENABLE;                //允许比较器    ENABLE,DISABLE
+ 173   1        CMP_InitStructure.CMP_P_Select     = CMP_P_P37;   //比较器输入正极选择, CMP_P_P37/CMP_P_P50/CMP_P_P51, CMP
+             -_P_ADC: 由ADC模拟输入端做正输入.
+ 174   1        CMP_InitStructure.CMP_N_Select     = CMP_N_GAP;   //比较器输入负极选择, CMP_N_GAP: 选择内部BandGap经过OP后
+             -的电压做负输入, CMP_N_P36: 选择P3.6做负输入.
+ 175   1        CMP_InitStructure.CMP_InvCMPO      = DISABLE;     //比较器输出取反,   ENABLE,DISABLE
+ 176   1        CMP_InitStructure.CMP_100nsFilter  = ENABLE;      //内部0.1uF滤波,    ENABLE,DISABLE
+ 177   1        CMP_InitStructure.CMP_Outpt_En     = ENABLE;      //允许比较结果输出,ENABLE,DISABLE
+ 178   1        CMP_InitStructure.CMP_OutDelayDuty = 16;          //比较结果变化延时周期数, 0~63
+ 179   1        CMP_Inilize(&CMP_InitStructure);        //初始化比较器
+ 180   1        NVIC_CMP_Init(RISING_EDGE|FALLING_EDGE,Priority_0); //中断使能, RISING_EDGE/FALLING_EDGE/DISABLE; 优先级(
+             -低到高) Priority_0,Priority_1,Priority_2,Priority_3
+ 181   1      }
+ 182          //========================================================================
+ 183          //                             外部中断初始化
+ 184          //========================================================================
+ 185          void  Exti_config(void)
+ 186          {
+ 187   1        EXTI_InitTypeDef  Exti_InitStructure;             //结构定义
+ 188   1      
+ 189   1        Exti_InitStructure.EXTI_Mode      = EXT_MODE_Fall;//中断模式,   EXT_MODE_RiseFall,EXT_MODE_Fall
+ 190   1        Ext_Inilize(EXT_INT0,&Exti_InitStructure);        //初始化
+ 191   1        NVIC_INT0_Init(ENABLE,Priority_0);    //中断使能, ENABLE/DISABLE; 优先级(低到高) Priority_0,Priority_1,Prio
+             -rity_2,Priority_3
+ 192   1      
+ 193   1        Exti_InitStructure.EXTI_Mode      = EXT_MODE_Fall;//中断模式,   EXT_MODE_RiseFall,EXT_MODE_Fall
+ 194   1        Ext_Inilize(EXT_INT1,&Exti_InitStructure);        //初始化
+ 195   1        NVIC_INT1_Init(ENABLE,Priority_0);    //中断使能, ENABLE/DISABLE; 优先级(低到高) Priority_0,Priority_1,Prio
+             -rity_2,Priority_3
+ 196   1      
+ 197   1        NVIC_INT2_Init(ENABLE,NULL);    //中断使能, ENABLE/DISABLE; 无优先级
+ 198   1        NVIC_INT3_Init(ENABLE,NULL);    //中断使能, ENABLE/DISABLE; 无优先级
+ 199   1        NVIC_INT4_Init(ENABLE,NULL);    //中断使能, ENABLE/DISABLE; 无优先级
+ 200   1      }
+ 201          
+ 202          //========================================================================
+ 203          //                             外部中断初始化
+ 204          //========================================================================
+ 205          
+ 206          //========================================================================
+ 207          //                               功能脚切换
+ 208          //========================================================================
+ 209          void  Switch_config(void)
+ 210          {
+ 211   1        UART1_SW(UART1_SW_P30_P31);   //UART1_SW_P30_P31,UART1_SW_P36_P37,UART1_SW_P16_P17,UART1_SW_P43_P44
+ 212   1        UART2_SW(UART2_SW_P10_P11);   //UART2_SW_P10_P11,UART2_SW_P40_P42
+ 213   1        UART3_SW(UART3_SW_P00_P01);   //UART3_SW_P00_P01,UART3_SW_P50_P51
+ 214   1        UART4_SW(UART4_SW_P02_P03);   //UART4_SW_P02_P03,UART4_SW_P52_P53
+ 215   1      //  I2C_SW(I2C_P14_P15);          //I2C_P14_P15,I2C_P24_P25,I2C_P76_P77,I2C_P33_P32
+ 216   1      //  COMP_SW(CMP_OUT_P34);         //CMP_OUT_P34,CMP_OUT_P41
+C51 COMPILER V9.59.0.0   SYSTEM_INIT                                                       06/10/2021 11:07:30 PAGE 5   
+
+ 217   1        SPI_SW(SPI_P22_P23_P24_P25);  //SPI_P12_P13_P14_P15,SPI_P22_P23_P24_P25,SPI_P74_P75_P76_P77,SPI_P35_P34_P3
+             -3_P32
+ 218   1      
+ 219   1        LCM_CTRL_SW(LCM_CTRL_P41_P37_P36);  //LCM_CTRL_P41_P44_P43,LCM_CTRL_P41_P37_P36,LCM_CTRL_P41_P42_P40,LCM_C
+             -TRL_P40_P37_P36
+ 220   1        LCM_DATA_SW(LCM_D8_NA_P2);    //LCM_D8_NA_P2,LCM_D8_NA_P6 / LCM_D16_P2_P0,LCM_D16_P6_P2,LCM_D16_P2_P7,LCM_D
+             -16_P6_P7
+ 221   1      
+ 222   1        PCA_SW(PCA_P12_P17_P16_P15_P14);  //PCA_P12_P17_P16_P15_P14,PCA_P22_P23_P24_P25_P26,PCA_P74_P70_P71_P72_P7
+             -3,PCA_P35_P33_P32_P31_P30
+ 223   1        
+ 224   1        PWM15_PWM0_SW(PWM15_SW_P2);   //PWM15_SW_P2,PWM15_SW_P1,PWM15_SW_P6
+ 225   1      }
+ 226          
+ 227          //========================================================================
+ 228          //                                系统初始化
+ 229          //========================================================================
+ 230          void  SYS_Init(void)
+ 231          {
+ 232   1      //  GPIO_config();
+ 233   1        Timer_config();
+ 234   1      //  ADC_config();
+ 235   1      //  UART_config();
+ 236   1      //  Exti_config();
+ 237   1      //  I2C_config();
+ 238   1      //  SPI_config();
+ 239   1      //  CMP_config();
+ 240   1        Switch_config();
+ 241   1        EA = 1;
+ 242   1        
+ 243   1        APP_config();
+ 244   1      }
+ 245          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    457    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----      41
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

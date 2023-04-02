@@ -14,6 +14,8 @@ sbit P_OLED12864_DC = P4 ^ 3;
 sbit P_OLED12864_CS = P4 ^ 4;
 
 sbit P_ADC = P0 ^ 0;
+
+// ADC 引脚
 #define ADC_CHANEL 0x08
 
 sbit P_MOTOR_A = P0 ^ 1;

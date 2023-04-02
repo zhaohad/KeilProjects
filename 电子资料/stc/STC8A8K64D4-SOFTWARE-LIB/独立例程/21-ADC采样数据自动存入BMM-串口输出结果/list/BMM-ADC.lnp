@@ -1,0 +1,13 @@
+".\list\isr.obj",
+".\list\main.obj",
+".\list\STC8A_GPIO.obj",
+".\list\STC8A_NVIC.obj",
+".\list\STC8A_ADC.obj",
+".\list\STC8A_BMM.obj",
+".\list\STC8A_BMM_Isr.obj",
+".\list\STC8A_UART.obj",
+".\list\STC8A_UART_Isr.obj",
+".\list\STC8A_Delay.obj" 
+TO ".\list\BMM-ADC" 
+
+PRINT(".\list\BMM-ADC.map") REMOVEUNUSED 

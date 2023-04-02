@@ -1,0 +1,187 @@
+C51 COMPILER V9.59.0.0   MAIN                                                              06/09/2021 15:04:43 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\list\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OMF2 OPTIMIZE(8,SPEED) BROWSE DEBUG PRINT(.\list\main.lst) TABS(2
+                    -) OBJECT(.\list\main.obj)
+
+line level    source
+
+   1          /*---------------------------------------------------------------------*/
+   2          /* --- STC MCU Limited ------------------------------------------------*/
+   3          /* --- STC 1T Series MCU Demo Programme -------------------------------*/
+   4          /* --- Mobile: (86)13922805190 ----------------------------------------*/
+   5          /* --- Fax: 86-0513-55012956,55012947,55012969 ------------------------*/
+   6          /* --- Tel: 86-0513-55012928,55012929,55012966 ------------------------*/
+   7          /* --- Web: www.STCMCU.com --------------------------------------------*/
+   8          /* --- Web: www.STCMCUDATA.com  ---------------------------------------*/
+   9          /* --- QQ:  800003751 -------------------------------------------------*/
+  10          /* 如果要在程序中使用此代码,请在程序中注明使用了STC的资料及程序            */
+  11          /*---------------------------------------------------------------------*/
+  12          
+  13          #include  "config.h"
+  14          #include  "STC8A_SPI.h"
+  15          #include  "STC8A_GPIO.h"
+  16          #include  "STC8A_UART.h"
+  17          #include  "STC8A_NVIC.h"
+  18          #include  "STC8A_Delay.h"
+  19          #include  "STC8A_Switch.h"
+  20          
+  21          /*************  功能说明  **************
+  22          
+  23          通过串口发送数据给MCU1，MCU1将接收到的数据由SPI发送给MCU2，MCU2再通过串口发送出去.
+  24          
+  25          设置方法 2：
+  26          两个设备初始化时都设置 SSIG 为 0，MSTR 设置为0，此时两个设备都是不忽略 SS 的从机模式。
+  27          当其中一个设备需要启动传输时，先检测 SS 管脚的电平，如果时候高电平，
+  28          就将自己设置成忽略 SS 的主模式，自己的 SS 脚输出低电平，拉低对方的 SS 脚，即可进行数据传输。
+  29          
+  30                   MCU1                          MCU2
+  31            |-----------------|           |-----------------|
+  32            |            MISO |-----------| MISO            |
+  33          --| TX         MOSI |-----------| MOSI         TX |--
+  34            |            SCLK |-----------| SCLK            |
+  35          --| RX           SS |-----------| SS           RX |--
+  36            |-----------------|           |-----------------|
+  37          
+  38          
+  39          下载时, 选择时钟 22.1184MHz (可以在配置文件"config.h"中修改).
+  40          
+  41          ******************************************/
+  42          
+  43          /*************  本地常量声明  **************/
+  44          
+  45          
+  46          /*************  本地变量声明  **************/
+  47          
+  48          
+  49          /*************  本地函数声明  **************/
+  50          
+  51          
+  52          
+  53          /*************  外部函数和变量声明 *****************/
+  54          
+C51 COMPILER V9.59.0.0   MAIN                                                              06/09/2021 15:04:43 PAGE 2   
+
+  55          
+  56          
+  57          /******************** IO口配置 ********************/
+  58          void  GPIO_config(void)
+  59          {
+  60   1        P2_MODE_IO_PU(GPIO_Pin_All);    //P2 设置为准双向口
+  61   1      }
+  62          
+  63          /****************  串口初始化函数 *****************/
+  64          void  UART_config(void)
+  65          {
+  66   1        COMx_InitDefine   COMx_InitStructure;         //结构定义
+  67   1        COMx_InitStructure.UART_Mode      = UART_8bit_BRTx;   //模式,   UART_ShiftRight,UART_8bit_BRTx,UART_9bit,U
+             -ART_9bit_BRTx
+  68   1        COMx_InitStructure.UART_BRT_Use   = BRT_Timer1;     //使用波特率, BRT_Timer1, BRT_Timer2 (注意: 串口2固定使
+             -用BRT_Timer2)
+  69   1        COMx_InitStructure.UART_BaudRate  = 115200ul;     //波特率,     110 ~ 115200
+  70   1        COMx_InitStructure.UART_RxEnable  = ENABLE;       //接收允许,   ENABLE或DISABLE
+  71   1        UART_Configuration(UART1, &COMx_InitStructure);   //初始化串口 USART1,USART2,USART3,USART4
+  72   1        NVIC_UART1_Init(ENABLE,Priority_1);   //中断使能, ENABLE/DISABLE; 优先级(低到高) Priority_0,Priority_1,Pri
+             -ority_2,Priority_3
+  73   1      }
+  74          
+  75          /****************  SPI初始化函数 *****************/
+  76          void  SPI_config(void)
+  77          {
+  78   1        SPI_InitTypeDef   SPI_InitStructure;
+  79   1        SPI_InitStructure.SPI_Enable    = ENABLE;           //SPI启动    ENABLE, DISABLE
+  80   1        SPI_InitStructure.SPI_SSIG      = ENABLE;           //片选位     ENABLE, DISABLE
+  81   1        SPI_InitStructure.SPI_FirstBit  = SPI_MSB;          //移位方向   SPI_MSB, SPI_LSB
+  82   1        SPI_InitStructure.SPI_Mode      = SPI_Mode_Slave;   //主从选择   SPI_Mode_Master, SPI_Mode_Slave
+  83   1        SPI_InitStructure.SPI_CPOL      = SPI_CPOL_Low;     //时钟相位   SPI_CPOL_High,   SPI_CPOL_Low
+  84   1        SPI_InitStructure.SPI_CPHA      = SPI_CPHA_2Edge;   //数据边沿   SPI_CPHA_1Edge,  SPI_CPHA_2Edge
+  85   1        SPI_InitStructure.SPI_Speed     = SPI_Speed_4;      //SPI速度    SPI_Speed_4, SPI_Speed_16, SPI_Speed_64, SP
+             -I_Speed_128
+  86   1        SPI_Init(&SPI_InitStructure);
+  87   1        NVIC_SPI_Init(ENABLE,Priority_3);   //中断使能, ENABLE/DISABLE; 优先级(低到高) Priority_0,Priority_1,Prior
+             -ity_2,Priority_3
+  88   1        
+  89   1        SPI_SW(SPI_P22_P23_P24_P25);  //SPI_P12_P13_P14_P15,SPI_P22_P23_P24_P25,SPI_P74_P75_P76_P77,SPI_P35_P34_P3
+             -3_P32
+  90   1        SPI_SS_2 = 1;
+  91   1      }
+  92          
+  93          
+  94          /******************** task A **************************/
+  95          void main(void)
+  96          {
+  97   1        u8  i;
+  98   1      
+  99   1        GPIO_config();
+ 100   1        UART_config();
+ 101   1        SPI_config();
+ 102   1        EA = 1;
+ 103   1      
+ 104   1        printf("STC8 UART1与SPI透传程序\r\n");    //UART1发送一个字符串
+ 105   1      
+ 106   1        while (1)
+ 107   1        {
+ 108   2          delay_ms(1);
+ 109   2              
+ 110   2          if(COM1.RX_TimeOut > 0)
+C51 COMPILER V9.59.0.0   MAIN                                                              06/09/2021 15:04:43 PAGE 3   
+
+ 111   2          {
+ 112   3            if(--COM1.RX_TimeOut == 0)
+ 113   3            {
+ 114   4              if(COM1.RX_Cnt > 0)
+ 115   4              {
+ 116   5                COM1.B_RX_OK = 1;
+ 117   5              }
+ 118   4            }
+ 119   3          }
+ 120   2          if((COM1.B_RX_OK) && (SPI_SS_2))
+ 121   2          {
+ 122   3            SPI_SS_2 = 0;     //拉低从机 SS 管脚
+ 123   3            SPI_SetMode(SPI_Mode_Master);
+ 124   3            for(i=0;i<COM1.RX_Cnt;i++)
+ 125   3            {
+ 126   4              SPI_WriteByte(RX1_Buffer[i]); //发送串口数据
+ 127   4            }
+ 128   3            SPI_SS_2 = 1;    //拉高从机的 SS 管脚
+ 129   3            SPI_SetMode(SPI_Mode_Slave);
+ 130   3            COM1.RX_Cnt = 0;  //COM1.B_RX_OK = 0;
+ 131   3            COM1.B_RX_OK = 0;
+ 132   3          }
+ 133   2          
+ 134   2          if(SPI_RxTimerOut > 0)
+ 135   2          {
+ 136   3            if(--SPI_RxTimerOut == 0)
+ 137   3            {
+ 138   4              if(SPI_RxCnt > 0)
+ 139   4              {
+ 140   5                for(i=0; i<SPI_RxCnt; i++)  TX1_write2buff(SPI_RxBuffer[i]);
+ 141   5              }
+ 142   4              SPI_RxCnt = 0;
+ 143   4            }
+ 144   3          }
+ 145   2        }
+ 146   1      }
+ 147          
+ 148          
+ 149          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    268    ----
+   CONSTANT SIZE    =     26    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      17
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

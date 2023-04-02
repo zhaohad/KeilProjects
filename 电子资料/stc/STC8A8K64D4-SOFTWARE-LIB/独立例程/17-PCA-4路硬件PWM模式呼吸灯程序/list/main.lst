@@ -1,0 +1,194 @@
+C51 COMPILER V9.59.0.0   MAIN                                                              06/10/2021 13:19:13 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\list\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OMF2 OPTIMIZE(8,SPEED) BROWSE DEBUG PRINT(.\list\main.lst) TABS(2
+                    -) OBJECT(.\list\main.obj)
+
+line level    source
+
+   1          /*---------------------------------------------------------------------*/
+   2          /* --- STC MCU Limited ------------------------------------------------*/
+   3          /* --- STC 1T Series MCU Demo Programme -------------------------------*/
+   4          /* --- Mobile: (86)13922805190 ----------------------------------------*/
+   5          /* --- Fax: 86-0513-55012956,55012947,55012969 ------------------------*/
+   6          /* --- Tel: 86-0513-55012928,55012929,55012966 ------------------------*/
+   7          /* --- Web: www.STCMCU.com --------------------------------------------*/
+   8          /* --- Web: www.STCMCUDATA.com  ---------------------------------------*/
+   9          /* --- QQ:  800003751 -------------------------------------------------*/
+  10          /* 如果要在程序中使用此代码,请在程序中注明使用了STC的资料及程序            */
+  11          /*---------------------------------------------------------------------*/
+  12          
+  13          #include  "config.h"
+  14          #include  "STC8A_PCA.h"
+  15          #include  "STC8A_GPIO.h"
+  16          #include  "STC8A_NVIC.h"
+  17          #include  "STC8A_Delay.h"
+  18          #include  "STC8A_Switch.h"
+  19          
+  20          /*************   功能说明   ***************
+  21          
+  22          输出4路变化的PWM信号, 类似"呼吸灯"的驱动.
+  23          PWM0 P1.7 为8位PWM.
+  24          PWM1 P1.6 为7位PWM.
+  25          PWM2 P1.5 为6位PWM, 输出PWM 1秒钟, 输出低电平1秒钟, 输出高电平1秒钟, 反复循环.
+  26          PWM3 P1.4 为10位PWM.
+  27          
+  28          下载时, 选择时钟 24MHz (用户可在"config.h"修改频率).
+  29          
+  30          ******************************************/
+  31          
+  32          /*************  本地常量声明  **************/
+  33          
+  34          
+  35          /*************  本地变量声明  **************/
+  36          
+  37          u16 pwm0,pwm1,pwm2,pwm3;
+  38          bit B_PWM0_Dir,B_PWM1_Dir,B_PWM2_Dir,B_PWM3_Dir;  //方向, 0为+, 1为-.
+  39          
+  40          /*************  本地函数声明  **************/
+  41          
+  42          
+  43          /*************  外部函数和变量声明 *****************/
+  44          
+  45          
+  46          /******************** IO口配置 ********************/
+  47          void  GPIO_config(void)
+  48          {
+  49   1        P1_MODE_IO_PU(GPIO_Pin_HIGH);     //P1.4~P1.7 设置为准双向口
+  50   1        PCA_SW(PCA_P12_P17_P16_P15_P14);  //PCA_P12_P17_P16_P15_P14,PCA_P22_P23_P24_P25_P26,PCA_P74_P70_P71_P72_P7
+             -3,PCA_P35_P33_P32_P31_P30
+  51   1      }
+  52          
+  53          /******************** PCA配置 ********************/
+C51 COMPILER V9.59.0.0   MAIN                                                              06/10/2021 13:19:13 PAGE 2   
+
+  54          void  PCA_config(void)
+  55          {
+  56   1        PCA_InitTypeDef   PCA_InitStructure;
+  57   1      
+  58   1        PCA_InitStructure.PCA_PWM_Wide = PCA_PWM_8bit;    //PCA_PWM_8bit, PCA_PWM_7bit, PCA_PWM_6bit, PCA_PWM_10bit
+  59   1        PCA_InitStructure.PCA_Value    = 128 << 8;        //对于PWM,高8位为PWM占空比
+  60   1        PCA_Init(PCA0,&PCA_InitStructure);
+  61   1      
+  62   1        PCA_InitStructure.PCA_PWM_Wide = PCA_PWM_7bit;    //PCA_PWM_8bit, PCA_PWM_7bit, PCA_PWM_6bit, PCA_PWM_10bit
+  63   1        PCA_InitStructure.PCA_Value    = 64 << 8;         //对于PWM,高8位为PWM占空比
+  64   1        PCA_Init(PCA1,&PCA_InitStructure);
+  65   1      
+  66   1        PCA_InitStructure.PCA_PWM_Wide = PCA_PWM_6bit;    //PCA_PWM_8bit, PCA_PWM_7bit, PCA_PWM_6bit, PCA_PWM_10bit
+  67   1        PCA_InitStructure.PCA_Value    = 32 << 8;         //对于PWM,高8位为PWM占空比
+  68   1        PCA_Init(PCA2,&PCA_InitStructure);
+  69   1      
+  70   1        PCA_InitStructure.PCA_PWM_Wide = PCA_PWM_10bit;   //PCA_PWM_8bit, PCA_PWM_7bit, PCA_PWM_6bit, PCA_PWM_10bi
+             -t
+  71   1        PCA_InitStructure.PCA_Value    = 256 << 8;          //对于PWM,高8位为PWM占空比
+  72   1        PCA_Init(PCA3,&PCA_InitStructure);
+  73   1      
+  74   1        PCA_InitStructure.PCA_Clock    = PCA_Clock_1T;    //PCA_Clock_1T, PCA_Clock_2T, PCA_Clock_4T, PCA_Clock_6T,
+             - PCA_Clock_8T, PCA_Clock_12T, PCA_Clock_Timer0_OF, PCA_Clock_ECI
+  75   1        PCA_InitStructure.PCA_RUN      = ENABLE;        //ENABLE, DISABLE
+  76   1        PCA_Init(PCA_Counter,&PCA_InitStructure);     //设置公用Counter
+  77   1      
+  78   1        NVIC_PCA_Init(PCA_Counter,PCA_Mode_PWM,Priority_0);
+  79   1        NVIC_PCA_Init(PCA0,PCA_Mode_PWM,Priority_0);
+  80   1        NVIC_PCA_Init(PCA1,PCA_Mode_PWM,Priority_0);
+  81   1        NVIC_PCA_Init(PCA2,PCA_Mode_PWM,Priority_0);
+  82   1        NVIC_PCA_Init(PCA3,PCA_Mode_PWM,Priority_0);
+  83   1      }
+  84          
+  85          
+  86          /******************** task A **************************/
+  87          void main(void)
+  88          {
+  89   1        GPIO_config();
+  90   1        PCA_config();
+  91   1        pwm0 = 128;
+  92   1        pwm1 = 64;
+  93   1        pwm2 = 32;
+  94   1        pwm3 = 512;
+  95   1        B_PWM0_Dir = 0;
+  96   1        B_PWM1_Dir = 0;
+  97   1        B_PWM2_Dir = 0;
+  98   1        B_PWM3_Dir = 0;
+  99   1      
+ 100   1        UpdatePcaPwm(PCA0,pwm0);
+ 101   1        UpdatePcaPwm(PCA1,pwm1);
+ 102   1        UpdatePcaPwm(PCA2,pwm2);
+ 103   1        UpdatePcaPwm(PCA3,pwm3);
+ 104   1      //  EA = 1;
+ 105   1        
+ 106   1        while (1)
+ 107   1        {
+ 108   2          delay_ms(10);
+ 109   2      
+ 110   2          if(B_PWM0_Dir)
+ 111   2          {
+ 112   3            if(--pwm0 <= 16)  B_PWM0_Dir = 0; //8位PWM
+ 113   3          }
+C51 COMPILER V9.59.0.0   MAIN                                                              06/10/2021 13:19:13 PAGE 3   
+
+ 114   2          else  if(++pwm0 >= 240) B_PWM0_Dir = 1; //8位PWM
+ 115   2          UpdatePcaPwm(PCA0,pwm0);
+ 116   2      
+ 117   2          if(B_PWM1_Dir)
+ 118   2          {
+ 119   3            if(--pwm1 <= 8)   B_PWM1_Dir = 0; //7位PWM
+ 120   3          }
+ 121   2          else  if(++pwm1 >= 120) B_PWM1_Dir = 1; //7位PWM
+ 122   2          UpdatePcaPwm(PCA1,pwm1);
+ 123   2      
+ 124   2      //    if(B_PWM2_Dir)
+ 125   2      //    {
+ 126   2      //      if(--pwm2 <= 4)   B_PWM2_Dir = 0; //6位PWM
+ 127   2      //    }
+ 128   2      //    else  if(++pwm2 >= 60)  B_PWM2_Dir = 1; //6位PWM
+ 129   2      //    UpdatePcaPwm(PCA2,pwm2);
+ 130   2      
+ 131   2          if(pwm2 >= 300)
+ 132   2          {
+ 133   3            pwm2 = 0;
+ 134   3          }
+ 135   2          else  if(pwm2 >= 200)
+ 136   2          {
+ 137   3            PCALevelSet(PCA2,1);  //PWM_ID, 强制输出高电平
+ 138   3          }
+ 139   2          else  if(pwm2 >= 100)
+ 140   2          {
+ 141   3            PCALevelSet(PCA2,0);  //PWM_ID, 强制输出低电平
+ 142   3          }
+ 143   2          else
+ 144   2          {
+ 145   3            UpdatePcaPwm(PCA2,32);//PWM_ID, 输出PWM
+ 146   3          }
+ 147   2          pwm2++;
+ 148   2          
+ 149   2          if(B_PWM3_Dir)
+ 150   2          {
+ 151   3            if(--pwm3 <= 24)    B_PWM3_Dir = 0; //10位PWM
+ 152   3          }
+ 153   2          else  if(++pwm3 >= 1000)  B_PWM3_Dir = 1; //10位PWM
+ 154   2          UpdatePcaPwm(PCA3,pwm3);
+ 155   2        }
+ 156   1      }
+ 157          
+ 158          
+ 159          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    459    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      8       5
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      4    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
