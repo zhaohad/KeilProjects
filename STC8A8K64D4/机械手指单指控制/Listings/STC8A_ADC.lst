@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   STC8A_ADC                                                         04/02/2023 16:28:19 PAGE 1   
+C51 COMPILER V9.60.7.0   STC8A_ADC                                                         04/08/2023 17:04:04 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE STC8A_ADC
@@ -62,7 +62,7 @@ line level    source
   51          // 函数: u16  Get_ADCResult(u8 channel)
   52          // 描述: 查询法读一次ADC转换结果.
   53          // 参数: channel: 选择要转换的ADC通道.
-C51 COMPILER V9.60.7.0   STC8A_ADC                                                         04/02/2023 16:28:19 PAGE 2   
+C51 COMPILER V9.60.7.0   STC8A_ADC                                                         04/08/2023 17:04:04 PAGE 2   
 
   54          // 返回: ADC转换结果.
   55          // 版本: V1.0, 2012-10-22

@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              04/02/2023 16:28:18 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              04/08/2023 17:04:03 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -16,325 +16,333 @@ line level    source
    6          #include "STC8A_ADC.h"
    7          #include "rotationCounter.h"
    8          #include "dtos.h"
-   9          
-  10          void INT_Init();
-  11          void StateInit_check();
-  12          void Interrupt_check();
-  13          bit IsInterrupted(bit clearFlag);
-  14          void CMD_Check();
-  15          void CMD_Work();
-  16          
-  17          bit gIntFlag;
-  18          bit gIsInInt;
-  19          
-  20          u8 g_state;
-  21          u8 g_initStage;
-  22          int g_MaxCount;
-  23          
-  24          u8 g_CMD;
-  25          u8 g_CMD_Value;
-  26          u8 g_CMD_Stage;
-  27          
-  28          #define INITSTAGE_NONE 0
-  29          #define INITSTAGE_TO_MIN 1
-  30          #define INITSTAGE_TO_MIN_START 2
-  31          #define INITSTAGE_TO_MAX 3
-  32          #define INITSTAGE_TO_START 4
-  33          #define INITSTAGE_READY 5
-  34          
-  35          #define STATE_IDLE 0
-  36          #define STATE_INIT 1
-  37          #define STATE_BUSY 2
-  38          
-  39          #define CMD_NONE 0
-  40          #define CMD_STOP 1
-  41          #define CMD_GO_UP 2
-  42          #define CMD_GO_DOWN 3
-  43          #define CMD_GO_MAX 4
-  44          #define CMD_GO_MIN 5
-  45          #define CMD_GO_VALUE 6
-  46          
-  47          #define CMD_STAGE_NONE 0
-  48          #define CMD_STAGE_UP 1
-  49          #define CMD_STAGE_UP_ADJUST 2
-  50          #define CMD_STAGE_UP_LIMIT 3
-  51          #define CMD_STAGE_DOWN 4
-  52          #define CMD_STAGE_DOWN_ADJUST 5
-  53          #define CMD_STAGE_DOWN_LIMIT 6
-  54          
-C51 COMPILER V9.60.7.0   MAIN                                                              04/02/2023 16:28:18 PAGE 2   
+   9          #include "test.h"
+  10          
+  11          void INT_Init();
+  12          void StateInit_check();
+  13          void Interrupt_check();
+  14          bit IsInterrupted(bit clearFlag);
+  15          void CMD_Check();
+  16          void CMD_Work();
+  17          
+  18          bit gIntFlag;
+  19          bit gIsInInt;
+  20          
+  21          u8 g_state;
+  22          u8 g_initStage;
+  23          int g_MaxCount;
+  24          
+  25          u8 g_CMD;
+  26          u8 g_CMD_Value;
+  27          u8 g_CMD_Stage;
+  28          
+  29          #define INITSTAGE_NONE 0
+  30          #define INITSTAGE_TO_MIN 1
+  31          #define INITSTAGE_TO_MIN_START 2
+  32          #define INITSTAGE_TO_MAX 3
+  33          #define INITSTAGE_TO_START 4
+  34          #define INITSTAGE_READY 5
+  35          
+  36          #define STATE_IDLE 0
+  37          #define STATE_INIT 1
+  38          #define STATE_BUSY 2
+  39          
+  40          #define CMD_NONE 0
+  41          #define CMD_STOP 1
+  42          #define CMD_GO_UP 2
+  43          #define CMD_GO_DOWN 3
+  44          #define CMD_GO_MAX 4
+  45          #define CMD_GO_MIN 5
+  46          #define CMD_GO_VALUE 6
+  47          
+  48          #define CMD_STAGE_NONE 0
+  49          #define CMD_STAGE_UP 1
+  50          #define CMD_STAGE_UP_ADJUST 2
+  51          #define CMD_STAGE_UP_LIMIT 3
+  52          #define CMD_STAGE_DOWN 4
+  53          #define CMD_STAGE_DOWN_ADJUST 5
+  54          #define CMD_STAGE_DOWN_LIMIT 6
+C51 COMPILER V9.60.7.0   MAIN                                                              04/08/2023 17:04:03 PAGE 2   
 
-  55          void main() {
-  56   1        RZ7899_Init();
-  57   1      
-  58   1        OLED_Init();
-  59   1        OLED_ShowString8(0, 0, "START");
-  60   1        
-  61   1        RotationCounter_init();
-  62   1        
-  63   1        g_state = STATE_INIT;
-  64   1        g_initStage = INITSTAGE_NONE;
-  65   1        g_CMD = CMD_NONE;
-  66   1        g_CMD_Stage = CMD_STAGE_NONE;
-  67   1        while(1) {
-  68   2          int rc;
-  69   2          char str[20];
-  70   2          u16 adc;
-  71   2          float r;
-  72   2          
-  73   2          OLED_Clear();
-  74   2          if (gIntFlag) {
-  75   3            OLED_ShowString(0, 0, "1");
-  76   3          } else {
-  77   3            OLED_ShowString(0, 0, "0");
-  78   3          }
-  79   2      
-  80   2          Interrupt_check();
-  81   2          RotationCounter_check();
-  82   2          CMD_Check();
-  83   2      
-  84   2          // rc = RotationCounter_getRotationCount();
-  85   2          adc = Get_ADCResult(ADC_CHANEL);
-  86   2          r = adc / 4096.f * 100.f;
-  87   2          floatToS(r, str, 20);
-  88   2          // sprintf(str, "maxcount = %d", g_MaxCount);
-  89   2          OLED_ShowString(0, 4, str);
-  90   2          
-  91   2          switch (g_state) {
-  92   3            case STATE_INIT: {
-  93   4              StateInit_check();
-  94   4              if (g_initStage == INITSTAGE_READY) {
-  95   5                g_state = STATE_IDLE;
-  96   5              }
-  97   4              break;
-  98   4            }
-  99   3            case STATE_IDLE: {
- 100   4              if (g_CMD != CMD_NONE) {
- 101   5                g_state = STATE_BUSY;
- 102   5                CMD_Work();
- 103   5              }
- 104   4              break;
- 105   4            }
- 106   3            case STATE_BUSY: {
- 107   4              CMD_Work();
+  55          
+  56          void main() {
+  57   1        RZ7899_Init();
+  58   1      
+  59   1        OLED_Init();
+  60   1        OLED_ShowString8(0, 0, "START");
+  61   1        
+  62   1        // RZ7899_Run(RUN_STATE_INV);
+  63   1        // while(1);
+  64   1        
+  65   1        RotationCounter_init();
+  66   1        
+  67   1        g_state = STATE_INIT;
+  68   1        g_initStage = INITSTAGE_NONE;
+  69   1        g_CMD = CMD_NONE;
+  70   1        g_CMD_Stage = CMD_STAGE_NONE;
+  71   1        
+  72   1        // Test_All();
+  73   1        
+  74   1        while(1) {
+  75   2          int rc;
+  76   2          char str[20];
+  77   2          u16 adc;
+  78   2          float r;
+  79   2          
+  80   2          OLED_Clear();
+  81   2      
+  82   2          Interrupt_check();
+  83   2          RotationCounter_check();
+  84   2          CMD_Check();
+  85   2      
+  86   2          rc = RotationCounter_getRotationCount();
+  87   2          intToS(rc, str, 20);
+  88   2          // adc = Get_ADCResult(ADC_CHANEL);
+  89   2          // r = adc / 4096.f * 100.f;
+  90   2          // floatToS(r, str, 20);
+  91   2          // sprintf(str, "maxcount = %d", g_MaxCount);
+  92   2          
+  93   2          OLED_ShowString8(0, 3, str);
+  94   2          
+  95   2          switch (g_state) {
+  96   3            case STATE_INIT: {
+  97   4              StateInit_check();
+  98   4              if (g_initStage == INITSTAGE_READY) {
+  99   5                g_state = STATE_IDLE;
+ 100   5              }
+ 101   4              break;
+ 102   4            }
+ 103   3            case STATE_IDLE: {
+ 104   4              if (g_CMD != CMD_NONE) {
+ 105   5                g_state = STATE_BUSY;
+ 106   5                CMD_Work();
+ 107   5              }
  108   4              break;
  109   4            }
- 110   3            default:
- 111   3              break;
- 112   3          }
- 113   2        }
- 114   1      }
-*** WARNING C280 IN LINE 68 OF src\main.c: 'rc': unreferenced local variable
- 115          
-C51 COMPILER V9.60.7.0   MAIN                                                              04/02/2023 16:28:18 PAGE 3   
+ 110   3            case STATE_BUSY: {
+ 111   4              CMD_Work();
+ 112   4              break;
+ 113   4            }
+ 114   3            default:
+ 115   3              break;
+ 116   3          }
+C51 COMPILER V9.60.7.0   MAIN                                                              04/08/2023 17:04:03 PAGE 3   
 
- 116          void INT_Init() {
- 117   1        GPIO_InitTypeDef conf;
- 118   1        GPIO_InitTypeDef conf1;
- 119   1        conf.Mode = GPIO_PullUp;
- 120   1        conf.Pin = GPIO_Pin_4;
- 121   1        GPIO_Inilize(GPIO_P5, &conf);
- 122   1        P_INT = 1;
- 123   1        gIsInInt = 0;
- 124   1      
- 125   1        conf1.Mode = GPIO_PullUp;
- 126   1        conf1.Pin = GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7;
- 127   1        GPIO_Inilize(GPIO_P0, &conf);
- 128   1        P_INT = 1;
- 129   1        
- 130   1        P_INT_01 = 1;
- 131   1        P_INT_02 = 1;
- 132   1        P_INT_03 = 1;
- 133   1        P_INT_04 = 1;
- 134   1        P_INT_05 = 1;
- 135   1        P_INT_06 = 1;
- 136   1        P_INT_07 = 1;
- 137   1      }
- 138          
- 139          void Interrupt_check() {
- 140   1        if (!P_INT && !gIsInInt) {
- 141   2          gIntFlag = 1;
- 142   2          gIsInInt = 1;
- 143   2        }
- 144   1        if (gIsInInt && P_INT) {
- 145   2          gIsInInt = 0;
- 146   2          gIntFlag = 0;
- 147   2        }
- 148   1      }
- 149          
- 150          bit IsInterrupted(bit clearFlag) {
- 151   1        bit res = gIntFlag;
- 152   1        if (clearFlag) {
- 153   2          gIntFlag = 0;
- 154   2        }
- 155   1        return res;
- 156   1      }
- 157          
- 158          void StateInit_check() {
- 159   1        switch (g_initStage) {
- 160   2          case INITSTAGE_NONE: {
- 161   3            OLED_ShowString(0, 2, "INITSTAGE_NONE");
- 162   3            RZ7899_Run(RUN_STATE_INV);
- 163   3            g_initStage = INITSTAGE_TO_MIN;
- 164   3            break;
- 165   3          }
- 166   2          case INITSTAGE_TO_MIN: {
- 167   3            OLED_ShowString(0, 2, "INITSTAGE_TO_MIN");
- 168   3            if (IsInterrupted(0)) {
- 169   4              RZ7899_Run(RUN_STATE_NORM);
- 170   4              g_initStage = INITSTAGE_TO_MIN_START;
- 171   4            }
- 172   3            break;
- 173   3          }
- 174   2          case INITSTAGE_TO_MIN_START: {
- 175   3            OLED_ShowString(0, 2, "INITSTAGE_TO_MIN_START");
- 176   3            if (!IsInterrupted(0)) {
- 177   4              RotationCounter_reset();
-C51 COMPILER V9.60.7.0   MAIN                                                              04/02/2023 16:28:18 PAGE 4   
+ 117   2          Test_Interruption_Check(5);
+ 118   2        }
+ 119   1      }
+*** WARNING C280 IN LINE 77 OF src\main.c: 'adc': unreferenced local variable
+*** WARNING C280 IN LINE 78 OF src\main.c: 'r': unreferenced local variable
+ 120          
+ 121          void INT_Init() {
+ 122   1        GPIO_InitTypeDef conf;
+ 123   1        GPIO_InitTypeDef conf1;
+ 124   1        conf.Mode = GPIO_PullUp;
+ 125   1        conf.Pin = GPIO_Pin_4;
+ 126   1        GPIO_Inilize(GPIO_P5, &conf);
+ 127   1        P_INT = 1;
+ 128   1        gIsInInt = 0;
+ 129   1      
+ 130   1        conf1.Mode = GPIO_PullUp;
+ 131   1        conf1.Pin = GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7;
+ 132   1        GPIO_Inilize(GPIO_P0, &conf);
+ 133   1        P_INT = 1;
+ 134   1        
+ 135   1        P_INT_01 = 1;
+ 136   1        P_INT_02 = 1;
+ 137   1        P_INT_03 = 1;
+ 138   1        P_INT_04 = 1;
+ 139   1        P_INT_05 = 1;
+ 140   1        P_INT_06 = 1;
+ 141   1        P_INT_07 = 1;
+ 142   1      }
+ 143          
+ 144          void Interrupt_check() {
+ 145   1        if (!P_INT && !gIsInInt) {
+ 146   2          gIntFlag = 1;
+ 147   2          gIsInInt = 1;
+ 148   2        }
+ 149   1        if (gIsInInt && P_INT) {
+ 150   2          gIsInInt = 0;
+ 151   2          gIntFlag = 0;
+ 152   2        }
+ 153   1      }
+ 154          
+ 155          bit IsInterrupted(bit clearFlag) {
+ 156   1        bit res = gIntFlag;
+ 157   1        if (clearFlag) {
+ 158   2          gIntFlag = 0;
+ 159   2        }
+ 160   1        return res;
+ 161   1      }
+ 162          
+ 163          void StateInit_check() {
+ 164   1        switch (g_initStage) {
+ 165   2          case INITSTAGE_NONE: {
+ 166   3            OLED_ShowString8(0, 2, "INITSTAGE_NONE");
+ 167   3            RZ7899_Run(RUN_STATE_INV);
+ 168   3            g_initStage = INITSTAGE_TO_MIN;
+ 169   3            break;
+ 170   3          }
+ 171   2          case INITSTAGE_TO_MIN: {
+ 172   3            OLED_ShowString8(0, 2, "INITSTAGE_TO_MIN");
+ 173   3            if (IsInterrupted(0)) {
+ 174   4              RZ7899_Run(RUN_STATE_NORM);
+ 175   4              g_initStage = INITSTAGE_TO_MIN_START;
+ 176   4            }
+C51 COMPILER V9.60.7.0   MAIN                                                              04/08/2023 17:04:03 PAGE 4   
 
- 178   4              g_initStage = INITSTAGE_TO_MAX;
- 179   4            }
- 180   3            break;
- 181   3          }
- 182   2          case INITSTAGE_TO_MAX: {
- 183   3            OLED_ShowString(0, 2, "INITSTAGE_TO_MAX");
- 184   3            if (IsInterrupted(0)) {
- 185   4              RZ7899_Run(RUN_STATE_INV);
- 186   4              g_initStage = INITSTAGE_TO_START;
- 187   4            }
- 188   3            break;
- 189   3          }
- 190   2          case INITSTAGE_TO_START: {
- 191   3            OLED_ShowString(0, 2, "INITSTAGE_TO_START");
- 192   3            if (!IsInterrupted(0)) {
- 193   4              RZ7899_Run(RUN_STATE_STOP);
- 194   4              g_initStage = INITSTAGE_READY;
- 195   4              g_MaxCount = RotationCounter_getRotationCount();
- 196   4            }
- 197   3            break;
- 198   3          }
- 199   2          case INITSTAGE_READY: {
- 200   3            OLED_ShowString(0, 2, "INITSTAGE_READY");
- 201   3            break;
- 202   3          }
- 203   2        }
- 204   1      }
- 205          
- 206          void CMD_Check() {
- 207   1        if (!P_INT_01) {
- 208   2          P_INT_01 = 1;
- 209   2          P_INT_02 = 1;
- 210   2          P_INT_03 = 1;
- 211   2          P_INT_04 = 1;
- 212   2          P_INT_05 = 1;
- 213   2          P_INT_06 = 1;
- 214   2          P_INT_07 = 1;
- 215   2          g_CMD = CMD_STOP;
- 216   2          OLED_ShowString(0, 6, "01 INT");
- 217   2        } else if (!P_INT_02) {
- 218   2          OLED_ShowString(0, 6, "02 INT");
- 219   2          g_CMD = CMD_GO_UP;
- 220   2        } else if (!P_INT_03) {
- 221   2          OLED_ShowString(0, 6, "03 INT");
- 222   2          g_CMD = CMD_GO_DOWN;
- 223   2        } else if (!P_INT_04) {
- 224   2          OLED_ShowString(0, 6, "04 INT");
- 225   2          g_CMD = CMD_GO_MAX;
- 226   2        } else if (!P_INT_05) {
- 227   2          OLED_ShowString(0, 6, "05 INT");
- 228   2          g_CMD = CMD_GO_MIN;
- 229   2        } else if (!P_INT_06) {
- 230   2          OLED_ShowString(0, 6, "06 INT");
- 231   2          g_CMD = CMD_GO_VALUE;
- 232   2          g_CMD_Value = 50;
- 233   2        } else if (!P_INT_07) {
- 234   2          OLED_ShowString(0, 6, "07 INT");
- 235   2          g_CMD = CMD_GO_VALUE;
- 236   2          g_CMD_Value = 20;
- 237   2        }
- 238   1      }
- 239          
-C51 COMPILER V9.60.7.0   MAIN                                                              04/02/2023 16:28:18 PAGE 5   
+ 177   3            break;
+ 178   3          }
+ 179   2          case INITSTAGE_TO_MIN_START: {
+ 180   3            OLED_ShowString8(0, 2, "INITSTAGE_TO_MIN_START");
+ 181   3            if (!IsInterrupted(0)) {
+ 182   4              RotationCounter_reset();
+ 183   4              g_initStage = INITSTAGE_TO_MAX;
+ 184   4            }
+ 185   3            break;
+ 186   3          }
+ 187   2          case INITSTAGE_TO_MAX: {
+ 188   3            OLED_ShowString8(0, 2, "INITSTAGE_TO_MAX");
+ 189   3            if (IsInterrupted(0)) {
+ 190   4              RZ7899_Run(RUN_STATE_INV);
+ 191   4              g_initStage = INITSTAGE_TO_START;
+ 192   4            }
+ 193   3            break;
+ 194   3          }
+ 195   2          case INITSTAGE_TO_START: {
+ 196   3            OLED_ShowString8(0, 2, "INITSTAGE_TO_START");
+ 197   3            if (!IsInterrupted(0)) {
+ 198   4              RZ7899_Run(RUN_STATE_STOP);
+ 199   4              g_initStage = INITSTAGE_READY;
+ 200   4              g_MaxCount = RotationCounter_getRotationCount();
+ 201   4            }
+ 202   3            break;
+ 203   3          }
+ 204   2          case INITSTAGE_READY: {
+ 205   3            OLED_ShowString8(0, 2, "INITSTAGE_READY");
+ 206   3            break;
+ 207   3          }
+ 208   2        }
+ 209   1      }
+ 210          
+ 211          void CMD_Check() {
+ 212   1        if (!P_INT_01) {
+ 213   2          P_INT_01 = 1;
+ 214   2          P_INT_02 = 1;
+ 215   2          P_INT_03 = 1;
+ 216   2          P_INT_04 = 1;
+ 217   2          P_INT_05 = 1;
+ 218   2          P_INT_06 = 1;
+ 219   2          P_INT_07 = 1;
+ 220   2          g_CMD = CMD_STOP;
+ 221   2          OLED_ShowString8(0, 4, "01 INT");
+ 222   2        } else if (!P_INT_02) {
+ 223   2          OLED_ShowString8(0, 4, "02 INT");
+ 224   2          g_CMD = CMD_GO_UP;
+ 225   2        } else if (!P_INT_03) {
+ 226   2          OLED_ShowString8(0, 4, "03 INT");
+ 227   2          g_CMD = CMD_GO_DOWN;
+ 228   2        } else if (!P_INT_04) {
+ 229   2          OLED_ShowString8(0, 4, "04 INT");
+ 230   2          g_CMD = CMD_GO_MAX;
+ 231   2        } else if (!P_INT_05) {
+ 232   2          OLED_ShowString8(0, 4, "05 INT");
+ 233   2          g_CMD = CMD_GO_MIN;
+ 234   2        } else if (!P_INT_06) {
+ 235   2          OLED_ShowString8(0, 4, "06 INT");
+ 236   2          g_CMD = CMD_GO_VALUE;
+ 237   2          g_CMD_Value = 50;
+ 238   2        } else if (!P_INT_07) {
+C51 COMPILER V9.60.7.0   MAIN                                                              04/08/2023 17:04:03 PAGE 5   
 
- 240          void CMD_Work() {
- 241   1        switch (g_CMD) {
- 242   2          case CMD_NONE: {
- 243   3            OLED_ShowString(0, 2, "CMD_NONE");
- 244   3            g_state = STATE_IDLE;
- 245   3            g_CMD_Stage = CMD_STAGE_NONE;
- 246   3            break;
- 247   3          }
- 248   2          case CMD_STOP: {
- 249   3            OLED_ShowString(0, 2, "CMD_STOP");
- 250   3            RZ7899_Run(RUN_STATE_STOP);
+ 239   2          OLED_ShowString8(0, 4, "07 INT");
+ 240   2          g_CMD = CMD_GO_VALUE;
+ 241   2          g_CMD_Value = 20;
+ 242   2        } else {
+ 243   2          OLED_ShowString8(0, 4, "NO INT");
+ 244   2        }
+ 245   1      }
+ 246          
+ 247          void CMD_Work() {
+ 248   1        switch (g_CMD) {
+ 249   2          case CMD_NONE: {
+ 250   3            OLED_ShowString8(0, 2, "CMD_NONE");
  251   3            g_state = STATE_IDLE;
- 252   3            g_CMD = CMD_NONE;
- 253   3            g_CMD_Stage = CMD_STAGE_NONE;
- 254   3            break;
- 255   3          }
- 256   2          case CMD_GO_UP:
- 257   2          case CMD_GO_MAX: {
- 258   3            OLED_ShowString(0, 2, "CMD_GO_UP OR MAX");
- 259   3            if (g_CMD_Stage != CMD_STAGE_UP && g_CMD_Stage == CMD_STAGE_NONE) {
- 260   4              RZ7899_Run(RUN_STATE_NORM);
- 261   4              g_CMD_Stage = CMD_STAGE_UP;
- 262   4            }
- 263   3            if (g_CMD_Stage == CMD_STAGE_UP && IsInterrupted(0)) {
- 264   4              RZ7899_Run(RUN_STATE_INV);
- 265   4              g_CMD_Stage = CMD_STAGE_UP_ADJUST;
- 266   4            }
- 267   3            if (g_CMD_Stage == CMD_STAGE_UP_ADJUST && !IsInterrupted(0)) {
- 268   4              RZ7899_Run(RUN_STATE_STOP);
- 269   4              g_CMD_Stage = CMD_STAGE_UP_LIMIT;
- 270   4              if (g_CMD == CMD_GO_MAX) {
- 271   5                g_CMD = CMD_STOP;
- 272   5                g_CMD_Stage = CMD_STAGE_NONE;
- 273   5              }
- 274   4            }
- 275   3            if (g_CMD == CMD_GO_UP && P_INT_02) {
- 276   4              g_CMD = CMD_STOP;
- 277   4              g_CMD_Stage = CMD_STAGE_NONE;
- 278   4            }
- 279   3            break;
- 280   3          }
- 281   2          case CMD_GO_DOWN:
- 282   2          case CMD_GO_MIN:{
- 283   3            OLED_ShowString(0, 2, "CMD_GO_DOWN OR MIN");
- 284   3            if (g_CMD_Stage != CMD_STAGE_DOWN && g_CMD_Stage == CMD_STAGE_NONE) {
- 285   4              RZ7899_Run(RUN_STATE_INV);
- 286   4              g_CMD_Stage = CMD_STAGE_DOWN;
- 287   4            }
- 288   3            if (g_CMD_Stage == CMD_STAGE_DOWN && IsInterrupted(0)) {
- 289   4              RZ7899_Run(RUN_STATE_NORM);
- 290   4              g_CMD_Stage = CMD_STAGE_DOWN_ADJUST;
- 291   4            }
- 292   3            if (g_CMD_Stage == CMD_STAGE_DOWN_ADJUST && !IsInterrupted(0)) {
- 293   4              RZ7899_Run(RUN_STATE_STOP);
- 294   4              g_CMD_Stage = CMD_STAGE_DOWN_LIMIT;
- 295   4              if (g_CMD == CMD_GO_MIN) {
- 296   5                g_CMD = CMD_STOP;
- 297   5                g_CMD_Stage = CMD_STAGE_NONE;
- 298   5              }
- 299   4            }
- 300   3            if (g_CMD == CMD_GO_DOWN && P_INT_03) {
- 301   4              g_CMD = CMD_STOP;
-C51 COMPILER V9.60.7.0   MAIN                                                              04/02/2023 16:28:18 PAGE 6   
+ 252   3            g_CMD_Stage = CMD_STAGE_NONE;
+ 253   3            break;
+ 254   3          }
+ 255   2          case CMD_STOP: {
+ 256   3            OLED_ShowString8(0, 2, "CMD_STOP");
+ 257   3            RZ7899_Run(RUN_STATE_STOP);
+ 258   3            g_state = STATE_IDLE;
+ 259   3            g_CMD = CMD_NONE;
+ 260   3            g_CMD_Stage = CMD_STAGE_NONE;
+ 261   3            break;
+ 262   3          }
+ 263   2          case CMD_GO_UP:
+ 264   2          case CMD_GO_MAX: {
+ 265   3            OLED_ShowString8(0, 2, "CMD_GO_UP OR MAX");
+ 266   3            if (g_CMD_Stage != CMD_STAGE_UP && g_CMD_Stage == CMD_STAGE_NONE) {
+ 267   4              RZ7899_Run(RUN_STATE_NORM);
+ 268   4              g_CMD_Stage = CMD_STAGE_UP;
+ 269   4            }
+ 270   3            if (g_CMD_Stage == CMD_STAGE_UP && IsInterrupted(0)) {
+ 271   4              RZ7899_Run(RUN_STATE_INV);
+ 272   4              g_CMD_Stage = CMD_STAGE_UP_ADJUST;
+ 273   4            }
+ 274   3            if (g_CMD_Stage == CMD_STAGE_UP_ADJUST && !IsInterrupted(0)) {
+ 275   4              RZ7899_Run(RUN_STATE_STOP);
+ 276   4              g_CMD_Stage = CMD_STAGE_UP_LIMIT;
+ 277   4              if (g_CMD == CMD_GO_MAX) {
+ 278   5                g_CMD = CMD_STOP;
+ 279   5                g_CMD_Stage = CMD_STAGE_NONE;
+ 280   5              }
+ 281   4            }
+ 282   3            if (g_CMD == CMD_GO_UP && P_INT_02) {
+ 283   4              g_CMD = CMD_STOP;
+ 284   4              g_CMD_Stage = CMD_STAGE_NONE;
+ 285   4            }
+ 286   3            break;
+ 287   3          }
+ 288   2          case CMD_GO_DOWN:
+ 289   2          case CMD_GO_MIN:{
+ 290   3            OLED_ShowString8(0, 2, "CMD_GO_DOWN OR MIN");
+ 291   3            if (g_CMD_Stage != CMD_STAGE_DOWN && g_CMD_Stage == CMD_STAGE_NONE) {
+ 292   4              RZ7899_Run(RUN_STATE_INV);
+ 293   4              g_CMD_Stage = CMD_STAGE_DOWN;
+ 294   4            }
+ 295   3            if (g_CMD_Stage == CMD_STAGE_DOWN && IsInterrupted(0)) {
+ 296   4              RZ7899_Run(RUN_STATE_NORM);
+ 297   4              g_CMD_Stage = CMD_STAGE_DOWN_ADJUST;
+ 298   4            }
+ 299   3            if (g_CMD_Stage == CMD_STAGE_DOWN_ADJUST && !IsInterrupted(0)) {
+ 300   4              RZ7899_Run(RUN_STATE_STOP);
+C51 COMPILER V9.60.7.0   MAIN                                                              04/08/2023 17:04:03 PAGE 6   
 
- 302   4              g_CMD_Stage = CMD_STAGE_NONE;
- 303   4            }
- 304   3            break;
- 305   3          }
- 306   2          case CMD_GO_VALUE: {
- 307   3            OLED_ShowString8(0, 2, "CMD_GO_VALUE");
- 308   3            break;
- 309   3          }
- 310   2        }
- 311   1      }
+ 301   4              g_CMD_Stage = CMD_STAGE_DOWN_LIMIT;
+ 302   4              if (g_CMD == CMD_GO_MIN) {
+ 303   5                g_CMD = CMD_STOP;
+ 304   5                g_CMD_Stage = CMD_STAGE_NONE;
+ 305   5              }
+ 306   4            }
+ 307   3            if (g_CMD == CMD_GO_DOWN && P_INT_03) {
+ 308   4              g_CMD = CMD_STOP;
+ 309   4              g_CMD_Stage = CMD_STAGE_NONE;
+ 310   4            }
+ 311   3            break;
+ 312   3          }
+ 313   2          case CMD_GO_VALUE: {
+ 314   3            OLED_ShowString8(0, 2, "CMD_GO_VALUE");
+ 315   3            break;
+ 316   3          }
+ 317   2        }
+ 318   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    899    ----
-   CONSTANT SIZE    =    233    ----
+   CODE SIZE        =    845    ----
+   CONSTANT SIZE    =    236    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =      7      32
@@ -343,4 +351,4 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
 END OF MODULE INFORMATION.
 
 
-C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)
+C51 COMPILATION COMPLETE.  2 WARNING(S),  0 ERROR(S)

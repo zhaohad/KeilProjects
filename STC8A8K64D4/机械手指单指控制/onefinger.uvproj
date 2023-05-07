@@ -486,6 +486,16 @@
               <FileType>5</FileType>
               <FilePath>.\src\dtos.h</FilePath>
             </File>
+            <File>
+              <FileName>test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\test.c</FilePath>
+            </File>
+            <File>
+              <FileName>test.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\test.h</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

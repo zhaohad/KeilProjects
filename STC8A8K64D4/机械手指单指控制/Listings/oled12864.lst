@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   OLED12864                                                         04/02/2023 16:28:18 PAGE 1   
+C51 COMPILER V9.60.7.0   OLED12864                                                         04/08/2023 17:04:03 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE OLED12864
@@ -62,7 +62,7 @@ line level    source
   52          
   53          //向SSD1306写入一个字节。
   54          //dat:要写入的数据/命令
-C51 COMPILER V9.60.7.0   OLED12864                                                         04/02/2023 16:28:18 PAGE 2   
+C51 COMPILER V9.60.7.0   OLED12864                                                         04/08/2023 17:04:03 PAGE 2   
 
   55          //cmd:数据/命令标志 0,表示命令;1,表示数据;
   56          void OLED_WR_Byte(u8 dat, u8 cmd) { 
@@ -126,7 +126,7 @@ line level    source
  114   2        }
  115   1      
  116   1        if (x > Max_Column - 1) {
-C51 COMPILER V9.60.7.0   OLED12864                                                         04/02/2023 16:28:18 PAGE 3   
+C51 COMPILER V9.60.7.0   OLED12864                                                         04/08/2023 17:04:03 PAGE 3   
 
  117   2          x = 0;
  118   2          y = y + 2;
@@ -190,7 +190,7 @@ line level    source
  176   2          OLED_ShowChar8(x, y, Bit4ToHex(buf[i] >> 4));
  177   2          x += 6;
  178   2          OLED_ShowChar8(x, y, Bit4ToHex(buf[i]));
-C51 COMPILER V9.60.7.0   OLED12864                                                         04/02/2023 16:28:18 PAGE 4   
+C51 COMPILER V9.60.7.0   OLED12864                                                         04/08/2023 17:04:03 PAGE 4   
 
  179   2          x += 9;
  180   2        }

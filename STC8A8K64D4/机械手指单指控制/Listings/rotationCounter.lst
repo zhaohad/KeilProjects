@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   ROTATIONCOUNTER                                                   04/02/2023 16:28:19 PAGE 1   
+C51 COMPILER V9.60.7.0   ROTATIONCOUNTER                                                   04/08/2023 17:04:04 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE ROTATIONCOUNTER
@@ -62,7 +62,7 @@ line level    source
   49   2        }
   50   1        
   51   1        if (__rotation_counter_current_state == ROTATION_COUNTER_STATE_RAGION_L) {
-C51 COMPILER V9.60.7.0   ROTATIONCOUNTER                                                   04/02/2023 16:28:19 PAGE 2   
+C51 COMPILER V9.60.7.0   ROTATIONCOUNTER                                                   04/08/2023 17:04:04 PAGE 2   
 
   52   2          if (__rotation_counter_last_state == ROTATION_COUNTER_STATE_RAGION_M &&
   53   2            __rotation_counter_last_state2 == ROTATION_COUNTER_STATE_RAGION_H) {

@@ -7,7 +7,8 @@
 ".\Objects\STC8A_ADC.obj",
 ".\Objects\STC8A_ADC_Isr.obj",
 ".\Objects\rotationCounter.obj",
-".\Objects\dtos.obj" 
+".\Objects\dtos.obj",
+".\Objects\test.obj" 
 TO ".\Objects\onefinger" 
 PRINT(".\Listings\onefinger.m51") RAMSIZE(256) 
 DISABLEWARNING (16) 
