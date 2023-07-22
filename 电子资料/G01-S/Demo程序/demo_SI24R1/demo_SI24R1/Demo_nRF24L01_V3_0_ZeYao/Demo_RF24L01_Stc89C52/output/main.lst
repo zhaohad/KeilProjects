@@ -1,0 +1,223 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              05/07/2023 23:33:59 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN ..\output\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE Source_File\app\src\main.c COMPACT OPTIMIZE(8,SPEED) BROWSE INCDIR(.\Sou
+                    -rce_File\app\inc;.\Source_File\drv_mcu\inc;.\Source_File\drv_periph\inc) DEBUG OBJECTEXTEND PRINT(..\output\main.lst) TA
+                    -BS(2) OBJECT(..\output\main.obj)
+
+line level    source
+
+   1          Ôªø/**
+*** ERROR C100 IN LINE 1 OF Source_File\app\src\main.c: unprintable character 0xEF skipped
+*** ERROR C100 IN LINE 1 OF Source_File\app\src\main.c: unprintable character 0xBB skipped
+*** ERROR C100 IN LINE 1 OF Source_File\app\src\main.c: unprintable character 0xBF skipped
+   2            ******************************************************************************
+   3            * @author  
+   4            * @version 
+   5            * @date    
+   6            * @brief   
+   7            ******************************************************************************
+   8            * @attention
+   9            *
+  10            * 
+  11            * 
+  12            * 
+  13            ******************************************************************************
+  14            */
+  15            
+  16          
+  17          #include "main.h"
+*** ERROR C100 IN LINE 1 OF .\Source_File\app\inc\main.h: unprintable character 0xEF skipped
+*** ERROR C100 IN LINE 1 OF .\Source_File\app\inc\main.h: unprintable character 0xBB skipped
+*** ERROR C100 IN LINE 1 OF .\Source_File\app\inc\main.h: unprintable character 0xBF skipped
+*** ERROR C100 IN LINE 1 OF .\Source_File\drv_mcu\inc\drv_led.h: unprintable character 0xEF skipped
+*** ERROR C100 IN LINE 1 OF .\Source_File\drv_mcu\inc\drv_led.h: unprintable character 0xBB skipped
+*** ERROR C100 IN LINE 1 OF .\Source_File\drv_mcu\inc\drv_led.h: unprintable character 0xBF skipped
+*** ERROR C100 IN LINE 1 OF \hw\KeilProjects\µÁ◊”◊ ¡œ\G01-S\Demo≥Ã–Ú\demo_SI24R1\demo_SI24R1\Demo_nRF24L01_V3_0_ZeYao\De
+             -mo_RF24L01_Stc89C52\Project_Rf24L01\Source_File\drv_mcu\inc\typedef.h: unprintable character 0xEF skipped
+*** ERROR C100 IN LINE 1 OF \hw\KeilProjects\µÁ◊”◊ ¡œ\G01-S\Demo≥Ã–Ú\demo_SI24R1\demo_SI24R1\Demo_nRF24L01_V3_0_ZeYao\De
+             -mo_RF24L01_Stc89C52\Project_Rf24L01\Source_File\drv_mcu\inc\typedef.h: unprintable character 0xBB skipped
+*** ERROR C100 IN LINE 1 OF \hw\KeilProjects\µÁ◊”◊ ¡œ\G01-S\Demo≥Ã–Ú\demo_SI24R1\demo_SI24R1\Demo_nRF24L01_V3_0_ZeYao\De
+             -mo_RF24L01_Stc89C52\Project_Rf24L01\Source_File\drv_mcu\inc\typedef.h: unprintable character 0xBF skipped
+*** ERROR C100 IN LINE 1 OF .\Source_File\drv_mcu\inc\drv_spi.h: unprintable character 0xEF skipped
+*** ERROR C100 IN LINE 1 OF .\Source_File\drv_mcu\inc\drv_spi.h: unprintable character 0xBB skipped
+*** ERROR C100 IN LINE 1 OF .\Source_File\drv_mcu\inc\drv_spi.h: unprintable character 0xBF skipped
+*** ERROR C100 IN LINE 1 OF \hw\KeilProjects\µÁ◊”◊ ¡œ\G01-S\Demo≥Ã–Ú\demo_SI24R1\demo_SI24R1\Demo_nRF24L01_V3_0_ZeYao\De
+             -mo_RF24L01_Stc89C52\Project_Rf24L01\Source_File\drv_mcu\inc\typedef.h: unprintable character 0xEF skipped
+*** ERROR C100 IN LINE 1 OF \hw\KeilProjects\µÁ◊”◊ ¡œ\G01-S\Demo≥Ã–Ú\demo_SI24R1\demo_SI24R1\Demo_nRF24L01_V3_0_ZeYao\De
+             -mo_RF24L01_Stc89C52\Project_Rf24L01\Source_File\drv_mcu\inc\typedef.h: unprintable character 0xBB skipped
+*** ERROR C100 IN LINE 1 OF \hw\KeilProjects\µÁ◊”◊ ¡œ\G01-S\Demo≥Ã–Ú\demo_SI24R1\demo_SI24R1\Demo_nRF24L01_V3_0_ZeYao\De
+             -mo_RF24L01_Stc89C52\Project_Rf24L01\Source_File\drv_mcu\inc\typedef.h: unprintable character 0xBF skipped
+*** ERROR C100 IN LINE 1 OF .\Source_File\drv_mcu\inc\drv_delay.h: unprintable character 0xEF skipped
+*** ERROR C100 IN LINE 1 OF .\Source_File\drv_mcu\inc\drv_delay.h: unprintable character 0xBB skipped
+*** ERROR C100 IN LINE 1 OF .\Source_File\drv_mcu\inc\drv_delay.h: unprintable character 0xBF skipped
+*** ERROR C100 IN LINE 1 OF \hw\KeilProjects\µÁ◊”◊ ¡œ\G01-S\Demo≥Ã–Ú\demo_SI24R1\demo_SI24R1\Demo_nRF24L01_V3_0_ZeYao\De
+             -mo_RF24L01_Stc89C52\Project_Rf24L01\Source_File\drv_mcu\inc\typedef.h: unprintable character 0xEF skipped
+*** ERROR C100 IN LINE 1 OF \hw\KeilProjects\µÁ◊”◊ ¡œ\G01-S\Demo≥Ã–Ú\demo_SI24R1\demo_SI24R1\Demo_nRF24L01_V3_0_ZeYao\De
+             -mo_RF24L01_Stc89C52\Project_Rf24L01\Source_File\drv_mcu\inc\typedef.h: unprintable character 0xBB skipped
+*** ERROR C100 IN LINE 1 OF \hw\KeilProjects\µÁ◊”◊ ¡œ\G01-S\Demo≥Ã–Ú\demo_SI24R1\demo_SI24R1\Demo_nRF24L01_V3_0_ZeYao\De
+             -mo_RF24L01_Stc89C52\Project_Rf24L01\Source_File\drv_mcu\inc\typedef.h: unprintable character 0xBF skipped
+*** ERROR C100 IN LINE 1 OF .\Source_File\drv_mcu\inc\drv_button.h: unprintable character 0xEF skipped
+*** ERROR C100 IN LINE 1 OF .\Source_File\drv_mcu\inc\drv_button.h: unprintable character 0xBB skipped
+*** ERROR C100 IN LINE 1 OF .\Source_File\drv_mcu\inc\drv_button.h: unprintable character 0xBF skipped
+C51 COMPILER V9.60.7.0   MAIN                                                              05/07/2023 23:33:59 PAGE 2   
+
+*** ERROR C100 IN LINE 1 OF \hw\KeilProjects\µÁ◊”◊ ¡œ\G01-S\Demo≥Ã–Ú\demo_SI24R1\demo_SI24R1\Demo_nRF24L01_V3_0_ZeYao\De
+             -mo_RF24L01_Stc89C52\Project_Rf24L01\Source_File\drv_mcu\inc\typedef.h: unprintable character 0xEF skipped
+*** ERROR C100 IN LINE 1 OF \hw\KeilProjects\µÁ◊”◊ ¡œ\G01-S\Demo≥Ã–Ú\demo_SI24R1\demo_SI24R1\Demo_nRF24L01_V3_0_ZeYao\De
+             -mo_RF24L01_Stc89C52\Project_Rf24L01\Source_File\drv_mcu\inc\typedef.h: unprintable character 0xBB skipped
+*** ERROR C100 IN LINE 1 OF \hw\KeilProjects\µÁ◊”◊ ¡œ\G01-S\Demo≥Ã–Ú\demo_SI24R1\demo_SI24R1\Demo_nRF24L01_V3_0_ZeYao\De
+             -mo_RF24L01_Stc89C52\Project_Rf24L01\Source_File\drv_mcu\inc\typedef.h: unprintable character 0xBF skipped
+*** ERROR C100 IN LINE 1 OF .\Source_File\drv_mcu\inc\drv_uart.h: unprintable character 0xEF skipped
+*** ERROR C100 IN LINE 1 OF .\Source_File\drv_mcu\inc\drv_uart.h: unprintable character 0xBB skipped
+*** ERROR C100 IN LINE 1 OF .\Source_File\drv_mcu\inc\drv_uart.h: unprintable character 0xBF skipped
+*** ERROR C100 IN LINE 1 OF \hw\KeilProjects\µÁ◊”◊ ¡œ\G01-S\Demo≥Ã–Ú\demo_SI24R1\demo_SI24R1\Demo_nRF24L01_V3_0_ZeYao\De
+             -mo_RF24L01_Stc89C52\Project_Rf24L01\Source_File\drv_mcu\inc\typedef.h: unprintable character 0xEF skipped
+*** ERROR C100 IN LINE 1 OF \hw\KeilProjects\µÁ◊”◊ ¡œ\G01-S\Demo≥Ã–Ú\demo_SI24R1\demo_SI24R1\Demo_nRF24L01_V3_0_ZeYao\De
+             -mo_RF24L01_Stc89C52\Project_Rf24L01\Source_File\drv_mcu\inc\typedef.h: unprintable character 0xBB skipped
+*** ERROR C100 IN LINE 1 OF \hw\KeilProjects\µÁ◊”◊ ¡œ\G01-S\Demo≥Ã–Ú\demo_SI24R1\demo_SI24R1\Demo_nRF24L01_V3_0_ZeYao\De
+             -mo_RF24L01_Stc89C52\Project_Rf24L01\Source_File\drv_mcu\inc\typedef.h: unprintable character 0xBF skipped
+*** ERROR C100 IN LINE 1 OF .\Source_File\drv_periph\inc\drv_RF24L01.h: unprintable character 0xEF skipped
+*** ERROR C100 IN LINE 1 OF .\Source_File\drv_periph\inc\drv_RF24L01.h: unprintable character 0xBB skipped
+*** ERROR C100 IN LINE 1 OF .\Source_File\drv_periph\inc\drv_RF24L01.h: unprintable character 0xBF skipped
+*** ERROR C100 IN LINE 1 OF .\Source_File\drv_mcu\inc\drv_spi.h: unprintable character 0xEF skipped
+*** ERROR C100 IN LINE 1 OF .\Source_File\drv_mcu\inc\drv_spi.h: unprintable character 0xBB skipped
+*** ERROR C100 IN LINE 1 OF .\Source_File\drv_mcu\inc\drv_spi.h: unprintable character 0xBF skipped
+*** ERROR C100 IN LINE 1 OF .\Source_File\drv_mcu\inc\drv_uart.h: unprintable character 0xEF skipped
+*** ERROR C100 IN LINE 1 OF .\Source_File\drv_mcu\inc\drv_uart.h: unprintable character 0xBB skipped
+*** ERROR C100 IN LINE 1 OF .\Source_File\drv_mcu\inc\drv_uart.h: unprintable character 0xBF skipped
+  18          
+  19          
+  20          const char *g_Ashining = "gisemi";
+  21          uint8_t g_TxMode = 0, g_UartRxFlag = 0;
+  22          uint8_t g_UartRxBuffer[ 32 ] = { 0 };
+  23          uint8_t g_RF24L01RxBuffer[ 32 ] = { 0 }; 
+  24          
+  25          
+  26          /**
+  27            * @brief :‰∏ªÂáΩÊï∞ 
+  28            * @param :Êó†
+  29            * @note  :Êó†
+  30            * @retval:Êó†
+  31            */ 
+  32          int main( void )
+  33          {   
+  34   1        uint8_t i = 0;
+  35   1      
+  36   1        //‰∏≤Âè£ÂàùÂßãÂåñ
+  37   1        drv_uart_init( );
+  38   1        
+  39   1        //LEDÂàùÂßãÂåñ
+  40   1        drv_led_init( );
+  41   1      
+  42   1        //SPIÂàùÂßãÂåñ
+  43   1        drv_spi_init( );
+  44   1        
+  45   1        //RF24L01ÂºïËÑöÂàùÂßãÂåñ
+  46   1        NRF24L01_Gpio_Init( );
+  47   1        
+  48   1        //Ê£ÄÊµãnRF24L01
+  49   1        NRF24L01_check( );  
+  50   1        RF24L01_Init( );
+  51   1        
+  52   1        led_red_off( );
+  53   1        led_green_off( );         //LEDÊåáÁ§∫ÁÅØÈªòËÆ§ÂÖ≥Èó≠Ôºå‰æø‰∫éËßÇÂØü
+  54   1        for( i = 0; i < 6; i++ )
+  55   1        {
+C51 COMPILER V9.60.7.0   MAIN                                                              05/07/2023 23:33:59 PAGE 3   
+
+  56   2          led_red_flashing( );
+  57   2          led_green_flashing( );
+  58   2          drv_delay_ms( 500 );      //Ê£ÄÊµãÂà∞ËäØÁâá Èó™ÈÄü3‰∏™Âë®Êúü
+  59   2        }
+  60   1          
+  61   1        
+  62   1      #ifdef  __RF24L01_TX_TEST__   
+  63   1      //=========================================================================================// 
+  64   1      //*****************************************************************************************//
+  65   1      //************************************* ÂèëÈÄÅ **********************************************//
+  66   1      //*****************************************************************************************//
+  67   1      //=========================================================================================// 
+  68   1        
+  69   1        //ÊåâÈîÆÂàùÂßãÂåñ
+  70   1        drv_button_init( );
+  71   1        
+  72   1        RF24L01_Set_Mode( MODE_TX );    //ÂèëÈÄÅÊ®°Âºè
+  73   1        while( 1 )  
+  74   1        {
+  75   2          //Ê®°ÂºèÂàáÊç¢
+  76   2          if( BUTOTN_PRESS_DOWN == drv_button_check( ))
+  77   2          {
+  78   3            g_TxMode = 1 - g_TxMode;    //Ê®°Âºè‰ºöÂú® TX_MODE_1( 0 ),TX_MODE_2( 1 )‰πãÈó¥ÂàáÊç¢
+  79   3            
+  80   3            //Áä∂ÊÄÅÊòæÁ§∫Ê∏ÖÈõ∂
+  81   3            led_green_off( );
+  82   3            led_red_off( );
+  83   3            
+  84   3            if( TX_MODE_1 == g_TxMode )
+  85   3            {
+  86   4              for( i = 0; i < 6; i++ )    
+  87   4              {
+  88   5                led_red_flashing( );  //Âõ∫ÂÆöÂèëÈÄÅÊ®°ÂºèÔºåÁ∫¢ÁÅØÈó™ÁÉÅ3Ê¨°
+  89   5                drv_delay_ms( 500 );    
+  90   5              }
+  91   4            }
+  92   3            else
+  93   3            {
+  94   4              for( i = 0; i < 6; i++ )
+  95   4              {
+  96   5                led_green_flashing( );  //‰∏≤Âè£ÂèëÈÄÅÊ®°ÂºèÔºåÁªøÁÅØÈó™ÁÉÅ3Ê¨°
+  97   5                drv_delay_ms( 500 );
+  98   5              }
+  99   4            }
+ 100   3          }
+ 101   2          
+ 102   2          //ÂèëÈÄÅ
+ 103   2          if( TX_MODE_1 == g_TxMode )
+ 104   2          {
+ 105   3            NRF24L01_TxPacket( (uint8_t *)g_Ashining, 8 );    //Ê®°Âºè1ÂèëÈÄÅÂõ∫ÂÆöÂ≠óÁ¨¶,1S‰∏ÄÂåÖ
+ 106   3            drv_delay_ms( 500 );  
+ 107   3            drv_delay_ms( 500 );  
+ 108   3            led_red_flashing( );      
+ 109   3          }
+ 110   2          else
+ 111   2          { 
+ 112   3            //Êü•ËØ¢‰∏≤Âè£Êï∞ÊçÆ
+ 113   3            i = drv_uart_rx_bytes( g_UartRxBuffer );
+ 114   3            
+ 115   3            if( 0 != i )
+ 116   3            {
+ 117   4              NRF24L01_TxPacket( g_UartRxBuffer, i );
+C51 COMPILER V9.60.7.0   MAIN                                                              05/07/2023 23:33:59 PAGE 4   
+
+ 118   4              led_red_flashing( );
+ 119   4            }
+ 120   3          }
+ 121   2        }
+ 122   1        
+ 123   1      #else   
+              //=========================================================================================// 
+              //*****************************************************************************************//
+              //************************************* Êé•Êî∂ **********************************************//
+              //*****************************************************************************************//
+              //=========================================================================================// 
+                
+                RF24L01_Set_Mode( MODE_RX );    //Êé•Êî∂Ê®°Âºè
+                while( 1 )
+                {
+                  i = NRF24L01_RxPacket( g_RF24L01RxBuffer );   //Êé•Êî∂Â≠óËäÇ
+                  if( 0 != i )
+                  {
+                    led_green_flashing( );
+                    drv_uart_tx_bytes( g_RF24L01RxBuffer,i ); //ËæìÂÖ•Êé•Êî∂Âà∞ÁöÑÂ≠óËäÇ
+                    
+                  }
+                }
+                
+              #endif
+ 143   1        
+ 144   1      }
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  45 ERROR(S)

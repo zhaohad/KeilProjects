@@ -1,0 +1,17 @@
+#ifndef __COMMAND_H__
+#define __COMMAND_H__
+
+#define NONE_COMMAND 0x00
+
+#define MODE_COMMAND 0x20
+#define MODE_LVDAI 0x00
+#define MODE_KONGZHI 0x01
+
+#define ADC_COMMAND_0 0x10
+#define ADC_COMMAND_1 ADC_COMMAND_0 + 1
+#define ADC_COMMAND_2 ADC_COMMAND_0 + 2
+#define ADC_COMMAND_3 ADC_COMMAND_0 + 3
+
+#define ADC_NONE_VALUE 50
+
+#endif

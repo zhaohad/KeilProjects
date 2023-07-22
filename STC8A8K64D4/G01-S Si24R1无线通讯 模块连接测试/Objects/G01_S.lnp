@@ -1,0 +1,9 @@
+".\Objects\STARTUP.obj",
+".\Objects\delay.obj",
+".\Objects\main.obj",
+".\Objects\STC8A_GPIO.obj",
+".\Objects\G01_S.obj",
+".\Objects\spi.obj" 
+TO ".\Objects\G01_S" 
+PRINT(".\Listings\G01_S.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

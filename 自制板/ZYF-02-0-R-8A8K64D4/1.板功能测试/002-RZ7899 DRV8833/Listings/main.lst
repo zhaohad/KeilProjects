@@ -1,0 +1,84 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              06/12/2023 14:54:46 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\
+                    -main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "stc8a8k64d4.H"
+   2          #include "stc8a_gpio.H"
+   3          #include "stc8a_spi.h"
+   4          #include "stc8a_nvic.h"
+   5          #include "typedef.h"
+   6          #include "oled12864.h"
+   7          #include "uart.h"
+   8          
+   9          void OLED_GPIO_Config() {
+  10   1        GPIO_InitTypeDef conf;
+  11   1        conf.Mode = GPIO_PullUp;
+  12   1        conf.Pin = GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7;
+  13   1        GPIO_Inilize(GPIO_P1, &conf);
+  14   1        
+  15   1        conf.Pin = GPIO_Pin_4;
+  16   1        GPIO_Inilize(GPIO_P4, &conf);
+  17   1      }
+  18          
+  19          void OLED12864_Init() {
+  20   1        OLED_GPIO_Config();
+  21   1        OLED_Init();
+  22   1      }
+  23          
+  24          void MOTOR_GPIO_Config() {
+  25   1        GPIO_InitTypeDef conf;
+  26   1        // conf.Mode = GPIO_OUT_PP;
+  27   1        conf.Mode = GPIO_PullUp;
+  28   1        conf.Pin = GPIO_Pin_All;
+  29   1        GPIO_Inilize(GPIO_P6, &conf);
+  30   1        
+  31   1        conf.Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3;
+  32   1        GPIO_Inilize(GPIO_P7, &conf);
+  33   1        
+  34   1        conf.Pin = GPIO_Pin_0;
+  35   1        GPIO_Inilize(GPIO_P2, &conf);
+  36   1        
+  37   1        conf.Pin = GPIO_Pin_0;
+  38   1        GPIO_Inilize(GPIO_P4, &conf);
+  39   1      }
+  40          
+  41          void main() {
+  42   1        u8 buf[] = {0xfe, 0x12, 0x34, 0x56, 0x70, 0x9a, 0xbc, 0xd0};
+  43   1        OLED12864_Init();
+  44   1        OLED_ShowString(0, 0, "121212121212");
+  45   1        OLED_ShowString8(0, 2, "123ABC.,m<>?abcdefghijkl");
+  46   1        OLED_ShowHexBuf8(0, 4, buf, 8);
+  47   1        
+  48   1        MOTOR_GPIO_Config();
+  49   1        P_VM2_RZ7899_I1 = 1;
+  50   1        P_VM2_RZ7899_I2 = 0;
+  51   1        P_VM2_DRV8833_I1 = 1;
+  52   1        P_VM2_DRV8833_I2 = 0;
+  53   1        P_VM2_DRV8833_I3 = 1;
+  54   1        P_VM2_DRV8833_I4 = 0;
+C51 COMPILER V9.60.7.0   MAIN                                                              06/12/2023 14:54:46 PAGE 2   
+
+  55   1      
+  56   1        while(1) {
+  57   2        }
+  58   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    174    ----
+   CONSTANT SIZE    =     46    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      12
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

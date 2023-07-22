@@ -1,0 +1,154 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              06/23/2023 17:34:13 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\
+                    -main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "stc8a8k64d4.H"
+   2          #include "stc8a_gpio.H"
+   3          #include "stc8a_spi.h"
+   4          #include "stc8a_nvic.h"
+   5          #include "typedef.h"
+   6          #include "oled12864.h"
+   7          #include "uart.h"
+   8          #include "stc8a_adc.h"
+   9          #include "stc8a_switch.h"
+  10          #include "dtos.h"
+  11          #include "G01_S.h"
+  12          
+  13          bit g_Rec = 1;
+  14          u8 outL = 0;
+  15          
+  16          void OLED_GPIO_Config() {
+  17   1        GPIO_InitTypeDef conf;
+  18   1        conf.Mode = GPIO_OUT_PP;
+  19   1        conf.Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4;
+  20   1        GPIO_Inilize(GPIO_P4, &conf);
+  21   1      }
+  22          
+  23          void OLED12864_Init() {
+  24   1        OLED_GPIO_Config();
+  25   1        OLED_Init();
+  26   1      }
+  27          
+  28          void MOTOR_GPIO_Config() {
+  29   1        GPIO_InitTypeDef conf;
+  30   1        conf.Mode = GPIO_PullUp;
+  31   1        
+  32   1        conf.Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3;
+  33   1        GPIO_Inilize(GPIO_P2, &conf);
+  34   1      }
+  35          
+  36          void main() {
+  37   1        int someNumber = 0;
+  38   1        bit exist;
+  39   1        
+  40   1        OLED12864_Init();
+  41   1      
+  42   1        NRF24L01_GPIO_config();
+  43   1        NRF24L01_Gpio_Init();
+  44   1      
+  45   1        OLED_ShowString8(0, 0, "CHECK MODULE...");
+  46   1        exist = NRF24L01_check();
+  47   1        
+  48   1        exist = NRF24L01_check();
+  49   1        if (exist) {
+  50   2          OLED_ShowString8(0, outL, "G01-S Online");
+  51   2        } else {
+  52   2          OLED_ShowString8(0, outL, "G01-S Offline");
+  53   2          while (1);
+  54   2        }
+C51 COMPILER V9.60.7.0   MAIN                                                              06/23/2023 17:34:13 PAGE 2   
+
+  55   1        outL++;
+  56   1        
+  57   1        RF24L01_Init();
+  58   1        _nop_();_nop_();_nop_();_nop_();_nop_();
+  59   1      
+  60   1        if (g_Rec) {
+  61   2          OLED_ShowString8(0, outL, "Set MODE_RX");
+  62   2          RF24L01_Set_Mode(MODE_RX); //接收模式
+  63   2          _nop_();_nop_();_nop_();_nop_();_nop_();
+  64   2        } else {
+  65   2          OLED_ShowString8(0, outL, "Set MODE_TX");
+  66   2          RF24L01_Set_Mode(MODE_TX); //发送模式
+  67   2          _nop_();_nop_();_nop_();_nop_();_nop_();
+  68   2        }
+  69   1        outL++;
+  70   1      
+  71   1        while(1) {
+  72   2          u8 outLL = outL;
+  73   2          xdata uint8_t res;
+  74   2          xdata uint8_t tx[1];
+  75   2          xdata uint8_t numStr[10];
+  76   2          xdata uint8_t str[20];
+  77   2      
+  78   2          if (g_Rec) {
+  79   3            xdata uint8_t rx;
+  80   3            xdata uint8_t g_rece[8];
+  81   3            u8 i;
+  82   3            sprintf(str, "Receiving...");
+  83   3            OLED_ShowString8(0, outLL, str);
+  84   3            outLL++;
+  85   3            rx = NRF24L01_RxPacket(g_rece); //接收字节
+  86   3      
+  87   3            if (rx != 0) {
+  88   4              uintToS(rx, numStr, 10);
+  89   4              sprintf(str, "Received: %s   ", numStr);
+  90   4              OLED_ShowString8(0, outLL, str);
+  91   4              outLL++;
+  92   4              
+  93   4              sprintf(str, "d: ");
+  94   4              for (i = 0; i < rx; ++i) {
+  95   5                u8 d = g_rece[i];
+  96   5                uintToS(d, numStr, 10);
+  97   5                sprintf(str, "%s %s", str, numStr);
+  98   5              }
+  99   4              sprintf(str, "%s    ", str);
+ 100   4              OLED_ShowString8(0, outLL, str);
+ 101   4              outLL++;
+ 102   4            }
+ 103   3          } else {
+ 104   3            tx[0] = someNumber;
+ 105   3            intToS(tx[0], numStr, 10);
+ 106   3            sprintf(str, "Sending %s   ", numStr);
+ 107   3            OLED_ShowString8(0, outLL, str);
+ 108   3            outLL++;
+ 109   3            res = NRF24L01_TxPacket((uint8_t *) tx, 1);
+ 110   3            if (res == TX_OK) {
+ 111   4              sprintf(str, "SUCCEES");
+ 112   4            } else {
+ 113   4              sprintf(str, "Failed");
+ 114   4            }
+ 115   3            OLED_ShowString8(0, outLL, str);
+ 116   3            outLL++;
+C51 COMPILER V9.60.7.0   MAIN                                                              06/23/2023 17:34:13 PAGE 3   
+
+ 117   3      
+ 118   3            someNumber++;
+ 119   3            if (someNumber > 100) {
+ 120   4              someNumber = 0;
+ 121   4            }
+ 122   3            
+ 123   3            delay_ms(3000);
+ 124   3          }
+ 125   2        }
+ 126   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    581    ----
+   CONSTANT SIZE    =    142    ----
+   XDATA SIZE       =   ----      41
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1       9
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

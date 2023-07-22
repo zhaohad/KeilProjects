@@ -1,0 +1,136 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              05/13/2023 19:30:41 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\
+                    -main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "STC8A8K64D4.H"
+   2          #include "STC8A_GPIO.H"
+   3          #include "typedef.h"
+   4          #include "G01_S.h"
+   5          #include "oled12864.h"
+   6          #include "stdio.h"
+   7          #include "dtos.h"
+   8          
+   9          bit g_Rec = 1;
+  10          u8 outL = 0;
+  11          
+  12          void GPIO_LED() {
+  13   1        GPIO_InitTypeDef conf;
+  14   1        conf.Mode = GPIO_OUT_PP;
+  15   1        conf.Pin = GPIO_Pin_0 | GPIO_Pin_1;
+  16   1        GPIO_Inilize(GPIO_P0, &conf);
+  17   1      }
+  18          
+  19          void main() {
+  20   1        int someNumber = 0;
+  21   1        bit exist;
+  22   1        GPIO_LED();
+  23   1        NRF24L01_GPIO_config();
+  24   1        NRF24L01_Gpio_Init();
+  25   1        
+  26   1        OLED_Init();
+  27   1        
+  28   1        exist = NRF24L01_check();
+  29   1        if (exist) {
+  30   2          P_LED1 = 0;
+  31   2          OLED_ShowString8(0, outL, "G01-S Online");
+  32   2        } else {
+  33   2          OLED_ShowString8(0, outL, "G01-S Offline");
+  34   2          while (1);
+  35   2        }
+  36   1        outL++;
+  37   1        
+  38   1        RF24L01_Init();
+  39   1        _nop_();_nop_();_nop_();_nop_();_nop_();
+  40   1        
+  41   1        if (g_Rec) {
+  42   2          OLED_ShowString8(0, outL, "Set MODE_RX");
+  43   2          RF24L01_Set_Mode(MODE_RX); //接收模式
+  44   2          _nop_();_nop_();_nop_();_nop_();_nop_();
+  45   2          P_LED2 = 0;
+  46   2        } else {
+  47   2          OLED_ShowString8(0, outL, "Set MODE_TX");
+  48   2          RF24L01_Set_Mode(MODE_TX); //发送模式
+  49   2          _nop_();_nop_();_nop_();_nop_();_nop_();
+  50   2        }
+  51   1        outL++;
+  52   1      
+  53   1        while(1) {
+  54   2          u8 outLL = outL;
+C51 COMPILER V9.60.7.0   MAIN                                                              05/13/2023 19:30:41 PAGE 2   
+
+  55   2          uint8_t res;
+  56   2          uint8_t tx[1];
+  57   2          uint8_t numStr[10];
+  58   2          uint8_t str[20];
+  59   2      
+  60   2          if (g_Rec) {
+  61   3            uint8_t rx;
+  62   3            uint8_t g_rece[8];
+  63   3            u8 i;
+  64   3            sprintf(str, "Receiving...");
+  65   3            OLED_ShowString8(0, outLL, str);
+  66   3            outLL++;
+  67   3            rx = NRF24L01_RxPacket(g_rece); //接收字节
+  68   3      
+  69   3            if (rx != 0) {
+  70   4              uintToS(rx, numStr, 10);
+  71   4              sprintf(str, "Received: %s   ", numStr);
+  72   4              OLED_ShowString8(0, outLL, str);
+  73   4              outLL++;
+  74   4              
+  75   4              sprintf(str, "d: ");
+  76   4              for (i = 0; i < rx; ++i) {
+  77   5                u8 d = g_rece[i];
+  78   5                uintToS(d, numStr, 10);
+  79   5                sprintf(str, "%s %s", str, numStr);
+  80   5              }
+  81   4              sprintf(str, "%s    ", str);
+  82   4              OLED_ShowString8(0, outLL, str);
+  83   4              outLL++;
+  84   4            }
+  85   3          } else {
+  86   3            tx[0] = someNumber;
+  87   3            intToS(tx[0], numStr, 10);
+  88   3            sprintf(str, "Sending %s   ", numStr);
+  89   3            OLED_ShowString8(0, outLL, str);
+  90   3            outLL++;
+  91   3            res = NRF24L01_TxPacket((uint8_t *) tx, 1);
+  92   3            if (res == TX_OK) {
+  93   4              sprintf(str, "SUCCEES");
+  94   4            } else {
+  95   4              sprintf(str, "Failed");
+  96   4            }
+  97   3            OLED_ShowString8(0, outLL, str);
+  98   3            outLL++;
+  99   3      
+ 100   3            someNumber++;
+ 101   3            if (someNumber > 100) {
+ 102   4              someNumber = 0;
+ 103   4            }
+ 104   3            
+ 105   3            delay_ms(3000);
+ 106   3          }
+ 107   2        }
+ 108   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    541    ----
+   CONSTANT SIZE    =    126    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1      48
+C51 COMPILER V9.60.7.0   MAIN                                                              05/13/2023 19:30:41 PAGE 3   
+
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

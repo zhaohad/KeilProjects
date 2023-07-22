@@ -1,9 +1,9 @@
-C51 COMPILER V9.60.0.0   MAIN                                                              11/19/2022 14:57:12 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              07/09/2023 14:26:16 PAGE 1   
 
 
-C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
 OBJECT MODULE PLACED IN .\Objects\main.obj
-COMPILER INVOKED BY: d:\Keil_v5\C51\BIN\C51.EXE src\main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\
                     -main.lst) TABS(2) OBJECT(.\Objects\main.obj)
 
 line level    source
@@ -62,7 +62,7 @@ line level    source
   50   1        UART_Configuration(UART1, &COMx_InitStructure); //初始化串口2 USART1,USART2,USART3,USART4
   51   1        NVIC_UART1_Init(ENABLE,Priority_1); //中断使能, ENABLE/DISABLE; 优先级(低到高) Priority_0,Priority_1,Prio
              -rity_2,Priority_3
-C51 COMPILER V9.60.0.0   MAIN                                                              11/19/2022 14:57:12 PAGE 2   
+C51 COMPILER V9.60.7.0   MAIN                                                              07/09/2023 14:26:16 PAGE 2   
 
   52   1      }
   53          

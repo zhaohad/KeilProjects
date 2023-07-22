@@ -1,0 +1,487 @@
+Archive member included because of file (symbol)
+
+d:/usrsoft/icc7/bin/../lib/gcc/avr/4.3.3/avr4\libgcc.a(_exit.o)
+                              d:/usrsoft/icc7/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr4/crtm8.o (exit)
+d:/usrsoft/icc7/bin/../lib/gcc/avr/4.3.3/avr4\libgcc.a(_copy_data.o)
+                              main.o (__do_copy_data)
+d:/usrsoft/icc7/bin/../lib/gcc/avr/4.3.3/avr4\libgcc.a(_clear_bss.o)
+                              main.o (__do_clear_bss)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+text             0x00000000         0x00002000         xr
+data             0x00800060         0x0000ffa0         rw !x
+eeprom           0x00810000         0x00010000         rw !x
+fuse             0x00820000         0x00000400         rw !x
+lock             0x00830000         0x00000400         rw !x
+signature        0x00840000         0x00000400         rw !x
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD d:/usrsoft/icc7/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr4/crtm8.o
+LOAD main.o
+LOAD drv_led.o
+LOAD drv_button.o
+LOAD drv_delay.o
+LOAD drv_spi.o
+LOAD drv_uart.o
+LOAD drv_RF24L01.o
+LOAD d:/usrsoft/icc7/bin/../lib/gcc/avr/4.3.3/avr4\libgcc.a
+LOAD d:/usrsoft/icc7/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr4\libc.a
+LOAD d:/usrsoft/icc7/bin/../lib/gcc/avr/4.3.3/avr4\libgcc.a
+
+.hash
+ *(.hash)
+
+.dynsym
+ *(.dynsym)
+
+.dynstr
+ *(.dynstr)
+
+.gnu.version
+ *(.gnu.version)
+
+.gnu.version_d
+ *(.gnu.version_d)
+
+.gnu.version_r
+ *(.gnu.version_r)
+
+.rel.init
+ *(.rel.init)
+
+.rela.init
+ *(.rela.init)
+
+.rel.text
+ *(.rel.text)
+ *(.rel.text.*)
+ *(.rel.gnu.linkonce.t*)
+
+.rela.text
+ *(.rela.text)
+ *(.rela.text.*)
+ *(.rela.gnu.linkonce.t*)
+
+.rel.fini
+ *(.rel.fini)
+
+.rela.fini
+ *(.rela.fini)
+
+.rel.rodata
+ *(.rel.rodata)
+ *(.rel.rodata.*)
+ *(.rel.gnu.linkonce.r*)
+
+.rela.rodata
+ *(.rela.rodata)
+ *(.rela.rodata.*)
+ *(.rela.gnu.linkonce.r*)
+
+.rel.data
+ *(.rel.data)
+ *(.rel.data.*)
+ *(.rel.gnu.linkonce.d*)
+
+.rela.data
+ *(.rela.data)
+ *(.rela.data.*)
+ *(.rela.gnu.linkonce.d*)
+
+.rel.ctors
+ *(.rel.ctors)
+
+.rela.ctors
+ *(.rela.ctors)
+
+.rel.dtors
+ *(.rel.dtors)
+
+.rela.dtors
+ *(.rela.dtors)
+
+.rel.got
+ *(.rel.got)
+
+.rela.got
+ *(.rela.got)
+
+.rel.bss
+ *(.rel.bss)
+
+.rela.bss
+ *(.rela.bss)
+
+.rel.plt
+ *(.rel.plt)
+
+.rela.plt
+ *(.rela.plt)
+
+.text           0x00000000     0x106a
+ *(.vectors)
+ .vectors       0x00000000       0x26 d:/usrsoft/icc7/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr4/crtm8.o
+                0x00000000                __vectors
+                0x00000000                __vector_default
+ *(.vectors)
+ *(.progmem.gcc*)
+ *(.progmem*)
+                0x00000026                . = ALIGN (0x2)
+                0x00000026                __trampolines_start = .
+ *(.trampolines)
+ .trampolines   0x00000026        0x0 linker stubs
+ *(.trampolines*)
+                0x00000026                __trampolines_end = .
+ *(.jumptables)
+ *(.jumptables*)
+ *(.lowtext)
+ *(.lowtext*)
+                0x00000026                __ctors_start = .
+ *(.ctors)
+                0x00000026                __ctors_end = .
+                0x00000026                __dtors_start = .
+ *(.dtors)
+                0x00000026                __dtors_end = .
+ SORT(*)(.ctors)
+ SORT(*)(.dtors)
+ *(.init0)
+ .init0         0x00000026        0x0 d:/usrsoft/icc7/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr4/crtm8.o
+                0x00000026                __init
+ *(.init0)
+ *(.init1)
+ *(.init1)
+ *(.init2)
+ .init2         0x00000026        0xc d:/usrsoft/icc7/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr4/crtm8.o
+ *(.init2)
+ *(.init3)
+ *(.init3)
+ *(.init4)
+ .init4         0x00000032       0x16 d:/usrsoft/icc7/bin/../lib/gcc/avr/4.3.3/avr4\libgcc.a(_copy_data.o)
+                0x00000032                __do_copy_data
+ .init4         0x00000048       0x10 d:/usrsoft/icc7/bin/../lib/gcc/avr/4.3.3/avr4\libgcc.a(_clear_bss.o)
+                0x00000048                __do_clear_bss
+ *(.init4)
+ *(.init5)
+ *(.init5)
+ *(.init6)
+ *(.init6)
+ *(.init7)
+ *(.init7)
+ *(.init8)
+ *(.init8)
+ *(.init9)
+ .init9         0x00000058        0x4 d:/usrsoft/icc7/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr4/crtm8.o
+ *(.init9)
+ *(.text)
+ .text          0x0000005c        0x2 d:/usrsoft/icc7/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr4/crtm8.o
+                0x0000005c                __vector_1
+                0x0000005c                __vector_12
+                0x0000005c                __bad_interrupt
+                0x0000005c                __vector_6
+                0x0000005c                __vector_3
+                0x0000005c                __vector_11
+                0x0000005c                __vector_13
+                0x0000005c                __vector_17
+                0x0000005c                __vector_7
+                0x0000005c                __vector_5
+                0x0000005c                __vector_4
+                0x0000005c                __vector_9
+                0x0000005c                __vector_2
+                0x0000005c                __vector_15
+                0x0000005c                __vector_8
+                0x0000005c                __vector_14
+                0x0000005c                __vector_10
+                0x0000005c                __vector_16
+                0x0000005c                __vector_18
+ .text          0x0000005e       0x5e main.o
+                0x0000005e                main
+ .text          0x000000bc       0xf2 drv_led.o
+                0x00000102                drv_led_on
+                0x00000172                drv_led_flashing
+                0x0000013a                drv_led_off
+                0x000000bc                drv_led_init
+ .text          0x000001ae       0x78 drv_button.o
+                0x000001d8                drv_button_check
+                0x000001ae                drv_button_init
+ .text          0x00000226       0xde drv_delay.o
+                0x000002c6                drv_delay_ms
+ .text          0x00000304      0x178 drv_spi.o
+                0x00000304                drv_spi_init
+                0x000003ec                drv_spi_read_write_string
+                0x000003c0                drv_spi_read_write_byte
+ .text          0x0000047c      0x174 drv_uart.o
+                0x00000508                drv_uart_tx_bytes
+                0x0000047c                drv_uart_init
+                0x0000056c                drv_uart_rx_bytes
+ .text          0x000005f0      0xa76 drv_RF24L01.o
+                0x00000a54                NRF24L01_Write_Tx_Payload_InAck
+                0x000008d8                NRF24L01_Read_Rx_Payload
+                0x00000e70                NRF24L01_RxPacket
+                0x00000b68                NRF24L01_Set_Speed
+                0x00000780                NRF24L01_Flush_Rx_Fifo
+                0x00000bba                NRF24L01_Set_Power
+                0x000005f0                NRF24L01_Read_Reg
+                0x0000062e                NRF24L01_Read_Buf
+                0x0000080a                NRF24L01_Read_Status_Register
+                0x000006e4                NRF24L01_Write_Buf
+                0x00000f38                NRF24L01_Gpio_Init
+                0x00000752                NRF24L01_Flush_Tx_Fifo
+                0x00000c2e                RF24LL01_Write_Hopping_Point
+                0x00000c4e                NRF24L01_check
+                0x00000d32                RF24L01_Set_Mode
+                0x0000095a                NRF24L01_Write_Tx_Payload_Ack
+                0x00000840                NRF24L01_Clear_IRQ_Flag
+                0x0000088c                RF24L01_Read_IRQ_Status
+                0x00000b0e                NRF24L01_Set_RxAddr
+                0x00000ad0                NRF24L01_Set_TxAddr
+                0x000009da                NRF24L01_Write_Tx_Payload_NoAck
+                0x000007ae                NRF24L01_Reuse_Tx_Payload
+                0x00000d70                NRF24L01_TxPacket
+                0x00000f9a                RF24L01_Init
+                0x000007dc                NRF24L01_Nop
+                0x0000089e                NRF24L01_Read_Top_Fifo_Width
+                0x000006a6                NRF24L01_Write_Reg
+ .text          0x00001066        0x0 d:/usrsoft/icc7/bin/../lib/gcc/avr/4.3.3/avr4\libgcc.a(_exit.o)
+ .text          0x00001066        0x0 d:/usrsoft/icc7/bin/../lib/gcc/avr/4.3.3/avr4\libgcc.a(_copy_data.o)
+ .text          0x00001066        0x0 d:/usrsoft/icc7/bin/../lib/gcc/avr/4.3.3/avr4\libgcc.a(_clear_bss.o)
+                0x00001066                . = ALIGN (0x2)
+ *(.text.*)
+ .text.libgcc   0x00001066        0x0 d:/usrsoft/icc7/bin/../lib/gcc/avr/4.3.3/avr4\libgcc.a(_exit.o)
+ .text.libgcc   0x00001066        0x0 d:/usrsoft/icc7/bin/../lib/gcc/avr/4.3.3/avr4\libgcc.a(_copy_data.o)
+ .text.libgcc   0x00001066        0x0 d:/usrsoft/icc7/bin/../lib/gcc/avr/4.3.3/avr4\libgcc.a(_clear_bss.o)
+                0x00001066                . = ALIGN (0x2)
+ *(.fini9)
+ .fini9         0x00001066        0x0 d:/usrsoft/icc7/bin/../lib/gcc/avr/4.3.3/avr4\libgcc.a(_exit.o)
+                0x00001066                exit
+                0x00001066                _exit
+ *(.fini9)
+ *(.fini8)
+ *(.fini8)
+ *(.fini7)
+ *(.fini7)
+ *(.fini6)
+ *(.fini6)
+ *(.fini5)
+ *(.fini5)
+ *(.fini4)
+ *(.fini4)
+ *(.fini3)
+ *(.fini3)
+ *(.fini2)
+ *(.fini2)
+ *(.fini1)
+ *(.fini1)
+ *(.fini0)
+ .fini0         0x00001066        0x4 d:/usrsoft/icc7/bin/../lib/gcc/avr/4.3.3/avr4\libgcc.a(_exit.o)
+ *(.fini0)
+                0x0000106a                _etext = .
+
+.data           0x00800060       0x38 load address 0x0000106a
+                0x00800060                PROVIDE (__data_start, .)
+ *(.data)
+ .data          0x00800060        0x0 d:/usrsoft/icc7/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr4/crtm8.o
+ .data          0x00800060       0x13 main.o
+                0x00800069                g_Ashining
+                0x0080006b                g_test
+ .data          0x00800073        0x0 drv_led.o
+ .data          0x00800073        0x0 drv_button.o
+ .data          0x00800073        0x0 drv_delay.o
+ .data          0x00800073        0x0 drv_spi.o
+ .data          0x00800073        0x0 drv_uart.o
+ .data          0x00800073       0x25 drv_RF24L01.o
+                0x0080008c                g_ErrorString
+ .data          0x00800098        0x0 d:/usrsoft/icc7/bin/../lib/gcc/avr/4.3.3/avr4\libgcc.a(_exit.o)
+ .data          0x00800098        0x0 d:/usrsoft/icc7/bin/../lib/gcc/avr/4.3.3/avr4\libgcc.a(_copy_data.o)
+ .data          0x00800098        0x0 d:/usrsoft/icc7/bin/../lib/gcc/avr/4.3.3/avr4\libgcc.a(_clear_bss.o)
+ *(.data*)
+ *(.rodata)
+ *(.rodata*)
+ *(.gnu.linkonce.d*)
+                0x00800098                . = ALIGN (0x2)
+                0x00800098                _edata = .
+                0x00800098                PROVIDE (__data_end, .)
+
+.bss            0x00800098       0x86
+                0x00800098                PROVIDE (__bss_start, .)
+ *(.bss)
+ .bss           0x00800098        0x0 d:/usrsoft/icc7/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr4/crtm8.o
+ .bss           0x00800098       0x86 main.o
+                0x00800098                g_TxMode
+                0x008000fe                g_RF24L01RxBuffer
+                0x0080009a                g_UartRxBuffer
+                0x00800099                g_UartRxFlag
+ .bss           0x0080011e        0x0 drv_led.o
+ .bss           0x0080011e        0x0 drv_button.o
+ .bss           0x0080011e        0x0 drv_delay.o
+ .bss           0x0080011e        0x0 drv_spi.o
+ .bss           0x0080011e        0x0 drv_uart.o
+ .bss           0x0080011e        0x0 drv_RF24L01.o
+ .bss           0x0080011e        0x0 d:/usrsoft/icc7/bin/../lib/gcc/avr/4.3.3/avr4\libgcc.a(_exit.o)
+ .bss           0x0080011e        0x0 d:/usrsoft/icc7/bin/../lib/gcc/avr/4.3.3/avr4\libgcc.a(_copy_data.o)
+ .bss           0x0080011e        0x0 d:/usrsoft/icc7/bin/../lib/gcc/avr/4.3.3/avr4\libgcc.a(_clear_bss.o)
+ *(.bss*)
+ *(COMMON)
+                0x0080011e                PROVIDE (__bss_end, .)
+                0x0000106a                __data_load_start = LOADADDR (.data)
+                0x000010a2                __data_load_end = (__data_load_start + SIZEOF (.data))
+
+.noinit         0x0080011e        0x0
+                0x0080011e                PROVIDE (__noinit_start, .)
+ *(.noinit*)
+                0x0080011e                PROVIDE (__noinit_end, .)
+                0x0080011e                _end = .
+                0x0080011e                PROVIDE (__heap_start, .)
+
+.eeprom         0x00810000        0x0
+ *(.eeprom*)
+                0x00810000                __eeprom_end = .
+
+.fuse
+ *(.fuse)
+ *(.lfuse)
+ *(.hfuse)
+ *(.efuse)
+
+.lock
+ *(.lock*)
+
+.signature
+ *(.signature*)
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+.stab.excl
+ *(.stab.excl)
+
+.stab.exclstr
+ *(.stab.exclstr)
+
+.stab.index
+ *(.stab.index)
+
+.stab.indexstr
+ *(.stab.indexstr)
+
+.comment
+ *(.comment)
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges  0x00000000       0xe0
+ *(.debug_aranges)
+ .debug_aranges
+                0x00000000       0x20 main.o
+ .debug_aranges
+                0x00000020       0x20 drv_led.o
+ .debug_aranges
+                0x00000040       0x20 drv_button.o
+ .debug_aranges
+                0x00000060       0x20 drv_delay.o
+ .debug_aranges
+                0x00000080       0x20 drv_spi.o
+ .debug_aranges
+                0x000000a0       0x20 drv_uart.o
+ .debug_aranges
+                0x000000c0       0x20 drv_RF24L01.o
+
+.debug_pubnames
+                0x00000000      0x4be
+ *(.debug_pubnames)
+ .debug_pubnames
+                0x00000000       0x7c main.o
+ .debug_pubnames
+                0x0000007c       0x57 drv_led.o
+ .debug_pubnames
+                0x000000d3       0x3b drv_button.o
+ .debug_pubnames
+                0x0000010e       0x23 drv_delay.o
+ .debug_pubnames
+                0x00000131       0x5d drv_spi.o
+ .debug_pubnames
+                0x0000018e       0x50 drv_uart.o
+ .debug_pubnames
+                0x000001de      0x2e0 drv_RF24L01.o
+
+.debug_info     0x00000000      0xccb
+ *(.debug_info)
+ .debug_info    0x00000000      0x175 main.o
+ .debug_info    0x00000175      0x120 drv_led.o
+ .debug_info    0x00000295       0x95 drv_button.o
+ .debug_info    0x0000032a       0xc9 drv_delay.o
+ .debug_info    0x000003f3       0xfc drv_spi.o
+ .debug_info    0x000004ef      0x105 drv_uart.o
+ .debug_info    0x000005f4      0x6d7 drv_RF24L01.o
+ *(.gnu.linkonce.wi.*)
+
+.debug_abbrev   0x00000000      0x509
+ *(.debug_abbrev)
+ .debug_abbrev  0x00000000       0xb3 main.o
+ .debug_abbrev  0x000000b3       0x9f drv_led.o
+ .debug_abbrev  0x00000152       0x63 drv_button.o
+ .debug_abbrev  0x000001b5       0x7d drv_delay.o
+ .debug_abbrev  0x00000232       0x94 drv_spi.o
+ .debug_abbrev  0x000002c6       0x9f drv_uart.o
+ .debug_abbrev  0x00000365      0x1a4 drv_RF24L01.o
+
+.debug_line     0x00000000     0x1215
+ *(.debug_line)
+ .debug_line    0x00000000      0x297 main.o
+ .debug_line    0x00000297      0x1bc drv_led.o
+ .debug_line    0x00000453       0xf8 drv_button.o
+ .debug_line    0x0000054b       0xf7 drv_delay.o
+ .debug_line    0x00000642      0x17d drv_spi.o
+ .debug_line    0x000007bf      0x18e drv_uart.o
+ .debug_line    0x0000094d      0x8c8 drv_RF24L01.o
+
+.debug_frame    0x00000000      0x310
+ *(.debug_frame)
+ .debug_frame   0x00000000       0x20 main.o
+ .debug_frame   0x00000020       0x50 drv_led.o
+ .debug_frame   0x00000070       0x30 drv_button.o
+ .debug_frame   0x000000a0       0x30 drv_delay.o
+ .debug_frame   0x000000d0       0x40 drv_spi.o
+ .debug_frame   0x00000110       0x40 drv_uart.o
+ .debug_frame   0x00000150      0x1c0 drv_RF24L01.o
+
+.debug_str      0x00000000      0x74f
+ *(.debug_str)
+ .debug_str     0x00000000      0x16c main.o
+                                0x1ae (size before relaxing)
+ .debug_str     0x0000016c       0x8b drv_led.o
+                                0x1a6 (size before relaxing)
+ .debug_str     0x000001f7       0x4a drv_button.o
+                                0x153 (size before relaxing)
+ .debug_str     0x00000241       0x66 drv_delay.o
+                                0x167 (size before relaxing)
+ .debug_str     0x000002a7       0x83 drv_spi.o
+                                0x19c (size before relaxing)
+ .debug_str     0x0000032a       0x7c drv_uart.o
+                                0x19e (size before relaxing)
+ .debug_str     0x000003a6      0x3a9 drv_RF24L01.o
+                                0x51d (size before relaxing)
+
+.debug_loc
+ *(.debug_loc)
+
+.debug_macinfo
+ *(.debug_macinfo)
+OUTPUT(Project_RF24L01.elf elf32-avr)
+LOAD linker stubs
