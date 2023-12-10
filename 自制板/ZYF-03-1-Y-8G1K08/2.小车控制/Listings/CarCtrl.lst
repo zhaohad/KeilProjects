@@ -1,0 +1,228 @@
+C51 COMPILER V9.60.7.0   CARCTRL                                                           09/17/2023 21:02:11 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE CARCTRL
+OBJECT MODULE PLACED IN .\Objects\CarCtrl.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\CarCtrl.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listin
+                    -gs\CarCtrl.lst) TABS(2) OBJECT(.\Objects\CarCtrl.obj)
+
+line level    source
+
+   1          #include "CarCtrl.h"
+   2          #include "delay.h"
+   3          #include "timer.h"
+   4          
+   5          #define MAX_MOTOR_STEP 2965
+   6          #define ROLL_BACK_STEP 900
+   7          #define TURN_RIGHT_STEP 900
+   8          #define TURN_LEFT_STEP 900
+   9          #define MOTOR_CYCLE_STEP 8
+  10          #define STATUS_TURN_NONE 0
+  11          #define STATUS_TURN_BACK 1
+  12          #define STATUS_TURN_RIGHT 2
+  13          #define STATUS_TURN_LEFT 3
+  14          
+  15          #define SPEED_MAX 10
+  16          #define SPEED_MIN 4
+  17          
+  18          #define GO_STOP 0
+  19          #define GO_FORWARD 1
+  20          #define GO_BACKWARD 2
+  21          
+  22          xdata u8 gcarctrl_status_turn = STATUS_TURN_NONE;
+  23          xdata u8 gcarctrl_speed = 5;
+  24          xdata u8 gcarctrl_pwm_counter = 0;
+  25          xdata u8 gcarctrl_goward = GO_STOP;
+  26          
+  27          void Timer2Callback() {
+  28   1        gcarctrl_pwm_counter = (gcarctrl_pwm_counter + 1) % SPEED_MAX;
+  29   1        if (gcarctrl_pwm_counter < gcarctrl_speed) {
+  30   2          if (gcarctrl_goward == GO_FORWARD) {
+  31   3            M1 = 1;
+  32   3            M2 = 0;
+  33   3          } else if (gcarctrl_goward == GO_BACKWARD) {
+  34   3            M1 = 0;
+  35   3            M2 = 1;
+  36   3          }
+  37   2        } else {
+  38   2          M1 = 0;
+  39   2          M2 = 0;
+  40   2        }
+  41   1      }
+  42          
+  43          void Timer_Config() {
+  44   1        TIM_InitTypeDef TIM_InitStructure; //½á¹¹¶¨Òå
+  45   1        TIM_InitStructure.TIM_Interrupt = ENABLE; //ÖÐ¶ÏÊÇ·ñÔÊÐí, ENABLE»òDISABLE. (×¢Òâ: Timer2¹Ì¶¨Îª16Î»×Ô¶¯ÖØ×
+             -°, ÖÐ¶Ï¹Ì¶¨ÎªµÍÓÅÏÈ¼¶)
+  46   1        TIM_InitStructure.TIM_ClkSource = TIM_CLOCK_1T; //Ö¸¶¨Ê±ÖÓÔ´, TIM_CLOCK_1T,TIM_CLOCK_12T,TIM_CLOCK_Ext
+  47   1        TIM_InitStructure.TIM_ClkOut = DISABLE; //ÊÇ·ñÊä³ö¸ßËÙÂö³å, ENABLE»òDISABLE
+  48   1        // TIM_InitStructure.TIM_Value = 65536UL - (MAIN_Fosc / 1000); //³õÖµ
+  49   1        TIM_InitStructure.TIM_Value = 65536UL - 1000; //³õÖµ
+  50   1        TIM_InitStructure.TIM_Run = ENABLE; //ÊÇ·ñ³õÊ¼»¯ºóÆô¶¯¶¨Ê±Æ÷, ENABLE»òDISABLE
+  51   1        Timer_Inilize(Timer2, &TIM_InitStructure); //³õÊ¼»¯Timer2   Timer0,Timer1,Timer2,Timer3,Timer4
+  52   1        
+  53   1        SET_INTERRUPT_CALLBACK(Timer2Callback);
+C51 COMPILER V9.60.7.0   CARCTRL                                                           09/17/2023 21:02:11 PAGE 2   
+
+  54   1      }
+  55          
+  56          void CarControl_Init() {
+  57   1        Timer_Config();
+  58   1      }
+  59          
+  60          void Motor_Step(unsigned int step, bit forward) {
+  61   1        u8 i = 0;
+  62   1        u8 n;
+  63   1        while(1) {
+  64   2          for (n = 0; n < 200; ++n) {
+  65   3            _nop_();_nop_();_nop_();_nop_();_nop_();
+  66   3          }
+  67   2          if (step == 0) {
+  68   3            break;
+  69   3          }
+  70   2          --step;
+  71   2          if ((i % MOTOR_CYCLE_STEP) == 0) {
+  72   3            M_A1 = 1;
+  73   3            M_B1 = 0;
+  74   3            M_A2 = 0;
+  75   3            M_B2 = 0;
+  76   3          } else if ((i % MOTOR_CYCLE_STEP) == 1) {
+  77   3            M_A1 = 1;
+  78   3            M_B1 = 1;
+  79   3            M_A2 = 0;
+  80   3            M_B2 = 0;
+  81   3          } else if ((i % MOTOR_CYCLE_STEP) == 2) {
+  82   3            M_A1 = 0;
+  83   3            M_B1 = 1;
+  84   3            M_A2 = 0;
+  85   3            M_B2 = 0;
+  86   3          } else if ((i % MOTOR_CYCLE_STEP) == 3) {
+  87   3            M_A1 = 0;
+  88   3            M_B1 = 1;
+  89   3            M_A2 = 1;
+  90   3            M_B2 = 0;
+  91   3          } else if ((i % MOTOR_CYCLE_STEP) == 4) {
+  92   3            M_A1 = 0;
+  93   3            M_B1 = 0;
+  94   3            M_A2 = 1;
+  95   3            M_B2 = 0;
+  96   3          } else if ((i % MOTOR_CYCLE_STEP) == 5) {
+  97   3            M_A1 = 0;
+  98   3            M_B1 = 0;
+  99   3            M_A2 = 1;
+ 100   3            M_B2 = 1;
+ 101   3          } else if ((i % MOTOR_CYCLE_STEP) == 6) {
+ 102   3            M_A1 = 0;
+ 103   3            M_B1 = 0;
+ 104   3            M_A2 = 0;
+ 105   3            M_B2 = 1;
+ 106   3          } else if ((i % MOTOR_CYCLE_STEP) == 7) {
+ 107   3            M_A1 = 1;
+ 108   3            M_B1 = 0;
+ 109   3            M_A2 = 0;
+ 110   3            M_B2 = 1;
+ 111   3          }
+ 112   2          if (forward) {
+ 113   3            --i;
+ 114   3            if (i < 0 || i > MOTOR_CYCLE_STEP) {
+ 115   4              i = MOTOR_CYCLE_STEP - 1;
+C51 COMPILER V9.60.7.0   CARCTRL                                                           09/17/2023 21:02:11 PAGE 3   
+
+ 116   4            }
+ 117   3          } else {
+ 118   3            ++i;
+ 119   3            if (i >= MOTOR_CYCLE_STEP) {
+ 120   4              i = 0;
+ 121   4            }
+ 122   3          }
+ 123   2        }
+ 124   1        M_A1 = 0;
+ 125   1        M_A2 = 0;
+ 126   1        M_B1 = 0;
+ 127   1        M_B2 = 0;
+ 128   1      }
+ 129          
+ 130          void TurnBack() {
+ 131   1        if (gcarctrl_status_turn == STATUS_TURN_LEFT) {
+ 132   2          Motor_Step(TURN_LEFT_STEP, 1);
+ 133   2        } else if (gcarctrl_status_turn == STATUS_TURN_RIGHT) {
+ 134   2          Motor_Step(TURN_RIGHT_STEP, 0);
+ 135   2        } else {
+ 136   2          Motor_Step(ROLL_BACK_STEP * 2, 1);
+ 137   2          Motor_Step(ROLL_BACK_STEP, 0);
+ 138   2        }
+ 139   1      
+ 140   1        M_A1 = 0;
+ 141   1        M_B1 = 0;
+ 142   1        M_A2 = 0;
+ 143   1        M_B2 = 0;
+ 144   1        gcarctrl_status_turn = STATUS_TURN_BACK;
+ 145   1      }
+ 146          
+ 147          void TurnRight() {  
+ 148   1        if (gcarctrl_status_turn == STATUS_TURN_BACK) {
+ 149   2          Motor_Step(TURN_RIGHT_STEP, 1);
+ 150   2        } else if (gcarctrl_status_turn == STATUS_TURN_LEFT) {
+ 151   2          TurnBack();
+ 152   2          Motor_Step(TURN_RIGHT_STEP, 1);
+ 153   2        }
+ 154   1      
+ 155   1        M_A1 = 0;
+ 156   1        M_B1 = 0;
+ 157   1        M_A2 = 0;
+ 158   1        M_B2 = 0;
+ 159   1        gcarctrl_status_turn = STATUS_TURN_RIGHT;
+ 160   1      }
+ 161          
+ 162          void TurnLeft() {
+ 163   1        if (gcarctrl_status_turn == STATUS_TURN_BACK) {
+ 164   2          Motor_Step(TURN_LEFT_STEP, 0);
+ 165   2        } else if (gcarctrl_status_turn == STATUS_TURN_RIGHT) {
+ 166   2          TurnBack();
+ 167   2          Motor_Step(TURN_LEFT_STEP, 0);
+ 168   2        }
+ 169   1      
+ 170   1        M_A1 = 0;
+ 171   1        M_B1 = 0;
+ 172   1        M_A2 = 0;
+ 173   1        M_B2 = 0;
+ 174   1        gcarctrl_status_turn = STATUS_TURN_LEFT;
+ 175   1      }
+ 176          
+ 177          void Motor_Go(bit forward) {
+C51 COMPILER V9.60.7.0   CARCTRL                                                           09/17/2023 21:02:11 PAGE 4   
+
+ 178   1        gcarctrl_goward = forward ? GO_FORWARD : GO_BACKWARD;
+ 179   1        M1 = forward;
+ 180   1        M2 = !M1;
+ 181   1      }
+ 182          
+ 183          void Motor_Stop() {
+ 184   1        gcarctrl_goward = GO_STOP;
+ 185   1        M1 = 0;
+ 186   1        M2 = 0;
+ 187   1      }
+ 188          
+ 189          void SetSpeed(u8 speed) {
+ 190   1        if (speed < SPEED_MIN) {
+ 191   2          gcarctrl_speed = SPEED_MIN;
+ 192   2        } else if (speed > SPEED_MAX) {
+ 193   2          gcarctrl_speed = SPEED_MAX;
+ 194   2        } else {
+ 195   2          gcarctrl_speed = speed;
+ 196   2        }
+ 197   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    443    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      4    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       8
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       2
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

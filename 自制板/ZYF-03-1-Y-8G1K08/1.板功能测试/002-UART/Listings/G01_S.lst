@@ -1,0 +1,374 @@
+C51 COMPILER V9.60.7.0   G01_S                                                             07/09/2023 15:07:59 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE G01_S
+OBJECT MODULE PLACED IN .\Objects\G01_S.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\G01_S.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings
+                    -\G01_S.lst) TABS(2) OBJECT(.\Objects\G01_S.obj)
+
+line level    source
+
+   1          #include "G01_S.h"
+   2          #include "delay.h"
+   3          #include "STC8A_GPIO.h"
+   4          
+   5          /**
+   6            * @brief :NRF24L01针对STC8A8K64D4芯片的GPIO配置
+   7            * @param :无
+   8            * @note  :无
+   9            * @retval:无
+  10            */ 
+  11          void NRF24L01_GPIO_config() {
+  12   1        xdata GPIO_InitTypeDef conf;
+  13   1        conf.Mode = GPIO_PullUp;
+  14   1        conf.Pin = GPIO_Pin_5 | GPIO_Pin_4 | GPIO_Pin_3 | GPIO_Pin_2;
+  15   1        GPIO_Inilize(GPIO_P2, &conf);
+  16   1        
+  17   1        // conf.Mode = GPIO_PullUp;
+  18   1        conf.Pin = GPIO_Pin_1;
+  19   1        GPIO_Inilize(GPIO_P2, &conf);
+  20   1      
+  21   1        conf.Pin = GPIO_Pin_2;
+  22   1        GPIO_Inilize(GPIO_P4, &conf);
+  23   1      }
+  24          
+  25          /**
+  26            * @brief :NRF24L01初始化
+  27            * @param :无
+  28            * @note  :无
+  29            * @retval:无
+  30            */ 
+  31          void NRF24L01_Gpio_Init() {
+  32   1        //引脚配置 部分51单片机不需要 
+  33   1        //CE 配置为输出 IRQ配置为输入
+  34   1        RF24L01_CE = 1;
+  35   1        RF24L01_CE = 0;       //使能设备
+  36   1        RF24L01_IRQ = 1;      //清中断
+  37   1        RF24L01_SET_CSN_HIGH();   //取消SPI片选
+  38   1      }
+  39          
+  40          
+  41          /**
+  42            * @brief :NRF24L01检测
+  43            * @param :无
+  44            * @note  :无
+  45            * @retval:无
+  46            */ 
+  47          bit NRF24L01_check() {
+  48   1        bit exist = 0;
+  49   1        uint8_t cnt = 5;
+  50   1        uint8_t buf[5] = {0XA5, 0XA5, 0XA5, 0XA5, 0XA5};
+  51   1        uint8_t read_buf[5] = {0};
+  52   1         
+  53   1        while(cnt--) {
+  54   2          uint8_t i;
+C51 COMPILER V9.60.7.0   G01_S                                                             07/09/2023 15:07:59 PAGE 2   
+
+  55   2          NRF24L01_Write_Buf(TX_ADDR, buf, 5); //写入5个字节的地址
+  56   2          NRF24L01_Read_Buf(TX_ADDR, read_buf, 5); //读出写入的地址  
+  57   2          for(i = 0; i < 5; i++) {
+  58   3            if(buf[i] != read_buf[i]) {
+  59   4              break; //读出的值和写入的置不同
+  60   4            } 
+  61   3          }
+  62   2      
+  63   2          if(5 == i) {
+  64   3            exist = 1;
+  65   3            break; //读出的字符串与写入的字符串相同，判断为设备存在
+  66   3          }
+  67   2          delay_ms(500);//500MS检测一次
+  68   2        }
+  69   1        return exist;
+  70   1      }
+  71          
+  72          
+  73          /**
+  74            * @brief :NRF24L01写指定长度的数据
+  75            * @param :
+  76            *     @reg:地址
+  77            *     @pBuf:写入的数据地址
+  78            *     @len:数据长度
+  79            * @note  :数据长度不超过255，地址在设备中有效
+  80            * @retval:写状态
+  81            */
+  82          void NRF24L01_Write_Buf(uint8_t RegAddr, uint8_t * pBuf, uint8_t len) {
+  83   1        uint8_t i;
+  84   1        RF24L01_SET_CSN_LOW(); //片选
+  85   1        
+  86   1        spi_read_write_byte(NRF_WRITE_REG | RegAddr); //写命令 地址
+  87   1        for(i = 0; i < len; i++) {
+  88   2          spi_read_write_byte(*(pBuf + i)); //写数据
+  89   2        }
+  90   1          
+  91   1        RF24L01_SET_CSN_HIGH(); //取消片选
+  92   1      }
+  93          
+  94          
+  95          /**
+  96            * @brief :NRF24L01读指定长度的数据
+  97            * @param :
+  98            *     @reg:地址
+  99            *     @pBuf:数据存放地址
+ 100            *     @len:数据长度
+ 101            * @note  :数据长度不超过255，地址在设备中有效
+ 102            * @retval:读取状态
+ 103            */
+ 104          void NRF24L01_Read_Buf(uint8_t RegAddr, uint8_t *pBuf, uint8_t len) {
+ 105   1          uint8_t btmp;
+ 106   1        
+ 107   1          RF24L01_SET_CSN_LOW(); //片选
+ 108   1        
+ 109   1          spi_read_write_byte(NRF_READ_REG | RegAddr); //读命令 地址
+ 110   1          for(btmp = 0; btmp < len; btmp++) {
+ 111   2            *(pBuf + btmp) = spi_read_write_byte(0xFF); //读数据
+ 112   2          }
+ 113   1          RF24L01_SET_CSN_HIGH(); //取消片选
+ 114   1      }
+ 115          
+ 116           /**
+C51 COMPILER V9.60.7.0   G01_S                                                             07/09/2023 15:07:59 PAGE 3   
+
+ 117            * @brief :RF24L01模块初始化
+ 118            * @param :无
+ 119            * @note  :无
+ 120            * @retval:无
+ 121            */
+ 122          void RF24L01_Init() {
+ 123   1        uint8_t addr[5] = {INIT_ADDR};
+ 124   1        RF24L01_SET_CE_HIGH();
+ 125   1        NRF24L01_Clear_IRQ_Flag(IRQ_ALL);
+ 126   1      
+ 127   1        NRF24L01_Write_Reg(DYNPD, (1 << 0)); //使能通道1动态数据长度
+ 128   1        NRF24L01_Write_Reg(FEATRUE, 0x07);
+ 129   1        NRF24L01_Read_Reg(DYNPD);
+ 130   1        NRF24L01_Read_Reg(FEATRUE);
+ 131   1      
+ 132   1        NRF24L01_Write_Reg(CONFIG, /*(1<<MASK_RX_DR) |*/  //接收中断
+ 133   1                                     (1 << EN_CRC)   //使能CRC 1个字节
+ 134   1                                   | (1 << PWR_UP)); //开启设备
+ 135   1        NRF24L01_Write_Reg(EN_AA, (1 << ENAA_P0)); //通道0自动应答
+ 136   1        NRF24L01_Write_Reg(EN_RXADDR, (1 << ERX_P0)); //通道0接收
+ 137   1        NRF24L01_Write_Reg(SETUP_AW, AW_5BYTES); //地址宽度 5个字节
+ 138   1        NRF24L01_Write_Reg(SETUP_RETR, ARD_4000US
+ 139   1                        | (REPEAT_CNT & 0x0F)); //重复等待时间 250us
+ 140   1        NRF24L01_Write_Reg(RF_CH, 60); //初始化通道
+ 141   1        NRF24L01_Write_Reg(RF_SETUP, 0x26);
+ 142   1      
+ 143   1        NRF24L01_Set_TxAddr(&addr[0], 5); //设置TX地址
+ 144   1        NRF24L01_Set_RxAddr(0, &addr[0], 5); //设置RX地址
+ 145   1      }
+ 146          
+ 147          /**
+ 148            * @brief :NRF24L01清中断
+ 149            * @param :
+ 150                     @IRQ_Source:中断源
+ 151            * @note  :无
+ 152            * @retval:清除后状态寄存器的值
+ 153            */
+ 154          uint8_t NRF24L01_Clear_IRQ_Flag(uint8_t IRQ_Source) {
+ 155   1        uint8_t btmp = 0;
+ 156   1      
+ 157   1        IRQ_Source &= (1 << RX_DR) | (1 << TX_DS) | (1 << MAX_RT); //中断标志处理
+ 158   1        btmp = NRF24L01_Read_Status_Register(); //读状态寄存器
+ 159   1      
+ 160   1        RF24L01_SET_CSN_LOW();      //片选
+ 161   1        spi_read_write_byte(NRF_WRITE_REG + STATUS); //写状态寄存器命令
+ 162   1        spi_read_write_byte(IRQ_Source | btmp); //清相应中断标志
+ 163   1        RF24L01_SET_CSN_HIGH(); //取消片选
+ 164   1        
+ 165   1        return (NRF24L01_Read_Status_Register()); //返回状态寄存器状态
+ 166   1      }
+ 167          
+ 168          /**
+ 169            * @brief :NRF24L01读状态寄存器
+ 170            * @param :无
+ 171            * @note  :无
+ 172            * @retval:RF24L01状态
+ 173            */
+ 174          uint8_t NRF24L01_Read_Status_Register() {
+ 175   1        uint8_t Status;
+ 176   1        RF24L01_SET_CSN_LOW(); //片选
+ 177   1        Status = spi_read_write_byte(NRF_READ_REG + STATUS); //读状态寄存器
+ 178   1        RF24L01_SET_CSN_HIGH(); //取消片选
+C51 COMPILER V9.60.7.0   G01_S                                                             07/09/2023 15:07:59 PAGE 4   
+
+ 179   1        return Status;
+ 180   1      }
+ 181          
+ 182          /**
+ 183            * @brief :NRF24L01写寄存器
+ 184            * @param :无
+ 185            * @note  :地址在设备中有效
+ 186            * @retval:读写状态
+ 187            */
+ 188          void NRF24L01_Write_Reg(uint8_t RegAddr, uint8_t Value) {
+ 189   1        RF24L01_SET_CSN_LOW( ); //片选
+ 190   1        spi_read_write_byte(NRF_WRITE_REG | RegAddr); //写命令 地址
+ 191   1        spi_read_write_byte(Value); //写数据
+ 192   1        RF24L01_SET_CSN_HIGH(); //取消片选
+ 193   1      }
+ 194          
+ 195          /**
+ 196            * @brief :NRF24L01读寄存器
+ 197            * @param :
+ 198                     @Addr:寄存器地址
+ 199            * @note  :地址在设备中有效
+ 200            * @retval:读取的数据
+ 201            */
+ 202          uint8_t NRF24L01_Read_Reg(uint8_t RegAddr) {
+ 203   1        uint8_t btmp;
+ 204   1        RF24L01_SET_CSN_LOW(); //片选
+ 205   1        spi_read_write_byte(NRF_READ_REG | RegAddr); //读命令 地址
+ 206   1        btmp = spi_read_write_byte(0xFF); //读数据
+ 207   1        RF24L01_SET_CSN_HIGH( ); //取消片选
+ 208   1        return btmp;
+ 209   1      }
+ 210          
+ 211           /**
+ 212            * @brief :设置发送地址
+ 213            * @param :
+ 214            *     @pAddr:地址存放地址
+ 215            *     @len:长度
+ 216            * @note  :无
+ 217            * @retval:无
+ 218            */
+ 219          void NRF24L01_Set_TxAddr(uint8_t *pAddr, uint8_t len) {
+ 220   1        len = (len > 5) ? 5 : len; //地址不能大于5个字节
+ 221   1        NRF24L01_Write_Buf(TX_ADDR, pAddr, len); //写地址
+ 222   1      }
+ 223          
+ 224           /**
+ 225            * @brief :设置接收通道地址
+ 226            * @param :
+ 227            *     @PipeNum:通道
+ 228            *     @pAddr:地址存肥着地址
+ 229            *     @Len:长度
+ 230            * @note  :通道不大于5 地址长度不大于5个字节
+ 231            * @retval:无
+ 232            */
+ 233          void NRF24L01_Set_RxAddr(uint8_t PipeNum, uint8_t *pAddr, uint8_t Len) {
+ 234   1        Len = (Len > 5) ? 5 : Len;
+ 235   1        PipeNum = (PipeNum > 5) ? 5 : PipeNum; //通道不大于5 地址长度不大于5个字节
+ 236   1        NRF24L01_Write_Buf(RX_ADDR_P0 + PipeNum, pAddr, Len ); //写入地址
+ 237   1      }
+ 238          
+ 239           /**
+ 240            * @brief :设置模式
+C51 COMPILER V9.60.7.0   G01_S                                                             07/09/2023 15:07:59 PAGE 5   
+
+ 241            * @param :
+ 242            *     @Mode:模式发送模式或接收模式
+ 243            * @note  :无
+ 244            * @retval:无
+ 245            */
+ 246          void RF24L01_Set_Mode(nRf24l01ModeType Mode) {
+ 247   1        uint8_t controlreg = 0;
+ 248   1        controlreg = NRF24L01_Read_Reg(CONFIG);
+ 249   1        if (Mode == MODE_TX) {
+ 250   2          controlreg &= ~(1<< PRIM_RX);
+ 251   2        } else if (Mode == MODE_RX) { 
+ 252   2          controlreg |= (1 << PRIM_RX); 
+ 253   2        }
+ 254   1        NRF24L01_Write_Reg(CONFIG, controlreg);
+ 255   1      }
+ 256          
+ 257          /**
+ 258            * @brief :NRF24L01发送一次数据
+ 259            * @param :
+ 260            *     @txbuf:待发送数据首地址
+ 261            *     @Length:发送数据长度
+ 262            * @note  :无
+ 263            * @retval:
+ 264            *     MAX_TX：达到最大重发次数
+ 265            *     TX_OK：发送完成
+ 266            *     0xFF:其他原因
+ 267            */ 
+ 268          uint8_t NRF24L01_TxPacket(uint8_t * txbuf, uint8_t Length) {
+ 269   1        uint8_t l_Status = 0;
+ 270   1        uint16_t l_MsTimes = 0;
+ 271   1      
+ 272   1        RF24L01_SET_CSN_LOW(); //片选
+ 273   1        spi_read_write_byte(FLUSH_TX);
+ 274   1        RF24L01_SET_CSN_HIGH();
+ 275   1      
+ 276   1        RF24L01_SET_CE_LOW();   
+ 277   1        NRF24L01_Write_Buf(WR_TX_PLOAD, txbuf, Length); //写数据到TX BUF 32字节  TX_PLOAD_WIDTH
+ 278   1        RF24L01_SET_CE_HIGH(); //启动发送
+ 279   1        while(0 != RF24L01_GET_IRQ_STATUS()) {
+ 280   2          delay_ms(1);
+ 281   2          if(500 == l_MsTimes++) { //500ms还没有发送成功，重新初始化设备
+ 282   3            NRF24L01_Gpio_Init();
+ 283   3            RF24L01_Init();
+ 284   3            RF24L01_Set_Mode( MODE_TX );
+ 285   3            break;
+ 286   3          }
+ 287   2        }
+ 288   1        l_Status = NRF24L01_Read_Reg(STATUS); //读状态寄存器
+ 289   1        NRF24L01_Write_Reg(STATUS, l_Status); //清除TX_DS或MAX_RT中断标志
+ 290   1        
+ 291   1        if(l_Status & MAX_TX) { //达到最大重发次数
+ 292   2          NRF24L01_Write_Reg( FLUSH_TX,0xff ); //清除TX FIFO寄存器
+ 293   2          return MAX_TX;
+ 294   2        }
+ 295   1      
+ 296   1        if(l_Status & TX_OK) { //发送完成
+ 297   2          return TX_OK;
+ 298   2        }
+ 299   1      
+ 300   1        return 0xFF;  //其他原因发送失败
+ 301   1      }
+ 302          
+C51 COMPILER V9.60.7.0   G01_S                                                             07/09/2023 15:07:59 PAGE 6   
+
+ 303          /**
+ 304            * @brief :NRF24L01接收数据
+ 305            * @param :
+ 306            *     @rxbuf:接收数据存放地址
+ 307            * @note  :无
+ 308            * @retval:
+ 309            *     0:接收完成
+ 310            *     1:没有接收到数据
+ 311            */ 
+ 312          uint8_t NRF24L01_RxPacket(uint8_t *rxbuf) {
+ 313   1        uint8_t l_Status = 0, l_RxLength = 0, l_100MsTimes = 0;
+ 314   1        
+ 315   1        RF24L01_SET_CSN_LOW(); //片选
+ 316   1        spi_read_write_byte(FLUSH_RX);
+ 317   1        RF24L01_SET_CSN_HIGH();
+ 318   1        
+ 319   1        while(0 != RF24L01_GET_IRQ_STATUS()) {
+ 320   2          delay_ms(100);
+ 321   2      
+ 322   2          if(30 == l_100MsTimes++) { //3s没接收过数据，重新初始化模块
+ 323   3            NRF24L01_Gpio_Init();
+ 324   3            RF24L01_Init();
+ 325   3            RF24L01_Set_Mode(MODE_RX);
+ 326   3            break;
+ 327   3          }
+ 328   2        }
+ 329   1        
+ 330   1        l_Status = NRF24L01_Read_Reg(STATUS); //读状态寄存器
+ 331   1        NRF24L01_Write_Reg(STATUS, l_Status); //清中断标志
+ 332   1        if(l_Status & RX_OK) { //接收到数据
+ 333   2          l_RxLength = NRF24L01_Read_Reg(R_RX_PL_WID); //读取接收到的数据个数
+ 334   2          NRF24L01_Read_Buf(RD_RX_PLOAD, rxbuf, l_RxLength ); //接收到数据 
+ 335   2          NRF24L01_Write_Reg(FLUSH_RX, 0xff);       //清除RX FIFO
+ 336   2          return l_RxLength;
+ 337   2        } 
+ 338   1      
+ 339   1        return 0;       //没有收到数据  
+ 340   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    812    ----
+   CONSTANT SIZE    =     15    ----
+   XDATA SIZE       =   ----       2
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      51
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -60,7 +60,7 @@ void main() {
 		if (!P_KEY1) {
 			OLED_ShowString8(0, 1, "KEY1 DOWN");
 		} else {
-			OLED_ShowString8(0, 1, "         ");
+			// OLED_ShowString8(0, 1, "         ");
 		}
 		if (!P_KEY2) {
 			OLED_ShowString8(0, 2, "KEY2 DOWN");

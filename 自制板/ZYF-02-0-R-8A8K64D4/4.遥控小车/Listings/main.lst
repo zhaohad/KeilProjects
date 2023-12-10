@@ -1,0 +1,273 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              08/12/2023 23:56:26 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\
+                    -main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "stc8a8k64d4.H"
+   2          #include "stc8a_gpio.H"
+   3          #include "stc8a_spi.h"
+   4          #include "stc8a_nvic.h"
+   5          #include "typedef.h"
+   6          #include "oled12864.h"
+   7          #include "stc8a_adc.h"
+   8          #include "stc8a_switch.h"
+   9          #include "dtos.h"
+  10          #include "STC8A_UART.h"
+  11          
+  12          #define MAX_MOTOR_STEP 2965
+  13          #define ROLL_BACK_STEP 900
+  14          #define TURN_WARD_STEP 700
+  15          #define MOTOR_CYCLE_STEP 8
+  16          
+  17          #define STATUS_NONE 0
+  18          #define STATUS_BACK 1
+  19          #define STATUS_RIGHT 2
+  20          #define STATUS_LEFT 3
+  21          
+  22          xdata u8 g_received_buf[MAX_CHAR8_COL];
+  23          xdata u8 g_status = STATUS_NONE;
+  24          
+  25          void OLED_GPIO_Config() {
+  26   1        xdata GPIO_InitTypeDef conf;
+  27   1        conf.Mode = GPIO_PullUp;
+  28   1        conf.Pin = GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7;
+  29   1        GPIO_Inilize(GPIO_P1, &conf);
+  30   1        
+  31   1        conf.Pin = GPIO_Pin_4;
+  32   1        GPIO_Inilize(GPIO_P4, &conf);
+  33   1      }
+  34          
+  35          void OLED12864_Init() {
+  36   1        OLED_GPIO_Config();
+  37   1        OLED_Init();
+  38   1      }
+  39          
+  40          void on_UART_Rec_1Byte(u8 d) {
+  41   1        COM1.B_RX_OK = 0;
+  42   1        COM1.RX_TimeOut = TimeOutSet1;
+  43   1        RX1_Buffer[COM1.RX_Cnt++] = d;
+  44   1        if(COM1.RX_Cnt >= COM_RX1_Lenth) {
+  45   2          COM1.RX_Cnt = 0;
+  46   2        }
+  47   1        COM1.B_RX_OK = 1;
+  48   1      }
+  49          
+  50          void OLED_GPIO_MOTOR_Config() {
+  51   1        xdata GPIO_InitTypeDef conf;
+  52   1        conf.Mode = GPIO_PullUp;
+  53   1        conf.Pin = GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6;
+  54   1        GPIO_Inilize(GPIO_P6, &conf);
+C51 COMPILER V9.60.7.0   MAIN                                                              08/12/2023 23:56:26 PAGE 2   
+
+  55   1        
+  56   1        conf.Pin = GPIO_Pin_0;
+  57   1        GPIO_Inilize(GPIO_P4, &conf);
+  58   1        
+  59   1        conf.Pin = GPIO_Pin_5;
+  60   1        GPIO_Inilize(GPIO_P5, &conf);
+  61   1        
+  62   1        conf.Pin = GPIO_Pin_1;
+  63   1        GPIO_Inilize(GPIO_P4, &conf);
+  64   1        
+  65   1          conf.Pin = GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6;
+  66   1        GPIO_Inilize(GPIO_P7, &conf);
+  67   1      }
+  68          
+  69          void Motor_Step(unsigned int step, bit forward) {
+  70   1        u8 i = 0;
+  71   1        while(1) {
+  72   2          if (step == 0) {
+  73   3            break;
+  74   3          }
+  75   2          --step;
+  76   2          if ((i % MOTOR_CYCLE_STEP) == 0) {
+  77   3            M_A1 = 1;
+  78   3            M_B1 = 0;
+  79   3            M_A2 = 0;
+  80   3            M_B2 = 0;
+  81   3            OLED_ShowString(0, 4, "0");
+  82   3          } else if ((i % MOTOR_CYCLE_STEP) == 1) {
+  83   3            M_A1 = 1;
+  84   3            M_B1 = 1;
+  85   3            M_A2 = 0;
+  86   3            M_B2 = 0;
+  87   3            OLED_ShowString(0, 4, "1");
+  88   3          } else if ((i % MOTOR_CYCLE_STEP) == 2) {
+  89   3            M_A1 = 0;
+  90   3            M_B1 = 1;
+  91   3            M_A2 = 0;
+  92   3            M_B2 = 0;
+  93   3            OLED_ShowString(0, 4, "2");
+  94   3          } else if ((i % MOTOR_CYCLE_STEP) == 3) {
+  95   3            M_A1 = 0;
+  96   3            M_B1 = 1;
+  97   3            M_A2 = 1;
+  98   3            M_B2 = 0;
+  99   3            OLED_ShowString(0, 4, "3");
+ 100   3          } else if ((i % MOTOR_CYCLE_STEP) == 4) {
+ 101   3            M_A1 = 0;
+ 102   3            M_B1 = 0;
+ 103   3            M_A2 = 1;
+ 104   3            M_B2 = 0;
+ 105   3            OLED_ShowString(0, 4, "4");
+ 106   3          } else if ((i % MOTOR_CYCLE_STEP) == 5) {
+ 107   3            M_A1 = 0;
+ 108   3            M_B1 = 0;
+ 109   3            M_A2 = 1;
+ 110   3            M_B2 = 1;
+ 111   3            OLED_ShowString(0, 4, "5");
+ 112   3          } else if ((i % MOTOR_CYCLE_STEP) == 6) {
+ 113   3            M_A1 = 0;
+ 114   3            M_B1 = 0;
+ 115   3            M_A2 = 0;
+ 116   3            M_B2 = 1;
+C51 COMPILER V9.60.7.0   MAIN                                                              08/12/2023 23:56:26 PAGE 3   
+
+ 117   3            OLED_ShowString(0, 4, "6");
+ 118   3          } else if ((i % MOTOR_CYCLE_STEP) == 7) {
+ 119   3            M_A1 = 1;
+ 120   3            M_B1 = 0;
+ 121   3            M_A2 = 0;
+ 122   3            M_B2 = 1;
+ 123   3            OLED_ShowString(0, 4, "7");
+ 124   3          }
+ 125   2          if (forward) {
+ 126   3            --i;
+ 127   3            if (i < 0 || i > MOTOR_CYCLE_STEP) {
+ 128   4              i = MOTOR_CYCLE_STEP - 1;
+ 129   4            }
+ 130   3          } else {
+ 131   3            ++i;
+ 132   3            if (i >= MOTOR_CYCLE_STEP) {
+ 133   4              i = 0;
+ 134   4            }
+ 135   3          }
+ 136   2        }
+ 137   1      }
+ 138          
+ 139          void TurnBack() {
+ 140   1        if (g_status == STATUS_LEFT) {
+ 141   2          Motor_Step(TURN_WARD_STEP, 1);
+ 142   2        } else if (g_status == STATUS_RIGHT) {
+ 143   2          Motor_Step(TURN_WARD_STEP, 0);
+ 144   2        } else {
+ 145   2          Motor_Step(ROLL_BACK_STEP * 2, 1);
+ 146   2          Motor_Step(ROLL_BACK_STEP, 0);
+ 147   2        }
+ 148   1      
+ 149   1        M_A1 = 0;
+ 150   1        M_B1 = 0;
+ 151   1        M_A2 = 0;
+ 152   1        M_B2 = 0;
+ 153   1        g_status = STATUS_BACK;
+ 154   1      }
+ 155          
+ 156          void TurnRight() {
+ 157   1        if (g_status == STATUS_BACK) {
+ 158   2          Motor_Step(TURN_WARD_STEP, 1);
+ 159   2        } else if (g_status == STATUS_LEFT) {
+ 160   2          Motor_Step(TURN_WARD_STEP * 2, 1);
+ 161   2        }
+ 162   1      
+ 163   1        M_A1 = 0;
+ 164   1        M_B1 = 0;
+ 165   1        M_A2 = 0;
+ 166   1        M_B2 = 0;
+ 167   1        g_status = STATUS_RIGHT;
+ 168   1      }
+ 169          
+ 170          void TurnLeft() {
+ 171   1        if (g_status == STATUS_BACK) {
+ 172   2          Motor_Step(TURN_WARD_STEP, 0);
+ 173   2        } else if (g_status == STATUS_RIGHT) {
+ 174   2          Motor_Step(TURN_WARD_STEP * 2, 0);
+ 175   2        }
+ 176   1      
+ 177   1        M_A1 = 0;
+ 178   1        M_B1 = 0;
+C51 COMPILER V9.60.7.0   MAIN                                                              08/12/2023 23:56:26 PAGE 4   
+
+ 179   1        M_A2 = 0;
+ 180   1        M_B2 = 0;
+ 181   1        g_status = STATUS_LEFT;
+ 182   1      }
+ 183          
+ 184          void main() {
+ 185   1        bit forward = 1;
+ 186   1        OLED12864_Init();
+ 187   1        OLED_ShowString(0, 0, "Init...");
+ 188   1        
+ 189   1        delay_ms(250);
+ 190   1        OLED_ShowString(0, 0, "Init Done");
+ 191   1        /*PrintString1("AT\r\n");*/
+ 192   1        
+ 193   1        OLED_GPIO_MOTOR_Config();
+ 194   1        /*M_A1 = 0;
+ 195   1        M_B1 = 0;
+ 196   1        M_A2 = 0;
+ 197   1        M_B2 = 1;*/
+ 198   1        
+ 199   1        TurnBack();
+ 200   1        delay_ms(250);
+ 201   1        delay_ms(250);
+ 202   1        delay_ms(250);
+ 203   1        
+ 204   1        TurnRight();
+ 205   1        delay_ms(250);
+ 206   1        delay_ms(250);
+ 207   1        delay_ms(250);
+ 208   1        
+ 209   1        TurnBack();
+ 210   1        delay_ms(250);
+ 211   1        delay_ms(250);
+ 212   1        delay_ms(250);
+ 213   1        
+ 214   1        TurnLeft();
+ 215   1        delay_ms(250);
+ 216   1        delay_ms(250);
+ 217   1        delay_ms(250);
+ 218   1        
+ 219   1        TurnBack();
+ 220   1        delay_ms(250);
+ 221   1        delay_ms(250);
+ 222   1        delay_ms(250);
+ 223   1        
+ 224   1        TurnRight();
+ 225   1        delay_ms(250);
+ 226   1        delay_ms(250);
+ 227   1        delay_ms(250);
+ 228   1        
+ 229   1        TurnLeft();
+ 230   1        delay_ms(250);
+ 231   1        delay_ms(250);
+ 232   1        delay_ms(250);
+ 233   1      
+ 234   1        TurnRight();
+ 235   1        delay_ms(250);
+ 236   1        delay_ms(250);
+ 237   1        delay_ms(250);
+ 238   1        
+ 239   1        TurnBack();
+ 240   1        while (1);
+C51 COMPILER V9.60.7.0   MAIN                                                              08/12/2023 23:56:26 PAGE 5   
+
+ 241   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    792    ----
+   CONSTANT SIZE    =     34    ----
+   XDATA SIZE       =     17       4
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       3
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       2
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

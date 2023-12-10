@@ -1,0 +1,59 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              09/17/2023 15:34:17 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\
+                    -main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "typedef.h"
+   2          #include "dtos.h"
+   3          #include "STC8xxxx.h"
+   4          #include "GPIO.h"
+   5          #include "UART.h"
+   6          
+   7          void RZ7899_GPIO_Config() {
+   8   1        xdata GPIO_InitTypeDef conf;
+   9   1        conf.Mode = GPIO_OUT_PP;
+  10   1        conf.Pin = GPIO_Pin_4 | GPIO_Pin_5;
+  11   1        GPIO_Inilize(GPIO_P1, &conf);
+  12   1      }
+  13          
+  14          void DRV8833_GPIO_Config() {
+  15   1        xdata GPIO_InitTypeDef conf;
+  16   1        conf.Mode = GPIO_OUT_PP;
+  17   1        conf.Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3;
+  18   1        GPIO_Inilize(GPIO_P1, &conf);
+  19   1      }
+  20          
+  21          void main() {
+  22   1        RZ7899_GPIO_Config();
+  23   1        DRV8833_GPIO_Config();
+  24   1        EA = 1;
+  25   1        
+  26   1        P_VM1_RZ7899_I1 = 0;
+  27   1        P_VM1_RZ7899_I2 = 1;
+  28   1      
+  29   1        P_VM1_DRV8833_I1 = 0;
+  30   1        P_VM1_DRV8833_I2 = 1;
+  31   1        P_VM1_DRV8833_I3 = 0;
+  32   1        P_VM1_DRV8833_I4 = 1;
+  33   1        while(1) {
+  34   2        }
+  35   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     64    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----       4
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

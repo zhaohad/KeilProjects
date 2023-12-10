@@ -1,0 +1,177 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              08/05/2023 20:06:28 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\
+                    -main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "stc8a8k64d4.H"
+   2          #include "stc8a_gpio.H"
+   3          #include "stc8a_spi.h"
+   4          #include "stc8a_nvic.h"
+   5          #include "typedef.h"
+   6          #include "oled12864.h"
+   7          #include "stc8a_adc.h"
+   8          #include "stc8a_switch.h"
+   9          #include "dtos.h"
+  10          #include "STC8A_UART.h"
+  11          
+  12          xdata u8 g_received_buf[MAX_CHAR8_COL];
+  13          
+  14          void OLED_GPIO_Config() {
+  15   1        xdata GPIO_InitTypeDef conf;
+  16   1        conf.Mode = GPIO_PullUp;
+  17   1        conf.Pin = GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7;
+  18   1        GPIO_Inilize(GPIO_P1, &conf);
+  19   1        
+  20   1        conf.Pin = GPIO_Pin_4;
+  21   1        GPIO_Inilize(GPIO_P4, &conf);
+  22   1      }
+  23          
+  24          void OLED12864_Init() {
+  25   1        OLED_GPIO_Config();
+  26   1        OLED_Init();
+  27   1      }
+  28          
+  29          void on_UART_Rec_1Byte(u8 d) {
+  30   1        COM1.B_RX_OK = 0;
+  31   1        COM1.RX_TimeOut = TimeOutSet1;
+  32   1        RX1_Buffer[COM1.RX_Cnt++] = d;
+  33   1        if(COM1.RX_Cnt >= COM_RX1_Lenth) {
+  34   2          COM1.RX_Cnt = 0;
+  35   2        }
+  36   1        COM1.B_RX_OK = 1;
+  37   1      }
+  38          
+  39          void OLED_GPIO_MOTOR_Config() {
+  40   1        xdata GPIO_InitTypeDef conf;
+  41   1        conf.Mode = GPIO_PullUp;
+  42   1        conf.Pin = GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6;
+  43   1        GPIO_Inilize(GPIO_P6, &conf);
+  44   1        
+  45   1        conf.Pin = GPIO_Pin_0;
+  46   1        GPIO_Inilize(GPIO_P4, &conf);
+  47   1        
+  48   1        conf.Pin = GPIO_Pin_5;
+  49   1        GPIO_Inilize(GPIO_P5, &conf);
+  50   1        
+  51   1        conf.Pin = GPIO_Pin_1;
+  52   1        GPIO_Inilize(GPIO_P4, &conf);
+  53   1        
+  54   1          conf.Pin = GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6;
+C51 COMPILER V9.60.7.0   MAIN                                                              08/05/2023 20:06:28 PAGE 2   
+
+  55   1        GPIO_Inilize(GPIO_P7, &conf);
+  56   1      }
+  57          
+  58          #define N 8
+  59          
+  60          unsigned int cntStep = 2965; // 
+  61          void main() {
+  62   1        u8 i = 0;
+  63   1        bit forward = 0;
+  64   1        OLED12864_Init();
+  65   1        OLED_ShowString(0, 0, "Init...");
+  66   1        
+  67   1        delay_ms(250);
+  68   1        OLED_ShowString(0, 0, "Init Done");
+  69   1        /*PrintString1("AT\r\n");*/
+  70   1        
+  71   1        OLED_GPIO_MOTOR_Config();
+  72   1        /*M_A1 = 0;
+  73   1        M_B1 = 0;
+  74   1        M_A2 = 0;
+  75   1        M_B2 = 1;*/
+  76   1      
+  77   1        while(1) {
+  78   2          if (cntStep == 0) {
+  79   3            break;
+  80   3          }
+  81   2          --cntStep;
+  82   2          if ((i % N) == 0) {
+  83   3            M_A1 = 1;
+  84   3            M_B1 = 0;
+  85   3            M_A2 = 0;
+  86   3            M_B2 = 0;
+  87   3            OLED_ShowString(0, 4, "0");
+  88   3          } else if ((i % N) == 1) {
+  89   3            M_A1 = 1;
+  90   3            M_B1 = 1;
+  91   3            M_A2 = 0;
+  92   3            M_B2 = 0;
+  93   3            OLED_ShowString(0, 4, "1");
+  94   3          } else if ((i % N) == 2) {
+  95   3            M_A1 = 0;
+  96   3            M_B1 = 1;
+  97   3            M_A2 = 0;
+  98   3            M_B2 = 0;
+  99   3            OLED_ShowString(0, 4, "2");
+ 100   3          } else if ((i % N) == 3) {
+ 101   3            M_A1 = 0;
+ 102   3            M_B1 = 1;
+ 103   3            M_A2 = 1;
+ 104   3            M_B2 = 0;
+ 105   3            OLED_ShowString(0, 4, "3");
+ 106   3          } else if ((i % N) == 4) {
+ 107   3            M_A1 = 0;
+ 108   3            M_B1 = 0;
+ 109   3            M_A2 = 1;
+ 110   3            M_B2 = 0;
+ 111   3            OLED_ShowString(0, 4, "4");
+ 112   3          } else if ((i % N) == 5) {
+ 113   3            M_A1 = 0;
+ 114   3            M_B1 = 0;
+ 115   3            M_A2 = 1;
+ 116   3            M_B2 = 1;
+C51 COMPILER V9.60.7.0   MAIN                                                              08/05/2023 20:06:28 PAGE 3   
+
+ 117   3            OLED_ShowString(0, 4, "5");
+ 118   3          } else if ((i % N) == 6) {
+ 119   3            M_A1 = 0;
+ 120   3            M_B1 = 0;
+ 121   3            M_A2 = 0;
+ 122   3            M_B2 = 1;
+ 123   3            OLED_ShowString(0, 4, "6");
+ 124   3          } else if ((i % N) == 7) {
+ 125   3            M_A1 = 1;
+ 126   3            M_B1 = 0;
+ 127   3            M_A2 = 0;
+ 128   3            M_B2 = 1;
+ 129   3            OLED_ShowString(0, 4, "7");
+ 130   3          }
+ 131   2          if (forward) {
+ 132   3            --i;
+ 133   3            if (i < 0 || i > N) {
+ 134   4              i = N - 1;
+ 135   4            }
+ 136   3          } else {
+ 137   3            ++i;
+ 138   3            if (i >= N) {
+ 139   4              i = 0;
+ 140   4            }
+ 141   3          }
+ 142   2        }
+ 143   1        
+ 144   1        M_A1 = 0;
+ 145   1        M_B1 = 0;
+ 146   1        M_A2 = 0;
+ 147   1        M_B2 = 0;
+ 148   1        while (1);
+ 149   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    497    ----
+   CONSTANT SIZE    =     34    ----
+   XDATA SIZE       =     16       4
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

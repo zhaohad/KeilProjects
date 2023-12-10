@@ -36,7 +36,8 @@ void	UART_config() {
 	UART1_SW(P_UART);
 	COMx_InitStructure.UART_Mode = UART_8bit_BRTx; //模式,   UART_ShiftRight,UART_8bit_BRTx,UART_9bit,UART_9bit_BRTx
 	COMx_InitStructure.UART_BRT_Use = BRT_Timer1; //使用波特率, BRT_Timer1, BRT_Timer2 (注意: 串口2固定使用BRT_Timer2)
-	COMx_InitStructure.UART_BaudRate = 115200ul; //波特率,     110 ~ 115200
+	// COMx_InitStructure.UART_BaudRate = 115200ul; //波特率,     110 ~ 115200
+	COMx_InitStructure.UART_BaudRate = 9600ul;
 	COMx_InitStructure.UART_RxEnable = ENABLE; //接收允许,   ENABLE或DISABLE
 
 	UART_Configuration(UART1, &COMx_InitStructure); //初始化串口2 USART1,USART2,USART3,USART4

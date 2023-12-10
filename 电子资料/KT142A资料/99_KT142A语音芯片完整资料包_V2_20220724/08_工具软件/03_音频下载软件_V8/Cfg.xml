@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<Cfg>
+	<Mode>sztc</Mode>
+	<SendLimit>1048576</SendLimit>
+	<RecvLimit>1048576</RecvLimit>
+	<AutoSaveSendContent>true</AutoSaveSendContent>
+	<AutoSaveRecvContent>true</AutoSaveRecvContent>
+	<SendRecvSaveFilePath />
+	<LastComPort>6</LastComPort>
+	<LastComBaud>115200</LastComBaud>
+	<AppTitle>语音助手</AppTitle>
+	<ShowBatchBtn>755</ShowBatchBtn>
+	<HideBtn>22</HideBtn>
+	<RecvHead>126</RecvHead>
+	<RecvTail>239</RecvTail>
+	<HideBaudSet>22</HideBaudSet>
+</Cfg>

@@ -1,0 +1,10 @@
+".\Objects\STARTUP.obj",
+".\Objects\delay.obj",
+".\Objects\main.obj",
+".\Objects\dtos.obj",
+".\Objects\GPIO.obj",
+".\Objects\UART.obj",
+".\Objects\timer.obj" 
+TO ".\Objects\multiuart" 
+PRINT(".\Listings\multiuart.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

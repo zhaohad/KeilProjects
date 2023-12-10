@@ -1,0 +1,97 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              07/22/2023 17:22:13 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\
+                    -main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "typedef.h"
+   2          #include "dtos.h"
+   3          #include "STC8xxxx.h"
+   4          #include "GPIO.h"
+   5          #include "UART.h"
+   6          
+   7          void OLED_GPIO_Config() {
+   8   1        xdata GPIO_InitTypeDef conf;
+   9   1        conf.Mode = GPIO_OUT_PP;
+  10   1        conf.Pin = GPIO_Pin_4 | GPIO_Pin_0;
+  11   1        GPIO_Inilize(GPIO_P1, &conf);
+  12   1      }
+  13          
+  14          void UART_Config() {
+  15   1        xdata COMx_InitDefine config; //结构定义
+  16   1        config.UART_Mode = UART_8bit_BRTx; //模式, UART_ShiftRight,UART_8bit_BRTx,UART_9bit,UART_9bit_BRTx
+  17   1        config.UART_BRT_Use = BRT_Timer2; //使用波特率, BRT_Timer1, BRT_Timer2 (注意: 串口2固定使用BRT_Timer2)
+  18   1        config.UART_BaudRate = 9600ul;  //波特率, 一般 110 ~ 115200
+  19   1        config.UART_RxEnable = ENABLE; //接收允许, ENABLE或DISABLE
+  20   1        config.BaudRateDouble = DISABLE; //波特率加倍, ENABLE或DISABLE
+  21   1        config.UART_Interrupt = ENABLE; //中断允许, ENABLE或DISABLE
+  22   1        config.UART_Polity = Polity_0; //指定中断优先级(低到高) Polity_0,Polity_1,Polity_2,Polity_3
+  23   1        // config.UART_P_SW = UART1_SW_P30_P31; //切换端口, UART1_SW_P30_P31,UART1_SW_P36_P37,UART1_SW_P16_P17,U
+             -ART1_SW_P43_P44
+  24   1        config.UART_P_SW = UART1_SW_P16_P17; //切换端口, UART1_SW_P30_P31,UART1_SW_P36_P37,UART1_SW_P16_P17,UART1
+             -_SW_P43_P44
+  25   1        UART_Configuration(UART1, &config); //初始化串口1 UART1,UART2,UART3,UART4
+  26   1      }
+  27          
+  28          void main() {
+  29   1        OLED_GPIO_Config();
+  30   1        UART_Config();
+  31   1        EA = 1;
+  32   1        
+  33   1        P_VM1_RZ7899_I1 = 1;
+  34   1        P_VM1_RZ7899_I2 = 0;
+  35   1      
+  36   1        P_VM1_DRV8833_I1 = 0;
+  37   1        P_VM1_DRV8833_I2 = 1;
+  38   1        P_VM1_DRV8833_I3 = 0;
+  39   1        P_VM1_DRV8833_I4 = 1;
+  40   1        while(1) {
+  41   2          delay_ms(100);
+  42   2          
+  43   2          // PrintString1("STC8H8K64U UART1 Test Programme!\r\n");
+  44   2          /*if (COM1.RX_TimeOut > 0) {
+  45   2            if (--COM1.RX_TimeOut == 0) {
+  46   2              u8 i;
+  47   2              if (COM1.RX_Cnt > 0) {
+  48   2                for (i = 0; i < COM1.RX_Cnt; ++i) {
+  49   2                  TX1_write2buff(RX1_Buffer[i]);
+  50   2                  if (RX1_Buffer[i] == '0') {
+  51   2                    P_VM1_RZ7899_I1 = 0;
+  52   2                    P_VM1_RZ7899_I2 = 0;
+C51 COMPILER V9.60.7.0   MAIN                                                              07/22/2023 17:22:13 PAGE 2   
+
+  53   2                  } else if (RX1_Buffer[i] == '1') {
+  54   2                    P_VM1_RZ7899_I1 = 1;
+  55   2                    P_VM1_RZ7899_I2 = 0;
+  56   2                  } else if (RX1_Buffer[i] == '2') {
+  57   2                    P_VM1_RZ7899_I1 = 0;
+  58   2                    P_VM1_RZ7899_I2 = 1;
+  59   2                  } else if (RX1_Buffer[i] == '3') {
+  60   2                    P_VM1_RZ7899_I1 = 1;
+  61   2                    P_VM1_RZ7899_I2 = 1;
+  62   2                  }
+  63   2                }
+  64   2                COM1.RX_Cnt = 0;
+  65   2              }
+  66   2            }
+  67   2          }*/
+  68   2        }
+  69   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     96    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----      14
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

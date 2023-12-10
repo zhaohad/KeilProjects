@@ -1,0 +1,133 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              09/17/2023 16:35:34 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\
+                    -main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "dtos.h"
+   2          #include "STC8xxxx.h"
+   3          #include "GPIO.h"
+   4          #include "UART.h"
+   5          #include "timer.h"
+   6          #include "typedef.h"
+   7          
+   8          #define MAX_TIMER_CNT 10
+   9          u8 g_TimerCnt = 0;
+  10          
+  11          void RZ7899_GPIO_Config() {
+  12   1        xdata GPIO_InitTypeDef conf;
+  13   1        conf.Mode = GPIO_OUT_PP;
+  14   1        conf.Pin = GPIO_Pin_4 | GPIO_Pin_5;
+  15   1        GPIO_Inilize(GPIO_P1, &conf);
+  16   1      }
+  17          
+  18          void UART_Config() {
+  19   1        xdata COMx_InitDefine config; //Ω·ππ∂®“Â
+  20   1        config.UART_Mode = UART_8bit_BRTx; //ƒ£ Ω, UART_ShiftRight,UART_8bit_BRTx,UART_9bit,UART_9bit_BRTx
+  21   1        config.UART_BRT_Use = BRT_Timer1; // π”√≤®Ãÿ¬ , BRT_Timer1, BRT_Timer2 (◊¢“‚: ¥Æø⁄2πÃ∂® π”√BRT_Timer2)
+  22   1        config.UART_BaudRate = 9600ul;  //≤®Ãÿ¬ , “ª∞„ 110 ~ 115200
+  23   1        config.UART_RxEnable = ENABLE; //Ω” ’‘ –Ì, ENABLEªÚDISABLE
+  24   1        config.BaudRateDouble = DISABLE; //≤®Ãÿ¬ º”±∂, ENABLEªÚDISABLE
+  25   1        config.UART_Interrupt = ENABLE; //÷–∂œ‘ –Ì, ENABLEªÚDISABLE
+  26   1        config.UART_Polity = Polity_0; //÷∏∂®÷–∂œ”≈œ»º∂(µÕµΩ∏ﬂ) Polity_0,Polity_1,Polity_2,Polity_3
+  27   1        // config.UART_P_SW = UART1_SW_P30_P31; //«–ªª∂Àø⁄, UART1_SW_P30_P31,UART1_SW_P36_P37,UART1_SW_P16_P17,U
+             -ART1_SW_P43_P44
+  28   1        config.UART_P_SW = UART1_SW_P16_P17; //«–ªª∂Àø⁄, UART1_SW_P30_P31,UART1_SW_P36_P37,UART1_SW_P16_P17,UART1
+             -_SW_P43_P44
+  29   1        UART_Configuration(UART1, &config); //≥ı ºªØ¥Æø⁄1 UART1,UART2,UART3,UART4
+  30   1      }
+  31          
+  32          void UART_GPIO_Config() {
+  33   1        xdata GPIO_InitTypeDef conf;
+  34   1        conf.Mode = GPIO_OUT_PP;
+  35   1        conf.Pin = GPIO_Pin_6 | GPIO_Pin_7;
+  36   1        GPIO_Inilize(GPIO_P1, &conf);
+  37   1      
+  38   1        conf.Mode = GPIO_OUT_PP;
+  39   1        conf.Pin = GPIO_Pin_0 | GPIO_Pin_1;
+  40   1        GPIO_Inilize(GPIO_P3, &conf);
+  41   1      }
+  42          
+  43          void Timer2Callback() {
+  44   1        g_TimerCnt = (g_TimerCnt + 1) % MAX_TIMER_CNT;
+  45   1        if (g_TimerCnt < 1) {
+  46   2          P_VM1_RZ7899_I2 = 0;
+  47   2        } else {
+  48   2          P_VM1_RZ7899_I2 = 1;
+  49   2        }
+  50   1      }
+  51          
+  52          void Timer_Config() {
+C51 COMPILER V9.60.7.0   MAIN                                                              09/17/2023 16:35:34 PAGE 2   
+
+  53   1        TIM_InitTypeDef TIM_InitStructure; //Ω·ππ∂®“Â
+  54   1        TIM_InitStructure.TIM_Interrupt = ENABLE; //÷–∂œ «∑Ò‘ –Ì, ENABLEªÚDISABLE. (◊¢“‚: Timer2πÃ∂®Œ™16Œª◊‘∂Ø÷ÿ◊
+             -∞, ÷–∂œπÃ∂®Œ™µÕ”≈œ»º∂)
+  55   1        TIM_InitStructure.TIM_ClkSource = TIM_CLOCK_1T; //÷∏∂® ±÷”‘¥, TIM_CLOCK_1T,TIM_CLOCK_12T,TIM_CLOCK_Ext
+  56   1        TIM_InitStructure.TIM_ClkOut = DISABLE; // «∑Ò ‰≥ˆ∏ﬂÀŸ¬ˆ≥Â, ENABLEªÚDISABLE
+  57   1        // TIM_InitStructure.TIM_Value = 65536UL - (MAIN_Fosc / 1000); //≥ı÷µ
+  58   1        TIM_InitStructure.TIM_Value = 65536UL - 10; //≥ı÷µ
+  59   1        TIM_InitStructure.TIM_Run = ENABLE; // «∑Ò≥ı ºªØ∫Û∆Ù∂Ø∂® ±∆˜, ENABLEªÚDISABLE
+  60   1        Timer_Inilize(Timer2, &TIM_InitStructure); //≥ı ºªØTimer2   Timer0,Timer1,Timer2,Timer3,Timer4
+  61   1        
+  62   1        SET_INTERRUPT_CALLBACK(Timer2Callback);
+  63   1      }
+  64          
+  65          void main() {
+  66   1        RZ7899_GPIO_Config();
+  67   1        UART_Config();
+  68   1        Timer_Config();
+  69   1        EA = 1;
+  70   1        
+  71   1        P_VM1_RZ7899_I1 = 1;
+  72   1        P_VM1_RZ7899_I2 = 1;
+  73   1      
+  74   1        while(1) {
+  75   2          /*delay_ms(100);
+  76   2          // PrintString1("STC8H8K64U UART1 Test Programme!\r\n");
+  77   2          if (COM1.RX_TimeOut > 0) {
+  78   2            if (--COM1.RX_TimeOut == 0) {
+  79   2              u8 i;
+  80   2              if (COM1.RX_Cnt > 0) {
+  81   2                for (i = 0; i < COM1.RX_Cnt; ++i) {
+  82   2                  TX1_write2buff(RX1_Buffer[i]);
+  83   2                  if (RX1_Buffer[i] == '0') {
+  84   2                    P_VM1_RZ7899_I1 = 0;
+  85   2                    P_VM1_RZ7899_I2 = 0;
+  86   2                  } else if (RX1_Buffer[i] == '1') {
+  87   2                    P_VM1_RZ7899_I1 = 1;
+  88   2                    P_VM1_RZ7899_I2 = 0;
+  89   2                  } else if (RX1_Buffer[i] == '2') {
+  90   2                    P_VM1_RZ7899_I1 = 0;
+  91   2                    P_VM1_RZ7899_I2 = 1;
+  92   2                  } else if (RX1_Buffer[i] == '3') {
+  93   2                    P_VM1_RZ7899_I1 = 1;
+  94   2                    P_VM1_RZ7899_I2 = 1;
+  95   2                  }
+  96   2                }
+  97   2                COM1.RX_Cnt = 0;
+  98   2              }
+  99   2            }
+ 100   2          }*/
+ 101   2        }
+ 102   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    192    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----      16
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1       8
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+C51 COMPILER V9.60.7.0   MAIN                                                              09/17/2023 16:35:34 PAGE 3   
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

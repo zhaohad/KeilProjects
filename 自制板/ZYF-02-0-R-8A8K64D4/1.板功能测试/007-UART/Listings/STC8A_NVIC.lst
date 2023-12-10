@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   STC8A_NVIC                                                        07/09/2023 18:03:53 PAGE 1   
+C51 COMPILER V9.60.7.0   STC8A_NVIC                                                        08/04/2023 22:07:06 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE STC8A_NVIC
@@ -62,7 +62,7 @@ line level    source
   52          //========================================================================
   53          u8 NVIC_Timer2_Init(u8 State, u8 Priority)
   54          {
-C51 COMPILER V9.60.7.0   STC8A_NVIC                                                        07/09/2023 18:03:53 PAGE 2   
+C51 COMPILER V9.60.7.0   STC8A_NVIC                                                        08/04/2023 22:07:06 PAGE 2   
 
   55   1        if(State <= ENABLE) Timer2_Interrupt(State);
   56   1        Priority = NULL;
@@ -126,7 +126,7 @@ line level    source
  114          {
  115   1        if(State <= ENABLE) INT1_Interrupt(State);
  116   1        if(Priority <= Priority_3) INT1_Priority(Priority);
-C51 COMPILER V9.60.7.0   STC8A_NVIC                                                        07/09/2023 18:03:53 PAGE 3   
+C51 COMPILER V9.60.7.0   STC8A_NVIC                                                        08/04/2023 22:07:06 PAGE 3   
 
  117   1        return SUCCESS;
  118   1      }
@@ -190,7 +190,7 @@ line level    source
  176   1        if(Priority <= Priority_3) ADC_Priority(Priority);
  177   1        return SUCCESS;
  178   1      }
-C51 COMPILER V9.60.7.0   STC8A_NVIC                                                        07/09/2023 18:03:53 PAGE 4   
+C51 COMPILER V9.60.7.0   STC8A_NVIC                                                        08/04/2023 22:07:06 PAGE 4   
 
  179          
  180          //========================================================================
@@ -254,7 +254,7 @@ line level    source
  238   1      }
  239          
  240          //========================================================================
-C51 COMPILER V9.60.7.0   STC8A_NVIC                                                        07/09/2023 18:03:53 PAGE 5   
+C51 COMPILER V9.60.7.0   STC8A_NVIC                                                        08/04/2023 22:07:06 PAGE 5   
 
  241          // 函数: NVIC_UART2_Init
  242          // 描述: UART2嵌套向量中断控制器初始化.
@@ -318,7 +318,7 @@ line level    source
  300          //========================================================================
  301          // 函数: NVIC_PCA_Init
  302          // 描述: PCA嵌套向量中断控制器初始化.
-C51 COMPILER V9.60.7.0   STC8A_NVIC                                                        07/09/2023 18:03:53 PAGE 6   
+C51 COMPILER V9.60.7.0   STC8A_NVIC                                                        08/04/2023 22:07:06 PAGE 6   
 
  303          // 参数: Channel:  通道, PCA0/PCA1/PCA2/PCA_Counter.
  304          // 参数: State:    中断使能状态, PCA_ECOM/PCA_CCAPP/PCA_CCAPN/PCA_MAT/PCA_TOG/PCA_PWM/PCA_ECCF/DISABLE.
@@ -382,7 +382,7 @@ line level    source
  362          
  363          //========================================================================
  364          // 函数: NVIC_BMM_M2M_Init
-C51 COMPILER V9.60.7.0   STC8A_NVIC                                                        07/09/2023 18:03:53 PAGE 7   
+C51 COMPILER V9.60.7.0   STC8A_NVIC                                                        08/04/2023 22:07:06 PAGE 7   
 
  365          // 描述: BMM M2M嵌套向量中断控制器初始化.
  366          // 参数: State:    中断使能状态, ENABLE/DISABLE.
@@ -446,7 +446,7 @@ line level    source
  424   1        if(State == ENABLE)
  425   1          BMM_UR1T_CFG |= 0x80;   //bit7 1:Enable Interrupt
  426   1        else
-C51 COMPILER V9.60.7.0   STC8A_NVIC                                                        07/09/2023 18:03:53 PAGE 8   
+C51 COMPILER V9.60.7.0   STC8A_NVIC                                                        08/04/2023 22:07:06 PAGE 8   
 
  427   1          BMM_UR1T_CFG &= ~0x80;  //bit7 0:Disable Interrupt
  428   1        EAXRAM();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展RAM(XRAM) */
@@ -510,7 +510,7 @@ line level    source
  486          //========================================================================
  487          u8 NVIC_BMM_UART2_Rx_Init(u8 State, u8 Priority, u8 Bus_Priority)
  488          {
-C51 COMPILER V9.60.7.0   STC8A_NVIC                                                        07/09/2023 18:03:53 PAGE 9   
+C51 COMPILER V9.60.7.0   STC8A_NVIC                                                        08/04/2023 22:07:06 PAGE 9   
 
  489   1        EAXSFR();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展SFR(XSFR) */
  490   1        BMM_UR2R_CFG &= ~0x0f;
@@ -574,7 +574,7 @@ line level    source
  548          // 函数: NVIC_BMM_UART4_Tx_Init
  549          // 描述: BMM UART4 Tx嵌套向量中断控制器初始化.
  550          // 参数: State:    中断使能状态, ENABLE/DISABLE.
-C51 COMPILER V9.60.7.0   STC8A_NVIC                                                        07/09/2023 18:03:53 PAGE 10  
+C51 COMPILER V9.60.7.0   STC8A_NVIC                                                        08/04/2023 22:07:06 PAGE 10  
 
  551          // 参数: Priority: 中断优先级, Priority_0,Priority_1,Priority_2,Priority_3.
  552          // 参数: Bus_Priority: 数据总线访问优先级, Priority_0,Priority_1,Priority_2,Priority_3.
@@ -638,7 +638,7 @@ line level    source
  610   1        else
  611   1          BMM_LCM_CFG &= ~0x80;   //bit7 0:Disable Interrupt
  612   1        EAXRAM();   /* MOVX A,@DPTR/MOVX @DPTR,A指令的操作对象为扩展RAM(XRAM) */
-C51 COMPILER V9.60.7.0   STC8A_NVIC                                                        07/09/2023 18:03:53 PAGE 11  
+C51 COMPILER V9.60.7.0   STC8A_NVIC                                                        08/04/2023 22:07:06 PAGE 11  
 
  613   1        return SUCCESS;
  614   1      }
