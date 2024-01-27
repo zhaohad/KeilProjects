@@ -1,0 +1,12 @@
+".\Objects\STARTUP.obj",
+".\Objects\delay.obj",
+".\Objects\main.obj",
+".\Objects\STC8A_GPIO.obj",
+".\Objects\STC8A_Timer_Isr.obj",
+".\Objects\STC8A_Timer.obj",
+".\Objects\STC8A_NVIC.obj",
+".\Objects\servo_t0.obj",
+".\Objects\servo_t1.obj" 
+TO ".\Objects\舵机控制计时器" 
+PRINT(".\Listings\舵机控制计时器.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

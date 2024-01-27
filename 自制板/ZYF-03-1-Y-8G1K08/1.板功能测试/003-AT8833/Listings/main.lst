@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              09/17/2023 15:34:17 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              12/17/2023 09:35:18 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -36,10 +36,10 @@ line level    source
   26   1        P_VM1_RZ7899_I1 = 0;
   27   1        P_VM1_RZ7899_I2 = 1;
   28   1      
-  29   1        P_VM1_DRV8833_I1 = 0;
-  30   1        P_VM1_DRV8833_I2 = 1;
-  31   1        P_VM1_DRV8833_I3 = 0;
-  32   1        P_VM1_DRV8833_I4 = 1;
+  29   1        P_VM1_DRV8833_I1 = 1;
+  30   1        P_VM1_DRV8833_I2 = 0;
+  31   1        P_VM1_DRV8833_I3 = 1;
+  32   1        P_VM1_DRV8833_I4 = 0;
   33   1        while(1) {
   34   2        }
   35   1      }

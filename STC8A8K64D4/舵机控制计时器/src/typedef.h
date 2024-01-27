@@ -7,6 +7,6 @@
 
 typedef unsigned char uchar;
 
-sbit P_SERVO = P2 ^ 0;
+sbit P_SERVO = P0 ^ 0;
 
 #endif

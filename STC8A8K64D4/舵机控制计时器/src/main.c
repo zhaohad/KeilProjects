@@ -13,19 +13,25 @@ void GPIO_Config() {
 	GPIO_Inilize(GPIO_P2, &conf);
 }
 
+bit rec = 0;
+
 void main() {
 	GPIO_Config();
 	Servo_Init();
-	Servo_Set_Target_Degree(90);
+	if (!rec) {
+		Servo_Set_Target_Degree(90);
+	}
 	while (1) {
-		/*int i = 0;
-		int f = -1;
-		for (i = 0; i <= 180; i += f) {
-			if (i == 0 || i == 180) {
-				f = -f;
+		if (rec) {
+			int i = 0;
+			int f = -1;
+			for (i = 0; i <= 180; i += f) {
+				if (i == 0 || i == 180) {
+					f = -f;
+				}
+				Servo_Set_Target_Degree(i);
+				delay_ms(1);
 			}
-			Servo_Set_Target_Degree(i);
-			delay_ms(1);
-		}*/
+		}
 	}
 }

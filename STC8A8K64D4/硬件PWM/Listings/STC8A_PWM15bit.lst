@@ -1,9 +1,9 @@
-C51 COMPILER V9.60.0.0   STC8A_PWM15BIT                                                    08/14/2022 17:26:52 PAGE 1   
+C51 COMPILER V9.60.7.0   STC8A_PWM15BIT                                                    01/05/2024 22:41:39 PAGE 1   
 
 
-C51 COMPILER V9.60.0.0, COMPILATION OF MODULE STC8A_PWM15BIT
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE STC8A_PWM15BIT
 OBJECT MODULE PLACED IN .\Objects\STC8A_PWM15bit.obj
-COMPILER INVOKED BY: d:\Keil_v5\C51\BIN\C51.EXE src\STC8A_PWM15bit.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\STC8A_PWM15bit.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.
                     -\Listings\STC8A_PWM15bit.lst) TABS(2) OBJECT(.\Objects\STC8A_PWM15bit.obj)
 
 line level    source
@@ -62,7 +62,7 @@ line level    source
   52            0xff2d,   /* PWM3HLD */
   53            0xff35,   /* PWM4HLD */
   54            0xff3d,   /* PWM5HLD */
-C51 COMPILER V9.60.0.0   STC8A_PWM15BIT                                                    08/14/2022 17:26:52 PAGE 2   
+C51 COMPILER V9.60.7.0   STC8A_PWM15BIT                                                    01/05/2024 22:41:39 PAGE 2   
 
   55            0xff45,   /* PWM6HLD */
   56            0xff4d,   /* PWM7HLD */
@@ -126,7 +126,7 @@ line level    source
  114   1        return SUCCESS;
  115   1      }
  116          
-C51 COMPILER V9.60.0.0   STC8A_PWM15BIT                                                    08/14/2022 17:26:52 PAGE 3   
+C51 COMPILER V9.60.7.0   STC8A_PWM15BIT                                                    01/05/2024 22:41:39 PAGE 3   
 
  117          //========================================================================
  118          // º¯Êý: u8 PWMLevelSet(u8 PWM_id, u8 pwm_hldl, u8 pwm_hldh)
@@ -176,7 +176,7 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    447    ----
+   CODE SIZE        =    403    ----
    CONSTANT SIZE    =     64    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----

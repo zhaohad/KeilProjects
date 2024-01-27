@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   UART                                                              09/17/2023 21:02:11 PAGE 1   
+C51 COMPILER V9.60.7.0   UART                                                              12/17/2023 09:57:06 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE UART
@@ -62,7 +62,7 @@ line level    source
   52   2          for(i=0; i<COM_TX1_Lenth; i++)  TX1_Buffer[i] = 0;
   53   2          for(i=0; i<COM_RX1_Lenth; i++)  RX1_Buffer[i] = 0;
   54   2      
-C51 COMPILER V9.60.7.0   UART                                                              09/17/2023 21:02:11 PAGE 2   
+C51 COMPILER V9.60.7.0   UART                                                              12/17/2023 09:57:06 PAGE 2   
 
   55   2          if(COMx->UART_Polity > Polity_3)  return 2; //错误
   56   2          UART1_Polity(COMx->UART_Polity);  //指定中断优先级(低到高) Polity_0,Polity_1,Polity_2,Polity_3
@@ -126,7 +126,7 @@ line level    source
                   COM2.TX_write   = 0;
                   COM2.B_TX_busy  = 0;
                   COM2.RX_Cnt     = 0;
-C51 COMPILER V9.60.7.0   UART                                                              09/17/2023 21:02:11 PAGE 3   
+C51 COMPILER V9.60.7.0   UART                                                              12/17/2023 09:57:06 PAGE 3   
 
                   COM2.RX_TimeOut = 0;
                   COM2.B_RX_OK    = 0;
@@ -190,7 +190,7 @@ line level    source
                     }
                     else if(COMx->UART_BRT_Use == BRT_Timer2)
                     {
-C51 COMPILER V9.60.7.0   UART                                                              09/17/2023 21:02:11 PAGE 4   
+C51 COMPILER V9.60.7.0   UART                                                              12/17/2023 09:57:06 PAGE 4   
 
                       AUXR &= ~(1<<4);    //Timer stop
                       S3_BRT_UseTimer2(); //S3 BRT Use Timer2;
@@ -254,7 +254,7 @@ line level    source
                     }
                     else return 2;  //错误
                   }
-C51 COMPILER V9.60.7.0   UART                                                              09/17/2023 21:02:11 PAGE 5   
+C51 COMPILER V9.60.7.0   UART                                                              12/17/2023 09:57:06 PAGE 5   
 
                   else  return 2; //模式错误
                   if(COMx->UART_Interrupt == ENABLE)  S4_Int_Enable();    //允许中断
@@ -318,7 +318,7 @@ line level    source
  300          /********************* UART2 函数 ************************/
  301          #ifdef UART2
               void TX2_write2buff(u8 dat) //写入发送缓冲，指针+1
-C51 COMPILER V9.60.7.0   UART                                                              09/17/2023 21:02:11 PAGE 6   
+C51 COMPILER V9.60.7.0   UART                                                              12/17/2023 09:57:06 PAGE 6   
 
               {
                 TX2_Buffer[COM2.TX_write] = dat;  //装发送缓冲
@@ -382,7 +382,7 @@ line level    source
               }
               
               void UART3_int (void) interrupt UART3_VECTOR
-C51 COMPILER V9.60.7.0   UART                                                              09/17/2023 21:02:11 PAGE 7   
+C51 COMPILER V9.60.7.0   UART                                                              12/17/2023 09:57:06 PAGE 7   
 
               {
                 if(RI3)
@@ -446,7 +446,7 @@ line level    source
                   CLR_TI4();
                   if(COM4.TX_read != COM4.TX_write)
                   {
-C51 COMPILER V9.60.7.0   UART                                                              09/17/2023 21:02:11 PAGE 8   
+C51 COMPILER V9.60.7.0   UART                                                              12/17/2023 09:57:06 PAGE 8   
 
                     S4BUF = TX4_Buffer[COM4.TX_read];
                     if(++COM4.TX_read >= COM_TX4_Lenth)   COM4.TX_read = 0;

@@ -1,0 +1,256 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              01/21/2024 17:50:53 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\
+                    -main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "stc8a8k64d4.h"
+   2          #include "stc8a_gpio.h"
+   3          #include "typedef.h"
+   4          #include "servo_t0.h"
+   5          #include "servo_t1.h"
+   6          #include "delay.h"
+   7          
+   8          
+   9          #define INIT_ANGLES 90, 90, 135, 135, 0, 0
+  10          #define INTER_ANGLE 30
+  11          
+  12          void GPIO_Config() {
+  13   1        GPIO_InitTypeDef conf;
+  14   1        conf.Mode = GPIO_OUT_PP;
+  15   1        conf.Pin = GPIO_Pin_All;
+  16   1        GPIO_Inilize(GPIO_P0, &conf);
+  17   1        GPIO_Inilize(GPIO_P1, &conf);
+  18   1        GPIO_Inilize(GPIO_P3, &conf);
+  19   1      }
+  20          
+  21          xdata int angles[CNT_SERVOS] = {INIT_ANGLES};
+  22          xdata u8 ens[CNT_SERVOS] = {1, 1, 1, 1, 1, 1};
+  23          
+  24          void initing_delay() {
+  25   1        u8 i = 0;
+  26   1        for (i = 0; i < 10; ++i) {
+  27   2          delay_ms(254);
+  28   2        }
+  29   1      }
+  30          
+  31          void delay_per_degree() {
+  32   1        delay_ms(32);
+  33   1      }
+  34          
+  35          
+  36          void init_position(int a[CNT_SERVOS], u8 e[CNT_SERVOS]) {
+  37   1        u8 i;
+  38   1        for (i = 0; i < CNT_SERVOS; ++i) {
+  39   2          e[i] = 1;
+  40   2          if (i < 4) {
+  41   3            a[i] = angles[i] - INTER_ANGLE;
+  42   3            Servo_T0_Set_Target_Degree(a, e);
+  43   3            initing_delay();
+  44   3          }
+  45   2          
+  46   2          a[i] = angles[i] + INTER_ANGLE;
+  47   2          Servo_T0_Set_Target_Degree(a, e);
+  48   2          initing_delay();
+  49   2          
+  50   2          a[i] = angles[i];
+  51   2          Servo_T0_Set_Target_Degree(a, e);
+  52   2          initing_delay();
+  53   2        }
+  54   1      }
+C51 COMPILER V9.60.7.0   MAIN                                                              01/21/2024 17:50:53 PAGE 2   
+
+  55          
+  56          void to_initial_pos() {
+  57   1        xdata int initial_pos[CNT_SERVOS];
+  58   1        initial_pos[0] = 90;
+  59   1        initial_pos[1] = 90;
+  60   1        initial_pos[2] = 135;
+  61   1        initial_pos[3] = 135;
+  62   1        initial_pos[4] = 0;
+  63   1        initial_pos[5] = 0;
+  64   1        Servo_T0_Set_Target_Degree(initial_pos, ens);
+  65   1        Servo_T1_Set_Target_Degree(initial_pos, ens);
+  66   1      }
+  67          
+  68          void to_flat_pos() {
+  69   1        xdata int initial_pos[CNT_SERVOS];
+  70   1        initial_pos[0] = 180;
+  71   1        initial_pos[1] = 90;
+  72   1        initial_pos[2] = 135;
+  73   1        initial_pos[3] = 135;
+  74   1        initial_pos[4] = 0;
+  75   1        initial_pos[5] = 0;
+  76   1        Servo_T0_Set_Target_Degree(initial_pos, ens);
+  77   1        Servo_T1_Set_Target_Degree(initial_pos, ens);
+  78   1      }
+  79          
+  80          // Ê¹ÓÃ 30.000 MHzÉÕÂ¼
+  81          void main() {
+  82   1        u8 i;
+  83   1        xdata int angles_t0[CNT_SERVOS], angles_t1[CNT_SERVOS];
+  84   1        xdata u8 ens_t0[CNT_SERVOS], ens_t1[CNT_SERVOS];
+  85   1      
+  86   1        for (i = 0; i < CNT_SERVOS; ++i) {
+  87   2          angles_t0[i] = 0;
+  88   2          ens_t0[i] = 0;
+  89   2      
+  90   2          angles_t1[i] = 0;
+  91   2          ens_t1[i] = 0;
+  92   2        }
+  93   1        
+  94   1        GPIO_Config();
+  95   1        Servo_T0_Init();
+  96   1        Servo_T1_Init();
+  97   1        
+  98   1        while (1) {
+  99   2          to_initial_pos();
+ 100   2          for (i = 0; i < 50; ++i) {
+ 101   3            delay_ms(254);
+ 102   3          }
+ 103   2          to_flat_pos();
+ 104   2        }
+ 105   1        
+ 106   1        // init_position(angles_t0, ens_t0);
+ 107   1        // init_position(angles_t1, ens_t1);
+ 108   1        
+ 109   1        /*ens_t0[0] = 1;
+ 110   1        ens_t0[2] = 1;
+ 111   1        ens_t0[4] = 1;
+ 112   1      
+ 113   1        angles_t0[0] = 89;
+ 114   1        angles_t0[2] = 136;
+ 115   1        angles_t0[4] = 1;
+ 116   1        Servo_T0_Set_Target_Degree(angles_t0, ens_t0);
+C51 COMPILER V9.60.7.0   MAIN                                                              01/21/2024 17:50:53 PAGE 3   
+
+ 117   1        delay_per_degree();
+ 118   1        angles_t0[0] = 87;
+ 119   1        angles_t0[2] = 137;
+ 120   1        angles_t0[4] = 2;
+ 121   1        Servo_T0_Set_Target_Degree(angles_t0, ens_t0);
+ 122   1        delay_per_degree();
+ 123   1        angles_t0[0] = 86;
+ 124   1        angles_t0[2] = 138;
+ 125   1        angles_t0[4] = 3;
+ 126   1        Servo_T0_Set_Target_Degree(angles_t0, ens_t0);
+ 127   1        delay_per_degree();
+ 128   1        angles_t0[0] = 85;
+ 129   1        angles_t0[2] = 139;
+ 130   1        angles_t0[4] = 4;
+ 131   1        Servo_T0_Set_Target_Degree(angles_t0, ens_t0);
+ 132   1        delay_per_degree();
+ 133   1        angles_t0[0] = 84;
+ 134   1        angles_t0[2] = 140;
+ 135   1        angles_t0[4] = 5;
+ 136   1        Servo_T0_Set_Target_Degree(angles_t0, ens_t0);
+ 137   1        delay_per_degree();
+ 138   1        angles_t0[0] = 83;
+ 139   1        angles_t0[2] = 141;
+ 140   1        angles_t0[4] = 6;
+ 141   1        Servo_T0_Set_Target_Degree(angles_t0, ens_t0);
+ 142   1        delay_per_degree();
+ 143   1        angles_t0[0] = 82;
+ 144   1        angles_t0[2] = 142;
+ 145   1        angles_t0[4] = 7;
+ 146   1        Servo_T0_Set_Target_Degree(angles_t0, ens_t0);
+ 147   1        delay_per_degree();
+ 148   1        angles_t0[0] = 81;
+ 149   1        angles_t0[2] = 143;
+ 150   1        angles_t0[4] = 8;
+ 151   1        Servo_T0_Set_Target_Degree(angles_t0, ens_t0);
+ 152   1        delay_per_degree();
+ 153   1        angles_t0[0] = 80;
+ 154   1        angles_t0[2] = 144;
+ 155   1        angles_t0[4] = 9;
+ 156   1        Servo_T0_Set_Target_Degree(angles_t0, ens_t0);
+ 157   1        delay_per_degree();
+ 158   1        angles_t0[0] = 79;
+ 159   1        angles_t0[2] = 145;
+ 160   1        angles_t0[4] = 10;
+ 161   1        Servo_T0_Set_Target_Degree(angles_t0, ens_t0);
+ 162   1        delay_per_degree();
+ 163   1        angles_t0[0] = 78;
+ 164   1        Servo_T0_Set_Target_Degree(angles_t0, ens_t0);
+ 165   1        delay_per_degree();
+ 166   1        angles_t0[0] = 77;
+ 167   1        Servo_T0_Set_Target_Degree(angles_t0, ens_t0);
+ 168   1        delay_per_degree();
+ 169   1        angles_t0[0] = 76;
+ 170   1        Servo_T0_Set_Target_Degree(angles_t0, ens_t0);
+ 171   1        delay_per_degree();
+ 172   1        angles_t0[0] = 75;
+ 173   1        Servo_T0_Set_Target_Degree(angles_t0, ens_t0);
+ 174   1        delay_per_degree();
+ 175   1        angles_t0[0] = 74;
+ 176   1        Servo_T0_Set_Target_Degree(angles_t0, ens_t0);
+ 177   1        delay_per_degree();
+ 178   1        angles_t0[0] = 73;
+C51 COMPILER V9.60.7.0   MAIN                                                              01/21/2024 17:50:53 PAGE 4   
+
+ 179   1        Servo_T0_Set_Target_Degree(angles_t0, ens_t0);
+ 180   1        delay_per_degree();
+ 181   1        angles_t0[0] = 72;
+ 182   1        Servo_T0_Set_Target_Degree(angles_t0, ens_t0);
+ 183   1        delay_per_degree();
+ 184   1        angles_t0[0] = 71;
+ 185   1        Servo_T0_Set_Target_Degree(angles_t0, ens_t0);
+ 186   1        delay_per_degree();
+ 187   1        angles_t0[0] = 70;
+ 188   1        Servo_T0_Set_Target_Degree(angles_t0, ens_t0);
+ 189   1        delay_per_degree();
+ 190   1        angles_t0[0] = 69;
+ 191   1        Servo_T0_Set_Target_Degree(angles_t0, ens_t0);
+ 192   1        delay_per_degree();
+ 193   1        
+ 194   1        delay_per_degree();
+ 195   1        angles_t0[0] = 68;
+ 196   1        Servo_T0_Set_Target_Degree(angles_t0, ens_t0);
+ 197   1        delay_per_degree();
+ 198   1        angles_t0[0] = 67;
+ 199   1        Servo_T0_Set_Target_Degree(angles_t0, ens_t0);
+ 200   1        delay_per_degree();
+ 201   1        angles_t0[0] = 66;
+ 202   1        Servo_T0_Set_Target_Degree(angles_t0, ens_t0);
+ 203   1        delay_per_degree();
+ 204   1        angles_t0[0] = 65;
+ 205   1        Servo_T0_Set_Target_Degree(angles_t0, ens_t0);
+ 206   1        delay_per_degree();
+ 207   1        angles_t0[0] = 64;
+ 208   1        Servo_T0_Set_Target_Degree(angles_t0, ens_t0);
+ 209   1        delay_per_degree();
+ 210   1        angles_t0[0] = 63;
+ 211   1        Servo_T0_Set_Target_Degree(angles_t0, ens_t0);
+ 212   1        delay_per_degree();
+ 213   1        angles_t0[0] = 62;
+ 214   1        Servo_T0_Set_Target_Degree(angles_t0, ens_t0);
+ 215   1        delay_per_degree();
+ 216   1        angles_t0[0] = 61;
+ 217   1        Servo_T0_Set_Target_Degree(angles_t0, ens_t0);
+ 218   1        delay_per_degree();
+ 219   1        angles_t0[0] = 60;
+ 220   1        
+ 221   1        initing_delay();
+ 222   1        Servo_T0_Set_Target_Degree(angles, ens_t0);*/
+ 223   1        
+ 224   1        while (1) {
+ 225   2        }
+ 226   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    543    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =     18      60
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      11
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

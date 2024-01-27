@@ -1,9 +1,9 @@
-C51 COMPILER V9.60.0.0   STC8A_TIMER_ISR                                                   08/27/2022 13:13:28 PAGE 1   
+C51 COMPILER V9.60.7.0   STC8A_TIMER_ISR                                                   12/30/2023 00:40:23 PAGE 1   
 
 
-C51 COMPILER V9.60.0.0, COMPILATION OF MODULE STC8A_TIMER_ISR
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE STC8A_TIMER_ISR
 OBJECT MODULE PLACED IN .\Objects\STC8A_Timer_Isr.obj
-COMPILER INVOKED BY: d:\Keil_v5\C51\BIN\C51.EXE src\STC8A_Timer_Isr.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\STC8A_Timer_Isr.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(
                     -.\Listings\STC8A_Timer_Isr.lst) TABS(2) OBJECT(.\Objects\STC8A_Timer_Isr.obj)
 
 line level    source
@@ -62,7 +62,7 @@ line level    source
   52   1      }
   53          
   54          //========================================================================
-C51 COMPILER V9.60.0.0   STC8A_TIMER_ISR                                                   08/27/2022 13:13:28 PAGE 2   
+C51 COMPILER V9.60.7.0   STC8A_TIMER_ISR                                                   12/30/2023 00:40:23 PAGE 2   
 
   55          // º¯Êý: Timer3_ISR_Handler
   56          // ÃèÊö: Timer3ÖÐ¶Ïº¯Êý.
