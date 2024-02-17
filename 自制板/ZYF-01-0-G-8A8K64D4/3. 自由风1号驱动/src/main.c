@@ -67,12 +67,42 @@ void to_initial_pos() {
 
 void to_flat_pos() {
 	xdata int initial_pos[CNT_SERVOS];
+	initial_pos[0] = 0;
+	initial_pos[1] = 180;
+	initial_pos[2] = 100;
+	initial_pos[3] = 100;
+	initial_pos[4] = 135;
+	initial_pos[5] = 135;
+	Servo_T0_Set_Target_Degree(initial_pos, ens);
 	initial_pos[0] = 180;
+	initial_pos[1] = 0;
+	initial_pos[2] = 100;
+	initial_pos[3] = 100;
+	initial_pos[4] = 135;
+	initial_pos[5] = 135;
+	Servo_T1_Set_Target_Degree(initial_pos, ens);
+}
+
+void to_jump_initial() {
+	xdata int initial_pos[CNT_SERVOS];
+	initial_pos[0] = 90;
 	initial_pos[1] = 90;
-	initial_pos[2] = 135;
-	initial_pos[3] = 135;
+	initial_pos[2] = 160;
+	initial_pos[3] = 160;
 	initial_pos[4] = 0;
 	initial_pos[5] = 0;
+	Servo_T0_Set_Target_Degree(initial_pos, ens);
+	Servo_T1_Set_Target_Degree(initial_pos, ens);
+}
+
+void to_jump_space() {
+	xdata int initial_pos[CNT_SERVOS];
+	initial_pos[0] = 90;
+	initial_pos[1] = 90;
+	initial_pos[2] = 0;
+	initial_pos[3] = 0;
+	initial_pos[4] = 130;
+	initial_pos[5] = 130;
 	Servo_T0_Set_Target_Degree(initial_pos, ens);
 	Servo_T1_Set_Target_Degree(initial_pos, ens);
 }
@@ -97,10 +127,14 @@ void main() {
 	
 	while (1) {
 		to_initial_pos();
-		for (i = 0; i < 50; ++i) {
+		for (i = 0; i < 20; ++i) {
 			delay_ms(254);
 		}
-		to_flat_pos();
+		to_jump_space();
+
+		for (i = 0; i < 20; ++i) {
+			delay_ms(254);
+		}
 	}
 	
 	// init_position(angles_t0, ens_t0);
