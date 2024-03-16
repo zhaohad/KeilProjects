@@ -1,0 +1,205 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              03/16/2024 19:21:59 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\
+                    -main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "stc8a8k64d4.h"
+   2          #include "stc8a_gpio.h"
+   3          #include "typedef.h"
+   4          #include "servo_t0.h"
+   5          #include "servo_t1.h"
+   6          #include "delay.h"
+   7          #include "action_def.h"
+   8          #include "action.h"
+   9          #include "dtos.h"
+  10          #include "G01_S.h"
+  11          #include "oled12864.h"
+  12          #include <stdlib.h>
+  13          #include <stdio.h>
+  14          #include "communication_protocol.h"
+  15          
+  16          #define CNT_SERVOS 6
+  17          #define DMS_MIN 10
+  18          #define DMS_NORM 32
+  19          #define INTER_ANGLE 30
+  20          
+  21          
+  22          void OLED_GPIO_Config() {
+  23   1        xdata GPIO_InitTypeDef conf;
+  24   1        conf.Mode = GPIO_OUT_PP;
+  25   1        conf.Pin = GPIO_Pin_2;
+  26   1        GPIO_Inilize(GPIO_P4, &conf);
+  27   1      
+  28   1        conf.Mode = GPIO_OUT_PP;
+  29   1        conf.Pin = GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4;
+  30   1        GPIO_Inilize(GPIO_P2, &conf);
+  31   1      }
+  32          
+  33          void G01_S_GPIO_config() {
+  34   1        xdata GPIO_InitTypeDef conf;
+  35   1        conf.Mode = GPIO_PullUp;  
+  36   1        conf.Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4;
+  37   1        GPIO_Inilize(GPIO_P0, &conf);
+  38   1        
+  39   1        conf.Pin = GPIO_Pin_3;
+  40   1        GPIO_Inilize(GPIO_P4, &conf);
+  41   1        
+  42   1        NRF24L01_Gpio_Init();
+  43   1      }
+  44          
+  45          void SERVO_GPIO_Config() {
+  46   1        xdata GPIO_InitTypeDef conf;
+  47   1        conf.Mode = GPIO_PullUp;
+  48   1        conf.Pin = GPIO_Pin_7 | GPIO_Pin_6 | GPIO_Pin_5 | GPIO_Pin_0;
+  49   1        GPIO_Inilize(GPIO_P2, &conf);
+  50   1      
+  51   1        conf.Pin = GPIO_Pin_7 | GPIO_Pin_6 | GPIO_Pin_5;
+  52   1        GPIO_Inilize(GPIO_P0, &conf);
+  53   1      
+  54   1        conf.Pin = GPIO_Pin_7 | GPIO_Pin_2;
+C51 COMPILER V9.60.7.0   MAIN                                                              03/16/2024 19:21:59 PAGE 2   
+
+  55   1        GPIO_Inilize(GPIO_P3, &conf);
+  56   1        
+  57   1        conf.Pin = GPIO_Pin_1 | GPIO_Pin_0;
+  58   1        GPIO_Inilize(GPIO_P4, &conf);
+  59   1        
+  60   1        conf.Pin = GPIO_Pin_5;
+  61   1        GPIO_Inilize(GPIO_P5, &conf);
+  62   1      }
+  63          
+  64          void initing_delay() {
+  65   1        xdata u8 i = 0;
+  66   1        for (i = 0; i < 5; ++i) {
+  67   2          delay_ms(254);
+  68   2        }
+  69   1      }
+  70          
+  71          void delay_per_degree(u8 dms) {
+  72   1        xdata u8 i;
+  73   1        for (i = 0; i < 1; ++i) {
+  74   2          // delay_ms(32);
+  75   2          delay_ms(dms);
+  76   2        }
+  77   1      }
+  78          
+  79          void to_initial_pos() {
+  80   1        Servo_T0_Set_Target_Degree((u8 *) ACT_TO_INIT[0]);
+  81   1        Servo_T1_Set_Target_Degree((u8 *) ACT_TO_INIT[0] + CNT_SERVOS);
+  82   1      }
+  83          
+  84          // 使用 30.000 MHz烧录
+  85          void main() {
+  86   1        bit exist;
+  87   1        SERVO_GPIO_Config();
+  88   1        Servo_T0_Init();
+  89   1        Servo_T1_Init();
+  90   1        OLED_GPIO_Config();
+  91   1        OLED_Init();
+  92   1        G01_S_GPIO_config();
+  93   1      
+  94   1        to_initial_pos();
+  95   1        initing_delay();
+  96   1        Action_Timer_Init();
+  97   1      
+  98   1        exist = NRF24L01_check();
+  99   1        
+ 100   1        RF24L01_Init();
+ 101   1        _nop_();_nop_();_nop_();_nop_();_nop_();
+ 102   1      
+ 103   1      
+ 104   1        RF24L01_Set_Mode(MODE_RX); //接收模式
+ 105   1        _nop_();_nop_();_nop_();_nop_();_nop_();
+ 106   1        
+ 107   1        OLED_ShowBootIMG();
+ 108   1      
+ 109   1        while(1) {
+ 110   2          xdata u8 forwardV = 0;
+ 111   2          xdata u8 backwardV = 0;
+ 112   2          bit turnLeft = 0;
+ 113   2          bit turnRight = 0;
+ 114   2          bit actDance = 0;
+ 115   2          bit actRock = 0;
+ 116   2          bit actWangtian = 0;
+C51 COMPILER V9.60.7.0   MAIN                                                              03/16/2024 19:21:59 PAGE 3   
+
+ 117   2      
+ 118   2          xdata uint8_t rx;
+ 119   2          xdata uint8_t g_rece[MAX_INTERACTIVE_CNT * 3];
+ 120   2          rx = NRF24L01_RxPacket(g_rece); //接收字节
+ 121   2          
+ 122   2          if (rx >= 2) {
+ 123   3            xdata u8 i;
+ 124   3            for (i = 0; i < rx; ++i) {
+ 125   4              u8 cmd = g_rece[i];
+ 126   4              xdata v = g_rece[i + 1];
+ 127   4              ++i;
+ 128   4              switch (cmd) {
+ 129   5                case KEY_JOINSTICK_LEFT_V:
+ 130   5                  if (v > 90) { forwardV = 5; } else if (v > 80) { forwardV = 4; } else if (v > 70) { forwardV = 3; } 
+             -else if (v > 60) { forwardV = 2; } else if (v > 50) { forwardV = 1; } else if (v < 10) { backwardV = 5; } else if (v < 2
+             -0) { backwardV = 4; } else if (v < 30) { backwardV = 3; } else if (v < 40) { backwardV = 2; } else if (v < 50) { backwar
+             -dV = 1; }
+ 131   5                  break;
+ 132   5                case KEY_K5:
+ 133   5                  turnLeft = v;
+ 134   5                  break;
+ 135   5                case KEY_K7:
+ 136   5                  turnRight = v;
+ 137   5                  break;
+ 138   5                case KEY_K10:
+ 139   5                  actRock = v;
+ 140   5                  break;
+ 141   5                case KEY_K11:
+ 142   5                  actDance = v;
+ 143   5                  break;
+ 144   5                case KEY_K4:
+ 145   5                  actWangtian = v;
+ 146   5                  break;
+ 147   5              }
+ 148   4            }
+ 149   3          }
+ 150   2            
+ 151   2          if (forwardV) {
+ 152   3            g_action_cmd_next = ACTION_FORWARD;
+ 153   3            g_action_cmd_v_next = forwardV;
+ 154   3          } else if (backwardV) {
+ 155   3            g_action_cmd_next = ACTION_BACKWARD;
+ 156   3            g_action_cmd_v_next = backwardV;
+ 157   3          } else if (turnLeft) {
+ 158   3            g_action_cmd_next = ACTION_TURN_LEFT;
+ 159   3          } else if (turnRight) {
+ 160   3            g_action_cmd_next = ACTION_TURN_RIGHT;
+ 161   3          } else if (actRock) {
+ 162   3            g_action_cmd_next = ACTION_ROCK;
+ 163   3          } else if (actWangtian) {
+ 164   3            g_action_cmd_next = ACTION_WANGTIAN;
+ 165   3          } else if (actDance) {
+ 166   3            g_action_cmd_next = ACTION_DANCE;
+ 167   3          } else {
+ 168   3            g_action_cmd_next = ACTION_NONE;
+ 169   3            g_action_cmd_v_next = 0;
+ 170   3          }
+ 171   2        }
+ 172   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+C51 COMPILER V9.60.7.0   MAIN                                                              03/16/2024 19:21:59 PAGE 4   
+
+   CODE SIZE        =    806    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----      68
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       6
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

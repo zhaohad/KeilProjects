@@ -1,0 +1,80 @@
+C51 COMPILER V9.60.7.0   ACTION_DEF                                                        03/16/2024 19:22:01 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE ACTION_DEF
+OBJECT MODULE PLACED IN .\Objects\action_def.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\action_def.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Lis
+                    -tings\action_def.lst) TABS(2) OBJECT(.\Objects\action_def.obj)
+
+line level    source
+
+   1          #include "action_def.h"
+   2          
+   3          // 角度 X 6 X 2, 一步周期数，每步步距角度
+   4          u8 code ACT_TO_INIT[CNT_ACTION_TO_INIT][CNT_ITEM_PER_ACTION] = {
+   5            75, 105, 135, 135, 0, 0, 105, 75, 135, 135, 0, 0, 1, 5,
+   6          };
+   7          
+   8          u8 code ACT_FORWORD[CNT_ACTION_FORWARD][CNT_ITEM_PER_ACTION] = {
+   9            60,   90,   160, 135, 0, 0,   120,  90, 135, 160, 0, 0, 1, 5,
+  10            60,   90,   135, 135, 0, 0,   120,  90, 135, 135, 0, 0, 1, 5,
+  11            90,   120,  135, 160, 0, 0,   90,   60, 160, 135, 0, 0, 1, 5, 
+  12            90,   120,  135, 135, 0, 0,   90,   60, 135, 135, 0, 0, 1, 5,
+  13          };
+  14          
+  15          u8 code ACT_BACKWORD[CNT_ACTION_BACKWARD][CNT_ITEM_PER_ACTION] = {
+  16            90,   120,  160, 135, 0, 0,   90,   60, 135, 160, 0, 0, 1, 5,
+  17            90,   120,  135, 135, 0, 0,   90,   60, 135, 135, 0, 0, 1, 5,
+  18            60,   90,   135, 160, 0, 0,   120,  90, 160, 135, 0, 0, 1, 5, 
+  19            60,   90,   135, 135, 0, 0,   120,  90, 135, 135, 0, 0, 1, 5,
+  20          };
+  21          
+  22          u8 code ACT_TURN_LEFT[CNT_ACTION_TURN_LEFT][CNT_ITEM_PER_ACTION] = {
+  23            60,   120,  160, 135, 0, 0,   120,  60, 135, 160, 0, 0, 1, 5,
+  24            60,   120,  135, 135, 0, 0,   120,  60, 135, 135, 0, 0, 1, 5,
+  25            90,   90,   135, 160, 0, 0,   90,   90, 160, 135, 0, 0, 1, 5, 
+  26            90,   90,   135, 135, 0, 0,   90,   90, 135, 135, 0, 0, 1, 5,
+  27          };
+  28          
+  29          u8 code ACT_TURN_RIGHT[CNT_ACTION_TURN_RIGHT][CNT_ITEM_PER_ACTION] = {
+  30            60,   120,  135, 160, 0, 0,   120,  60, 160, 135, 0, 0, 1, 5,
+  31            60,   120,  135, 135, 0, 0,   120,  60, 135, 135, 0, 0, 1, 5,
+  32            90,   90,   160, 135, 0, 0,   90,   90, 135, 160, 0, 0, 1, 5, 
+  33            90,   90,   135, 135, 0, 0,   90,   90, 135, 135, 0, 0, 1, 5,
+  34          };
+  35          
+  36          u8 code ACT_ROCK[CNT_ACTION_ROCK][CNT_ITEM_PER_ACTION] = {
+  37            75,   105,  160, 160, 0, 0,   75,   105, 160, 160, 0, 0, 1, 5,
+  38            75,   105,  135, 135, 0, 0,   75,   105, 135, 135, 0, 0, 1, 5,
+  39            105,  75,   160, 160, 0, 0,   105,  75, 160, 160, 0, 0, 1, 5, 
+  40            105,  75,   135, 135, 0, 0,   105,  75, 135, 135, 0, 0, 1, 5,
+  41          };
+  42          
+  43          u8 code ACT_WANGTIAN[CNT_ACTION_WANGTIAN][CNT_ITEM_PER_ACTION] = {
+  44            75, 105, 0, 0, 120, 120, 105, 75, 130, 130, 5, 5, 1, 5,
+  45            75, 105, 90, 10, 120, 120, 105, 75, 130, 130, 5, 5, 1, 5,
+  46            0, 105, 90, 10, 115, 115, 105, 75, 130, 130, 5, 5, 1, 5,
+  47          };
+  48          
+  49          u8 code ACT_DANCE[CNT_ACTION_DANCE][CNT_ITEM_PER_ACTION] = {
+  50            75, 105, 80, 80, 50, 50, 105, 75, 120, 120, 15, 15, 1, 5,
+  51            75, 105, 80, 80, 50, 50, 105, 75, 135, 105, 0, 30, 1, 3,
+  52            75, 105, 80, 80, 50, 50, 105, 75, 120, 120, 15, 15, 1, 3,
+  53            75, 105, 80, 80, 50, 50, 105, 75, 120, 135, 30, 0, 1, 3,
+  54          };
+C51 COMPILER V9.60.7.0   ACTION_DEF                                                        03/16/2024 19:22:01 PAGE 2   
+
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =    392    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

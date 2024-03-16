@@ -1,0 +1,127 @@
+C51 COMPILER V9.60.7.0   GLOBAL_STATUS                                                     03/16/2024 15:06:43 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE GLOBAL_STATUS
+OBJECT MODULE PLACED IN .\Objects\global_status.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\global_status.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\
+                    -Listings\global_status.lst) TABS(2) OBJECT(.\Objects\global_status.obj)
+
+line level    source
+
+   1          #include "global_status.h"
+   2          #include "stc8a_timer.h"
+   3          #include "stc8a_nvic.h"
+   4          #include "typedef.h"
+   5          #include "communication_protocol.h"
+   6          #include "G01_S.h"
+   7          
+   8          xdata u8 g_status = 0;
+   9          
+  10          bit g_heart_beat = 1;
+  11          xdata u8 g_heart_beat_cnt = 0;
+  12          xdata u8 g_heart_beat_retry_cnt = 0;
+  13          #define HEART_BEAT_INTERVAL 50
+  14          #define HEART_BEAT_RETRY_CNT 3
+  15          
+  16          
+  17          #define CONNECTED_FLICKER_INTERVAL 40
+  18          xdata u8 g_connected_flicker_cnt = 0;
+  19          
+  20          
+  21          // 30.000 MHZ T2 12T 16位自动重载 周期10ms
+  22          void Global_Status_Timer_Init() {
+  23   1        TIM_InitTypeDef TIM_InitStructure;
+  24   1        TIM_InitStructure.TIM_Mode      = TIM_16BitAutoReload;
+  25   1        TIM_InitStructure.TIM_ClkSource = TIM_CLOCK_12T;    //指定时钟源,     TIM_CLOCK_1T,TIM_CLOCK_12T,TIM_CLOCK_
+             -Ext
+  26   1        TIM_InitStructure.TIM_ClkOut    = DISABLE;        //是否输出高速脉冲, ENABLE或DISABLE
+  27   1        TIM_InitStructure.TIM_Run       = ENABLE;         //是否初始化后启动定时器, ENABLE或DISABLE
+  28   1        Timer_Inilize(Timer2, &TIM_InitStructure);          //初始化Timer2    Timer0,Timer1,Timer2,Timer3,Timer4
+  29   1        T2L = 0x58;       //设置定时初始值
+  30   1        T2H = 0x9E;       //设置定时初始值
+  31   1        NVIC_Timer2_Init(ENABLE, NULL);   //中断使能, ENABLE/DISABLE; 无优先级
+  32   1      
+  33   1        EA = 1;
+  34   1      }
+  35          
+  36          // 30.000 MHZ T3 12T 16位自动重载 最大周期26214us -> 26ms
+  37          void Global_Status_Hear_Beat_Timer_Init() {
+  38   1        TIM_InitTypeDef TIM_InitStructure;
+  39   1        TIM_InitStructure.TIM_Mode      = TIM_16BitAutoReload;
+  40   1        TIM_InitStructure.TIM_ClkSource = TIM_CLOCK_12T;    //指定时钟源,     TIM_CLOCK_1T,TIM_CLOCK_12T,TIM_CLOCK_
+             -Ext
+  41   1        TIM_InitStructure.TIM_ClkOut    = DISABLE;        //是否输出高速脉冲, ENABLE或DISABLE
+  42   1        TIM_InitStructure.TIM_Run       = ENABLE;         //是否初始化后启动定时器, ENABLE或DISABLE
+  43   1        Timer_Inilize(Timer3, &TIM_InitStructure);          //初始化Timer2    Timer0,Timer1,Timer2,Timer3,Timer4
+  44   1        T2L = 0;        //设置定时初始值
+  45   1        T2H = 0;        //设置定时初始值
+  46   1        NVIC_Timer3_Init(ENABLE, NULL);   //中断使能, ENABLE/DISABLE; 无优先级
+  47   1      
+  48   1        EA = 1;
+  49   1      }
+  50          
+  51          // 30.000 MHZ T3 12T 16位自动重载 最大周期26214us -> 26ms
+  52          void Global_Status_Heart_Beat_Timer_Callback() {
+C51 COMPILER V9.60.7.0   GLOBAL_STATUS                                                     03/16/2024 15:06:43 PAGE 2   
+
+  53   1        if (g_heart_beat) {
+  54   2          g_heart_beat_cnt++;
+  55   2          if (g_heart_beat_cnt == HEART_BEAT_INTERVAL) {
+  56   3            xdata u8 res = 0;
+  57   3            
+  58   3            res = NRF24L01_TxPacket((uint8_t *) COMMUICATION_HEART_BEAT, HEART_BEAT_LEN);
+  59   3            if (res == TX_OK) {
+  60   4              g_heart_beat_retry_cnt = 0;
+  61   4              Global_Status_Set_Status(STATUS_CONNECTED);
+  62   4            } else {
+  63   4              g_heart_beat_retry_cnt++;
+  64   4              if (g_heart_beat_retry_cnt == HEART_BEAT_RETRY_CNT) {
+  65   5                Global_Status_Set_Status(STATUS_CONNECTING);
+  66   5                g_heart_beat_retry_cnt = 0;
+  67   5              }
+  68   4            }
+  69   3            g_heart_beat_cnt = 0;
+  70   3          }
+  71   2        } else {
+  72   2          g_heart_beat_cnt = 0;
+  73   2          g_heart_beat_retry_cnt = 0;
+  74   2        }
+  75   1      }
+  76          
+  77          // 30.000 MHZ 10ms一周期
+  78          void Global_Status_Timer_Callback() {
+  79   1        switch (g_status) {
+  80   2          case STATUS_CONNECTING:
+  81   2            g_connected_flicker_cnt++;
+  82   2            if (g_connected_flicker_cnt == CONNECTED_FLICKER_INTERVAL) {
+  83   3              P_LED_3 = !P_LED_3;
+  84   3              g_connected_flicker_cnt = 0;
+  85   3            }
+  86   2            break;
+  87   2          case STATUS_CONNECTED:
+  88   2            P_LED_3 = 0;
+  89   2            break;
+  90   2        }
+  91   1      }
+  92          
+  93          void Global_Status_Set_Status(u8 status) {
+  94   1        g_status = status;
+  95   1      }
+  96          
+  97          void Global_Status_Do_Heart_Beat(bit hb) {
+  98   1        g_heart_beat = hb;
+  99   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    192    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      4       1
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      12
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

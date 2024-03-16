@@ -1,0 +1,150 @@
+C51 COMPILER V9.60.7.0   ACTION                                                            03/16/2024 19:22:00 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE ACTION
+OBJECT MODULE PLACED IN .\Objects\action.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\action.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listing
+                    -s\action.lst) TABS(2) OBJECT(.\Objects\action.obj)
+
+line level    source
+
+   1          #include "action.h"
+   2          #include "action_def.h"
+   3          #include "stc8a_timer.h"
+   4          #include "stc8a_nvic.h"
+   5          
+   6          #include "servo_t0.h"
+   7          #include "servo_t1.h"
+   8          
+   9          u8 (* g_cur_action)[CNT_ITEM_PER_ACTION] = ACT_FORWORD;
+  10          u8 g_cur_action_max_step = 0;
+  11          u8 g_cur_step = 0;
+  12          u8 g_step_speed = 1;
+  13          u8 g_timer_cnt = 0;
+  14          xdata u8 g_action_cmd = 0;
+  15          xdata u8 g_action_cmd_v = 0;
+  16          xdata u8 g_action_cmd_next = 0;
+  17          xdata u8 g_action_cmd_v_next = 0;
+  18          
+  19          
+  20          void Action_Timer_Init() {
+  21   1        TIM_InitTypeDef TIM_InitStructure;
+  22   1        // TIM_InitStructure.TIM_Mode      = TIM_16BitAutoReload;
+  23   1        TIM_InitStructure.TIM_ClkSource = TIM_CLOCK_12T;    //指定时钟源,     TIM_CLOCK_1T,TIM_CLOCK_12T,TIM_CLOCK_
+             -Ext
+  24   1        TIM_InitStructure.TIM_ClkOut    = DISABLE;        //是否输出高速脉冲, ENABLE或DISABLE
+  25   1        TIM_InitStructure.TIM_Run       = ENABLE;         //是否初始化后启动定时器, ENABLE或DISABLE
+  26   1        Timer_Inilize(Timer2,&TIM_InitStructure);         //初始化Timer2    Timer0,Timer1,Timer2,Timer3,Timer4
+  27   1        T2L = 0xB0;       //设置定时初始值
+  28   1        T2H = 0x3C;       //设置定时初始值
+  29   1        NVIC_Timer2_Init(ENABLE, NULL);   //中断使能, ENABLE/DISABLE; 无优先级
+  30   1      
+  31   1        EA = 1;
+  32   1      }
+  33          
+  34          // 30.000 MHZ 20ms一周期
+  35          void Action_Timer_Callback() {
+  36   1        xdata u8 step_done = 0;
+  37   1        xdata u8 stride = 0;
+  38   1      
+  39   1        switch (g_action_cmd) {
+  40   2          case ACTION_FORWARD: {
+  41   3            g_cur_action = ACT_FORWORD;
+  42   3            g_cur_action_max_step = CNT_ACTION_FORWARD;
+  43   3            stride = g_action_cmd_v;
+  44   3            break;
+  45   3          }
+  46   2          case ACTION_BACKWARD: {
+  47   3            g_cur_action = ACT_BACKWORD;
+  48   3            g_cur_action_max_step = CNT_ACTION_BACKWARD;
+  49   3            stride = g_action_cmd_v;
+  50   3            break;
+  51   3          }
+  52   2          case ACTION_TO_INIT: {
+  53   3            g_cur_action = ACT_TO_INIT;
+C51 COMPILER V9.60.7.0   ACTION                                                            03/16/2024 19:22:00 PAGE 2   
+
+  54   3            g_cur_action_max_step = CNT_ACTION_TO_INIT;
+  55   3            break;
+  56   3          }
+  57   2          case ACTION_TURN_LEFT: {
+  58   3            g_cur_action = ACT_TURN_LEFT;
+  59   3            g_cur_action_max_step = CNT_ACTION_TURN_LEFT;
+  60   3            break;
+  61   3          }
+  62   2          case ACTION_TURN_RIGHT: {
+  63   3            g_cur_action = ACT_TURN_RIGHT;
+  64   3            g_cur_action_max_step = CNT_ACTION_TURN_RIGHT;
+  65   3            break;
+  66   3          }
+  67   2          case ACTION_DANCE: {
+  68   3            g_cur_action = ACT_DANCE;
+  69   3            g_cur_action_max_step = CNT_ACTION_DANCE;
+  70   3            break;
+  71   3          }
+  72   2          case ACTION_ROCK: {
+  73   3            g_cur_action = ACT_ROCK;
+  74   3            g_cur_action_max_step = CNT_ACTION_ROCK;
+  75   3            break;
+  76   3          }
+  77   2          case ACTION_WANGTIAN: {
+  78   3            g_cur_action = ACT_WANGTIAN;
+  79   3            g_cur_action_max_step = CNT_ACTION_WANGTIAN;
+  80   3            break;
+  81   3          }
+  82   2          default: {
+  83   3            g_cur_action = NULL;
+  84   3            g_action_cmd = g_action_cmd_next;
+  85   3            g_action_cmd_v = g_action_cmd_v_next;
+  86   3            g_cur_action_max_step = 0;
+  87   3            break;
+  88   3          }
+  89   2        }
+  90   1        
+  91   1        if (g_cur_action == NULL) {
+  92   2          return;
+  93   2        }
+  94   1      
+  95   1        if (stride == 0) {
+  96   2          stride = g_cur_action[g_cur_step][ACTION_STRIDE_INDEX];
+  97   2        }
+  98   1        ++g_timer_cnt;
+  99   1        if (g_cur_step < g_cur_action_max_step) {
+ 100   2          g_step_speed = g_cur_action[g_cur_step][ACTION_SPEED_INDEX];
+ 101   2          if (g_timer_cnt >= g_step_speed) {
+ 102   3            g_timer_cnt = 0;
+ 103   3            step_done = Servo_T0_Step_One(g_cur_action[g_cur_step], stride);
+ 104   3            step_done &= Servo_T1_Step_One((u8 *) g_cur_action[g_cur_step] + CNT_SERVOS, stride);
+ 105   3          }
+ 106   2          if (step_done) {
+ 107   3            ++g_cur_step;
+ 108   3          }
+ 109   2        } else {
+ 110   2          g_cur_step = 0;
+ 111   2          if (g_action_cmd == ACTION_WANGTIAN && g_action_cmd_next == ACTION_WANGTIAN) {
+ 112   3            g_cur_step = CNT_ACTION_WANGTIAN;
+ 113   3          } else if (g_action_cmd_next != ACTION_NONE) {
+ 114   3            g_action_cmd = g_action_cmd_next;
+ 115   3            g_action_cmd_v = g_action_cmd_v_next;
+C51 COMPILER V9.60.7.0   ACTION                                                            03/16/2024 19:22:00 PAGE 3   
+
+ 116   3          } else {
+ 117   3            g_action_cmd = ACTION_TO_INIT;
+ 118   3            g_action_cmd_v = 5;
+ 119   3          }
+ 120   2        }
+ 121   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    439    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      4       2
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      7       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

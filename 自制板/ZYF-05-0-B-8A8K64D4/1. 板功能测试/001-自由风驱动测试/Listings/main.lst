@@ -1,0 +1,121 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              03/12/2024 10:57:18 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\
+                    -main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "stc8a8k64d4.h"
+   2          #include "stc8a_gpio.h"
+   3          #include "typedef.h"
+   4          #include "servo_t0.h"
+   5          #include "servo_t1.h"
+   6          #include "delay.h"
+   7          #include "action_def.h"
+   8          #include "action.h"
+   9          
+  10          #define CNT_SERVOS 6
+  11          #define DMS_MIN 10
+  12          #define DMS_NORM 32
+  13          #define INIT_ANGLES 90, 90, 135, 135, 0, 0
+  14          #define INTER_ANGLE 30
+  15          
+  16          void SERVO_GPIO_Config() {
+  17   1        GPIO_InitTypeDef conf;
+  18   1        conf.Mode = GPIO_PullUp;
+  19   1        conf.Pin = GPIO_Pin_7 | GPIO_Pin_6 | GPIO_Pin_5 | GPIO_Pin_0;
+  20   1        GPIO_Inilize(GPIO_P2, &conf);
+  21   1      
+  22   1        conf.Pin = GPIO_Pin_7 | GPIO_Pin_6 | GPIO_Pin_5;
+  23   1        GPIO_Inilize(GPIO_P0, &conf);
+  24   1      
+  25   1        conf.Pin = GPIO_Pin_7 | GPIO_Pin_2;
+  26   1        GPIO_Inilize(GPIO_P3, &conf);
+  27   1        
+  28   1        conf.Pin = GPIO_Pin_1 | GPIO_Pin_0;
+  29   1        GPIO_Inilize(GPIO_P4, &conf);
+  30   1        
+  31   1        conf.Pin = GPIO_Pin_5;
+  32   1        GPIO_Inilize(GPIO_P5, &conf);
+  33   1      }
+  34          xdata u8 ens[CNT_SERVOS] = {1, 1, 1, 1, 1, 1};
+  35          
+  36          void initing_delay() {
+  37   1        u8 i = 0;
+  38   1        for (i = 0; i < 5; ++i) {
+  39   2          delay_ms(254);
+  40   2        }
+  41   1      }
+  42          
+  43          void delay_per_degree(u8 dms) {
+  44   1        u8 i;
+  45   1        for (i = 0; i < 1; ++i) {
+  46   2          // delay_ms(32);
+  47   2          delay_ms(dms);
+  48   2        }
+  49   1      }
+  50          
+  51          void to_initial_pos() {
+  52   1        xdata u8 initial_pos[CNT_SERVOS];
+  53   1        initial_pos[0] = 90;
+  54   1        initial_pos[1] = 90;
+C51 COMPILER V9.60.7.0   MAIN                                                              03/12/2024 10:57:18 PAGE 2   
+
+  55   1        initial_pos[2] = 135;
+  56   1        initial_pos[3] = 135;
+  57   1        initial_pos[4] = 0;
+  58   1        initial_pos[5] = 0;
+  59   1        Servo_T0_Set_Target_Degree(initial_pos);
+  60   1        Servo_T1_Set_Target_Degree(initial_pos);
+  61   1      }
+  62          
+  63          double pow(double a, u8 b) {
+  64   1        u8 i;
+  65   1        double r = 1;
+  66   1        for (i = 0; i < b; ++i) {
+  67   2          r *= a;
+  68   2        }
+  69   1        return r;
+  70   1      }
+  71          
+  72          // Ê¹ÓÃ 30.000 MHzÉÕÂ¼
+  73          void main() {
+  74   1        u8 i;
+  75   1        xdata int angles_t0[CNT_SERVOS], angles_t1[CNT_SERVOS];
+  76   1        xdata u8 ens_t0[CNT_SERVOS], ens_t1[CNT_SERVOS];
+  77   1      
+  78   1        for (i = 0; i < CNT_SERVOS; ++i) {
+  79   2          angles_t0[i] = 0;
+  80   2          ens_t0[i] = 0;
+  81   2      
+  82   2          angles_t1[i] = 0;
+  83   2          ens_t1[i] = 0;
+  84   2        }
+  85   1        
+  86   1        SERVO_GPIO_Config();
+  87   1        Servo_T0_Init();
+  88   1        Servo_T1_Init();
+  89   1        to_initial_pos();
+  90   1        initing_delay();
+  91   1        Action_Timer_Init();
+  92   1        
+  93   1        while (1) {
+  94   2        }
+  95   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    299    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      6      42
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      15
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

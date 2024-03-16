@@ -1,0 +1,225 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              03/12/2024 20:22:55 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\
+                    -main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "stc8a8k64d4.H"
+   2          #include "stc8a_gpio.H"
+   3          #include "stc8a_spi.h"
+   4          #include "stc8a_nvic.h"
+   5          #include "typedef.h"
+   6          #include "oled12864.h"
+   7          #include "uart.h"
+   8          #include "stc8a_adc.h"
+   9          #include "stc8a_switch.h"
+  10          #include "dtos.h"
+  11          #include "G01_S.h"
+  12          #include "stc8a_adc.h"
+  13          
+  14          void OLED_GPIO_Config() {
+  15   1        GPIO_InitTypeDef conf;
+  16   1        conf.Mode = GPIO_PullUp;
+  17   1        conf.Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2;
+  18   1        GPIO_Inilize(GPIO_P0, &conf);
+  19   1      
+  20   1        conf.Mode = GPIO_PullUp;
+  21   1        conf.Pin = GPIO_Pin_7 | GPIO_Pin_6;
+  22   1        GPIO_Inilize(GPIO_P2, &conf);
+  23   1      }
+  24          
+  25          void LED_GPIO_Config() {
+  26   1        GPIO_InitTypeDef conf;
+  27   1        conf.Mode = GPIO_PullUp;
+  28   1        conf.Pin = GPIO_Pin_7;
+  29   1        GPIO_Inilize(GPIO_P1, &conf);
+  30   1      
+  31   1        conf.Mode = GPIO_PullUp;
+  32   1        conf.Pin = GPIO_Pin_5;
+  33   1        GPIO_Inilize(GPIO_P5, &conf);
+  34   1      
+  35   1        conf.Mode = GPIO_PullUp;
+  36   1        conf.Pin = GPIO_Pin_0;
+  37   1        GPIO_Inilize(GPIO_P4, &conf);
+  38   1      }
+  39          
+  40          void G01_S_GPIO_config() {
+  41   1        xdata GPIO_InitTypeDef conf;
+  42   1        conf.Mode = GPIO_PullUp;  
+  43   1        conf.Pin = GPIO_Pin_0;
+  44   1        GPIO_Inilize(GPIO_P2, &conf);
+  45   1        
+  46   1        conf.Pin = GPIO_Pin_1;
+  47   1        GPIO_Inilize(GPIO_P4, &conf);
+  48   1      
+  49   1        conf.Pin = GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7;
+  50   1        GPIO_Inilize(GPIO_P3, &conf);
+  51   1        
+  52   1        NRF24L01_Gpio_Init();
+  53   1      }
+  54          
+C51 COMPILER V9.60.7.0   MAIN                                                              03/12/2024 20:22:55 PAGE 2   
+
+  55          void RZ7899_GPIO_Config() {
+  56   1        GPIO_InitTypeDef conf;
+  57   1        conf.Mode = GPIO_PullUp;
+  58   1        conf.Pin = GPIO_Pin_4;
+  59   1        GPIO_Inilize(GPIO_P2, &conf);
+  60   1      }
+  61          
+  62          void KEY_GPIO_Config() {
+  63   1        GPIO_InitTypeDef conf;
+  64   1        conf.Mode = GPIO_PullUp;
+  65   1        conf.Pin = GPIO_Pin_3 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_5;
+  66   1        GPIO_Inilize(GPIO_P2, &conf);
+  67   1      
+  68   1        conf.Pin = GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4;
+  69   1        GPIO_Inilize(GPIO_P4, &conf);
+  70   1        
+  71   1        conf.Pin = GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6;
+  72   1        GPIO_Inilize(GPIO_P1, &conf);
+  73   1        
+  74   1        conf.Pin = GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5;
+  75   1        GPIO_Inilize(GPIO_P0, &conf);
+  76   1        
+  77   1        conf.Pin = GPIO_Pin_3;
+  78   1        GPIO_Inilize(GPIO_P3, &conf);
+  79   1      }
+  80          
+  81          void GOPI_Config() {
+  82   1        OLED_GPIO_Config();
+  83   1        
+  84   1        LED_GPIO_Config();
+  85   1      
+  86   1        G01_S_GPIO_config();
+  87   1        
+  88   1        RZ7899_GPIO_Config();
+  89   1      }
+  90          
+  91          void ADC_Init() {
+  92   1        ADC_InitTypeDef ADC_InitStructure;    //结构定义
+  93   1        ADC_InitStructure.ADC_SMPduty = 31;   //ADC 模拟信号采样时间控制, 0~31（注意： SMPDUTY 一定不能设置小于 10
+             -）
+  94   1        ADC_InitStructure.ADC_CsSetup = 0;    //ADC 通道选择时间控制 0(默认),1
+  95   1        ADC_InitStructure.ADC_CsHold = 1;   //ADC 通道选择保持时间控制 0,1(默认),2,3
+  96   1        ADC_InitStructure.ADC_Speed = ADC_SPEED_2X1T;   //设置 ADC 工作时钟频率 ADC_SPEED_2X1T~ADC_SPEED_2X16T
+  97   1        ADC_InitStructure.ADC_AdjResult = ADC_RIGHT_JUSTIFIED;  //ADC结果调整,  ADC_LEFT_JUSTIFIED,ADC_RIGHT_JUSTIF
+             -IED
+  98   1        ADC_Inilize(&ADC_InitStructure);    //初始化
+  99   1        ADC_PowerControl(ENABLE);           //ADC电源开关, ENABLE或DISABLE
+ 100   1        // NVIC_ADC_Init(DISABLE, Priority_0);    //中断使能, ENABLE/DISABLE; 优先级(低到高) Priority_0,Priority_1,
+             -Priority_2,Priority_3
+ 101   1      }
+ 102          
+ 103          bit g_Rec = 0;
+ 104          u8 outL = 0;
+ 105          
+ 106          void main() {
+ 107   1        bit exist;
+ 108   1        GOPI_Config();
+ 109   1      
+ 110   1        OLED_Init();
+ 111   1      
+ 112   1        OLED_ShowString8(0, outL, "CHECK MODULE...");
+ 113   1        outL++;
+C51 COMPILER V9.60.7.0   MAIN                                                              03/12/2024 20:22:55 PAGE 3   
+
+ 114   1        exist = NRF24L01_check();
+ 115   1        
+ 116   1        if (exist) {
+ 117   2          OLED_ShowString8(0, outL, "DONE");
+ 118   2        } else {
+ 119   2          OLED_ShowString8(0, outL, "NOT EXIST");
+ 120   2        }
+ 121   1        outL++;
+ 122   1        
+ 123   1        RF24L01_Init();
+ 124   1        _nop_();_nop_();_nop_();_nop_();_nop_();
+ 125   1      
+ 126   1        if (g_Rec) {
+ 127   2          OLED_ShowString8(0, outL, "Set MODE_RX");
+ 128   2          RF24L01_Set_Mode(MODE_RX); //接收模式
+ 129   2        } else {
+ 130   2          OLED_ShowString8(0, outL, "Set MODE_TX");
+ 131   2          RF24L01_Set_Mode(MODE_TX); //发送模式
+ 132   2        }
+ 133   1        _nop_();_nop_();_nop_();_nop_();_nop_();
+ 134   1        outL++;
+ 135   1      
+ 136   1        while(1) {
+ 137   2          xdata u8 outLL = outL;
+ 138   2          xdata uint8_t numStr[10];
+ 139   2          xdata uint8_t str[20];
+ 140   2      
+ 141   2          if (g_Rec) {
+ 142   3            xdata uint8_t rx;
+ 143   3            xdata uint8_t g_rece[8];
+ 144   3            xdata u8 i;
+ 145   3            sprintf(str, "Receiving...");
+ 146   3            OLED_ShowString8(0, outLL, str);
+ 147   3            outLL++;
+ 148   3            rx = NRF24L01_RxPacket(g_rece); //接收字节
+ 149   3      
+ 150   3            if (rx != 0) {
+ 151   4              uintToS(rx, numStr, 10);
+ 152   4              sprintf(str, "Received: %s   ", numStr);
+ 153   4              OLED_ShowString8(0, outLL, str);
+ 154   4              outLL++;
+ 155   4              
+ 156   4              sprintf(str, "d: ");
+ 157   4              for (i = 0; i < rx; ++i) {
+ 158   5                u8 d = g_rece[i];
+ 159   5                uintToS(d, numStr, 10);
+ 160   5                sprintf(str, "%s %s", str, numStr);
+ 161   5              }
+ 162   4              sprintf(str, "%s    ", str);
+ 163   4              OLED_ShowString8(0, outLL, str);
+ 164   4              outLL++;
+ 165   4            }
+ 166   3          } else {
+ 167   3            xdata uint8_t tx[1];
+ 168   3            xdata int someNumber = 253;
+ 169   3            xdata uint8_t res;
+ 170   3            tx[0] = someNumber;
+ 171   3            intToS(tx[0], numStr, 10);
+ 172   3            sprintf(str, "Sending %s   ", numStr);
+ 173   3            OLED_ShowString8(0, outLL, str);
+ 174   3            outLL++;
+ 175   3            res = NRF24L01_TxPacket((uint8_t *) tx, 1);
+C51 COMPILER V9.60.7.0   MAIN                                                              03/12/2024 20:22:55 PAGE 4   
+
+ 176   3            if (res == TX_OK) {
+ 177   4              sprintf(str, "SUCCEES");
+ 178   4            } else {
+ 179   4              sprintf(str, "Failed");
+ 180   4            }
+ 181   3            OLED_ShowString8(0, outLL, str);
+ 182   3            outLL++;
+ 183   3      
+ 184   3            someNumber++;
+ 185   3            if (someNumber > 100) {
+ 186   4              someNumber = 0;
+ 187   4            }
+ 188   3            
+ 189   3            delay_ms(3000);
+ 190   3          }
+ 191   2        }
+ 192   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    851    ----
+   CONSTANT SIZE    =    130    ----
+   XDATA SIZE       =   ----      47
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1      14
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

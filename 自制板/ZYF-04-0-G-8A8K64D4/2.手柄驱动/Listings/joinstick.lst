@@ -1,0 +1,41 @@
+C51 COMPILER V9.60.7.0   JOINSTICK                                                         03/16/2024 15:06:44 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE JOINSTICK
+OBJECT MODULE PLACED IN .\Objects\joinstick.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\joinstick.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\List
+                    -ings\joinstick.lst) TABS(2) OBJECT(.\Objects\joinstick.obj)
+
+line level    source
+
+   1          #include "joinstick.h"
+   2          
+   3          #define PU_YAO_FJM10K_S_MID_VALUE 67
+   4          #define PU_YAO_FJM10K_S_E 2
+   5          
+   6          u8 JOIN_STICK_Pu_Yao_FJM10K_S_Cal(float v) {
+   7   1        if (v <= PU_YAO_FJM10K_S_MID_VALUE + PU_YAO_FJM10K_S_E && v >= PU_YAO_FJM10K_S_MID_VALUE - PU_YAO_FJM10K_
+             -S_E) {
+   8   2          return 50;
+   9   2        } else if (v < PU_YAO_FJM10K_S_MID_VALUE) {
+  10   2          return (u8) (50.f / PU_YAO_FJM10K_S_MID_VALUE * v + 0.5);
+  11   2        } else if (v > PU_YAO_FJM10K_S_MID_VALUE) {
+  12   2          return (u8) (50.f / (100 - PU_YAO_FJM10K_S_MID_VALUE) * v + 100 * (1 - 50.f / (100 - PU_YAO_FJM10K_S_MID
+             -_VALUE)) + 0.5);
+  13   2        }
+  14   1        return 0;
+  15   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    158    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       4
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

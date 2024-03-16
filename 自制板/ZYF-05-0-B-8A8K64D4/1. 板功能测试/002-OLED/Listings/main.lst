@@ -1,0 +1,64 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              03/12/2024 19:16:25 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\
+                    -main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "stc8a8k64d4.H"
+   2          #include "stc8a_gpio.H"
+   3          #include "stc8a_spi.h"
+   4          #include "stc8a_nvic.h"
+   5          #include "typedef.h"
+   6          #include "oled12864.h"
+   7          #include "uart.h"
+   8          
+   9          void OLED_GPIO_Config() {
+  10   1        GPIO_InitTypeDef conf;
+  11   1        conf.Mode = GPIO_OUT_PP;
+  12   1        conf.Pin = GPIO_Pin_2;
+  13   1        GPIO_Inilize(GPIO_P4, &conf);
+  14   1      
+  15   1        conf.Mode = GPIO_OUT_PP;
+  16   1        conf.Pin = GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4;
+  17   1        GPIO_Inilize(GPIO_P2, &conf);
+  18   1      }
+  19          
+  20          void OLED12864_Init() {
+  21   1        OLED_GPIO_Config();
+  22   1        OLED_Init();
+  23   1      }
+  24          
+  25          void main() {
+  26   1        u8 buf[] = {0xfe, 0x12, 0x34, 0x56, 0x70, 0x9a, 0xbc, 0xd0};
+  27   1        OLED12864_Init();
+  28   1        OLED_ShowString(0, 0, "121212121212");
+  29   1        OLED_ShowString8(0, 2, "123ABC.,m<>?abcdefghijkl");
+  30   1        OLED_ShowHexBuf8(0, 4, buf, 8);
+  31   1      
+  32   1        /*P_OLED12864_SCK = 0;
+  33   1        P_OLED12864_SDA = 0;
+  34   1        P_OLED12864_RES = 0;
+  35   1        P_OLED12864_DC = 0;
+  36   1        P_OLED12864_CS = 0;*/
+  37   1      
+  38   1        while(1) {
+  39   2        }
+  40   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    105    ----
+   CONSTANT SIZE    =     46    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      10
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

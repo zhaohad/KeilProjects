@@ -1,0 +1,374 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              03/16/2024 15:06:40 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\
+                    -main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          /**
+   2           * 使用30MHz烧录
+   3           */
+   4          #include "stc8a8k64d4.H"
+   5          #include "stc8a_gpio.H"
+   6          #include "stc8a_spi.h"
+   7          #include "stc8a_nvic.h"
+   8          #include "typedef.h"
+   9          #include "oled12864.h"
+  10          #include "uart.h"
+  11          #include "stc8a_adc.h"
+  12          #include "stc8a_switch.h"
+  13          #include "dtos.h"
+  14          #include "G01_S.h"
+  15          #include "stc8a_adc.h"
+  16          #include "global_status.h"
+  17          #include "joinstick.h"
+  18          #include "communication_protocol.h"
+  19          
+  20          #define HEART_BEAT_RETRY_CNT 3
+  21          #define HEART_BEAT_INTERVAL 10
+  22          
+  23          void OLED_GPIO_Config() {
+  24   1        GPIO_InitTypeDef conf;
+  25   1        conf.Mode = GPIO_PullUp;
+  26   1        conf.Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2;
+  27   1        GPIO_Inilize(GPIO_P0, &conf);
+  28   1      
+  29   1        conf.Mode = GPIO_PullUp;
+  30   1        conf.Pin = GPIO_Pin_7 | GPIO_Pin_6;
+  31   1        GPIO_Inilize(GPIO_P2, &conf);
+  32   1      }
+  33          
+  34          void LED_GPIO_Config() {
+  35   1        GPIO_InitTypeDef conf;
+  36   1        conf.Mode = GPIO_PullUp;
+  37   1        conf.Pin = GPIO_Pin_7;
+  38   1        GPIO_Inilize(GPIO_P1, &conf);
+  39   1      
+  40   1        conf.Mode = GPIO_PullUp;
+  41   1        conf.Pin = GPIO_Pin_5;
+  42   1        GPIO_Inilize(GPIO_P5, &conf);
+  43   1      
+  44   1        conf.Mode = GPIO_PullUp;
+  45   1        conf.Pin = GPIO_Pin_0;
+  46   1        GPIO_Inilize(GPIO_P4, &conf);
+  47   1      }
+  48          
+  49          void G01_S_GPIO_config() {
+  50   1        xdata GPIO_InitTypeDef conf;
+  51   1        conf.Mode = GPIO_PullUp;  
+  52   1        conf.Pin = GPIO_Pin_0;
+  53   1        GPIO_Inilize(GPIO_P2, &conf);
+  54   1        
+C51 COMPILER V9.60.7.0   MAIN                                                              03/16/2024 15:06:40 PAGE 2   
+
+  55   1        conf.Pin = GPIO_Pin_1;
+  56   1        GPIO_Inilize(GPIO_P4, &conf);
+  57   1      
+  58   1        conf.Pin = GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7;
+  59   1        GPIO_Inilize(GPIO_P3, &conf);
+  60   1        
+  61   1        NRF24L01_Gpio_Init();
+  62   1      }
+  63          
+  64          void RZ7899_GPIO_Config() {
+  65   1        GPIO_InitTypeDef conf;
+  66   1        conf.Mode = GPIO_PullUp;
+  67   1        conf.Pin = GPIO_Pin_4;
+  68   1        GPIO_Inilize(GPIO_P2, &conf);
+  69   1      }
+  70          
+  71          void KEY_GPIO_Config() {
+  72   1        GPIO_InitTypeDef conf;
+  73   1        conf.Mode = GPIO_PullUp;
+  74   1        conf.Pin = GPIO_Pin_3 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_5;
+  75   1        GPIO_Inilize(GPIO_P2, &conf);
+  76   1      
+  77   1        conf.Pin = GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4;
+  78   1        GPIO_Inilize(GPIO_P4, &conf);
+  79   1        
+  80   1        conf.Pin = GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6;
+  81   1        GPIO_Inilize(GPIO_P1, &conf);
+  82   1        
+  83   1        conf.Pin = GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5;
+  84   1        GPIO_Inilize(GPIO_P0, &conf);
+  85   1        
+  86   1        conf.Pin = GPIO_Pin_3;
+  87   1        GPIO_Inilize(GPIO_P3, &conf);
+  88   1      }
+  89          
+  90          void GOPI_Config() {
+  91   1        OLED_GPIO_Config();
+  92   1        
+  93   1        KEY_GPIO_Config();
+  94   1        
+  95   1        LED_GPIO_Config();
+  96   1      
+  97   1        G01_S_GPIO_config();
+  98   1        
+  99   1        RZ7899_GPIO_Config();
+ 100   1      }
+ 101          
+ 102          void ADC_Init() {
+ 103   1        ADC_InitTypeDef ADC_InitStructure;    //结构定义
+ 104   1        ADC_InitStructure.ADC_SMPduty = 31;   //ADC 模拟信号采样时间控制, 0~31（注意： SMPDUTY 一定不能设置小于 10
+             -）
+ 105   1        ADC_InitStructure.ADC_CsSetup = 0;    //ADC 通道选择时间控制 0(默认),1
+ 106   1        ADC_InitStructure.ADC_CsHold = 1;   //ADC 通道选择保持时间控制 0,1(默认),2,3
+ 107   1        ADC_InitStructure.ADC_Speed = ADC_SPEED_2X1T;   //设置 ADC 工作时钟频率 ADC_SPEED_2X1T~ADC_SPEED_2X16T
+ 108   1        ADC_InitStructure.ADC_AdjResult = ADC_RIGHT_JUSTIFIED;  //ADC结果调整,  ADC_LEFT_JUSTIFIED,ADC_RIGHT_JUSTIF
+             -IED
+ 109   1        ADC_Inilize(&ADC_InitStructure);    //初始化
+ 110   1        ADC_PowerControl(ENABLE);           //ADC电源开关, ENABLE或DISABLE
+ 111   1        // NVIC_ADC_Init(DISABLE, Priority_0);    //中断使能, ENABLE/DISABLE; 优先级(低到高) Priority_0,Priority_1,
+             -Priority_2,Priority_3
+ 112   1      }
+ 113          
+C51 COMPILER V9.60.7.0   MAIN                                                              03/16/2024 15:06:40 PAGE 3   
+
+ 114          u8 outL = 0;
+ 115          
+ 116          void All_init() {
+ 117   1        bit exist;
+ 118   1        xdata u8 someNumber = 0;
+ 119   1        GOPI_Config();
+ 120   1        
+ 121   1        ADC_Init();
+ 122   1      
+ 123   1        Global_Status_Timer_Init();
+ 124   1        // Global_Status_Hear_Beat_Timer_Init();
+ 125   1      
+ 126   1        OLED_Init();
+ 127   1      
+ 128   1        OLED_ShowString8(0, outL, "CHECK MODULE...");
+ 129   1        outL++;
+ 130   1        exist = NRF24L01_check();
+ 131   1        
+ 132   1        if (exist) {
+ 133   2          OLED_ShowString8(0, outL, "DONE");
+ 134   2        } else {
+ 135   2          OLED_ShowString8(0, outL, "NOT EXIST");
+ 136   2        }
+ 137   1        outL++;
+ 138   1        
+ 139   1        RF24L01_Init();
+ 140   1        _nop_();_nop_();_nop_();_nop_();_nop_();
+ 141   1      
+ 142   1        OLED_ShowString8(0, outL, "Set MODE_TX");
+ 143   1        RF24L01_Set_Mode(MODE_TX); //发送模式
+ 144   1        _nop_();_nop_();_nop_();_nop_();_nop_();
+ 145   1        outL++;
+ 146   1        
+ 147   1        // Global_Status_Do_Heart_Beat(1);
+ 148   1      }
+ 149          
+ 150          
+ 151          /**
+ 152           * 使用30MHz烧录
+ 153           */
+ 154          void main() {
+ 155   1        bit lastLH = 0, lastLV = 0, lastRH = 0, lastRV = 0;
+ 156   1        bit lastK0 = 0, lastK1 = 0, lastK2 = 0, lastK3 = 0;
+ 157   1        bit lastK4 = 0, lastK5 = 0, lastK6 = 0, lastK7 = 0;
+ 158   1        bit lastK8 = 0, lastK9 = 0, lastK10 = 0, lastK11 = 0;
+ 159   1        bit lastLK = 0, lastRK = 0;
+ 160   1        xdata u8 heartBeatRetryCnt = 0;
+ 161   1        xdata u8 heartBeatIntervalCnt = 0;
+ 162   1        All_init();
+ 163   1      
+ 164   1        while(1) {
+ 165   2          xdata u16 adc = 0;
+ 166   2          xdata float percentage;
+ 167   2          xdata u8 strP[10];
+ 168   2          xdata u8 strD[20];
+ 169   2          xdata u8 js;
+ 170   2          xdata u8 tx_buf[MAX_INTERACTIVE_CNT * 2];
+ 171   2          xdata u8 tx_len = 0;
+ 172   2          xdata u8 res = 0;
+ 173   2          xdata u8 curLine = 0;
+ 174   2          adc = Get_ADCResult(CHANEL_ADC0);
+ 175   2          percentage = adc / 4096.f * 100.f;
+C51 COMPILER V9.60.7.0   MAIN                                                              03/16/2024 15:06:40 PAGE 4   
+
+ 176   2          js = JOIN_STICK_Pu_Yao_FJM10K_S_Cal(percentage);
+ 177   2          uintToS(js, strP, 10);
+ 178   2          sprintf(strD, "C1: %s ", strP);
+ 179   2          OLED_ShowString8(0, curLine++, strD);
+ 180   2          if (lastLH || js != 50) {
+ 181   3            tx_buf[tx_len++] = KEY_JOINSTICK_LEFT_H;
+ 182   3            tx_buf[tx_len++] = js;
+ 183   3          }
+ 184   2          lastLH = js != 50;
+ 185   2          
+ 186   2          adc = Get_ADCResult(CHANEL_ADC1);
+ 187   2          percentage = adc / 4096.f * 100.f;
+ 188   2          js = JOIN_STICK_Pu_Yao_FJM10K_S_Cal(percentage);
+ 189   2          uintToS(js, strP, 10);
+ 190   2          sprintf(strD, "C2: %s ", strP);
+ 191   2          OLED_ShowString8(0, curLine++, strD);
+ 192   2          if (lastLV || js != 50) {
+ 193   3            tx_buf[tx_len++] = KEY_JOINSTICK_LEFT_V;
+ 194   3            tx_buf[tx_len++] = js;
+ 195   3          }
+ 196   2          lastLV = js != 50;
+ 197   2          
+ 198   2          adc = Get_ADCResult(CHANEL_ADC2);
+ 199   2          percentage = adc / 4096.f * 100.f;
+ 200   2          js = JOIN_STICK_Pu_Yao_FJM10K_S_Cal(percentage);
+ 201   2          uintToS(js, strP, 10);
+ 202   2          sprintf(strD, "C3: %s ", strP);
+ 203   2          OLED_ShowString8(0, curLine++, strD);
+ 204   2          if (lastRH || js != 50) {
+ 205   3            tx_buf[tx_len++] = KEY_JOINSTICK_RIGHT_H;
+ 206   3            tx_buf[tx_len++] = js;
+ 207   3          }
+ 208   2          lastRH = js != 50;
+ 209   2          
+ 210   2          adc = Get_ADCResult(CHANEL_ADC3);
+ 211   2          percentage = adc / 4096.f * 100.f;
+ 212   2          js = JOIN_STICK_Pu_Yao_FJM10K_S_Cal(percentage);
+ 213   2          uintToS(js, strP, 10);
+ 214   2          sprintf(strD, "C4: %s ", strP);
+ 215   2          OLED_ShowString8(0, curLine++, strD);
+ 216   2          if (lastRV || js != 50) {
+ 217   3            tx_buf[tx_len++] = KEY_JOINSTICK_RIGHT_V;
+ 218   3            tx_buf[tx_len++] = js;
+ 219   3          }
+ 220   2          lastRV = js != 50;
+ 221   2          
+ 222   2          if (lastLK || !P_KEY_YG0) {
+ 223   3            tx_buf[tx_len++] = KEY_JOINSTICK_LEFT_K;
+ 224   3            tx_buf[tx_len++] = !P_KEY_YG0;
+ 225   3          }
+ 226   2          lastLK = !P_KEY_YG0;
+ 227   2      
+ 228   2          if (lastRK || !P_KEY_YG1) {
+ 229   3            tx_buf[tx_len++] = KEY_JOINSTICK_RIGHT_K;
+ 230   3            tx_buf[tx_len++] = !P_KEY_YG1;
+ 231   3          }
+ 232   2          lastRK = !P_KEY_YG1;
+ 233   2          
+ 234   2          if (lastK0 || !P_KEY_0) {
+ 235   3            tx_buf[tx_len++] = KEY_K0;
+ 236   3            tx_buf[tx_len++] = !P_KEY_0;
+ 237   3          }
+C51 COMPILER V9.60.7.0   MAIN                                                              03/16/2024 15:06:40 PAGE 5   
+
+ 238   2          lastK0 = !P_KEY_0;
+ 239   2          
+ 240   2          if (lastK1 || !P_KEY_1) {
+ 241   3            tx_buf[tx_len++] = KEY_K1;
+ 242   3            tx_buf[tx_len++] = !P_KEY_1;
+ 243   3          }
+ 244   2          lastK1 = !P_KEY_1;
+ 245   2          
+ 246   2          if (lastK2 || !P_KEY_2) {
+ 247   3            tx_buf[tx_len++] = KEY_K2;
+ 248   3            tx_buf[tx_len++] = !P_KEY_2;
+ 249   3          }
+ 250   2          lastK2 = !P_KEY_2;
+ 251   2          
+ 252   2          if (lastK3 || !P_KEY_3) {
+ 253   3            tx_buf[tx_len++] = KEY_K3;
+ 254   3            tx_buf[tx_len++] = !P_KEY_3;
+ 255   3          }
+ 256   2          lastK3 = !P_KEY_3;
+ 257   2          
+ 258   2          if (lastK4 || !P_KEY_4) {
+ 259   3            tx_buf[tx_len++] = KEY_K4;
+ 260   3            tx_buf[tx_len++] = !P_KEY_4;
+ 261   3          }
+ 262   2          lastK4 = !P_KEY_4;
+ 263   2          
+ 264   2          if (lastK5 || !P_KEY_5) {
+ 265   3            tx_buf[tx_len++] = KEY_K5;
+ 266   3            tx_buf[tx_len++] = !P_KEY_5;
+ 267   3          }
+ 268   2          lastK5 = !P_KEY_5;
+ 269   2          
+ 270   2          if (lastK6 || !P_KEY_6) {
+ 271   3            tx_buf[tx_len++] = KEY_K6;
+ 272   3            tx_buf[tx_len++] = !P_KEY_6;
+ 273   3          }
+ 274   2          lastK6 = !P_KEY_6;
+ 275   2          
+ 276   2          if (lastK7 || !P_KEY_7) {
+ 277   3            tx_buf[tx_len++] = KEY_K7;
+ 278   3            tx_buf[tx_len++] = !P_KEY_7;
+ 279   3          }
+ 280   2          lastK7 = !P_KEY_7;
+ 281   2          
+ 282   2          if (lastK8 || !P_KEY_8) {
+ 283   3            tx_buf[tx_len++] = KEY_K8;
+ 284   3            tx_buf[tx_len++] = !P_KEY_8;
+ 285   3          }
+ 286   2          lastK8 = !P_KEY_8;
+ 287   2          
+ 288   2          if (lastK9 || !P_KEY_9) {
+ 289   3            tx_buf[tx_len++] = KEY_K9;
+ 290   3            tx_buf[tx_len++] = !P_KEY_9;
+ 291   3          }
+ 292   2          lastK9 = !P_KEY_9;
+ 293   2          
+ 294   2          if (lastK10 || !P_KEY_10) {
+ 295   3            tx_buf[tx_len++] = KEY_K10;
+ 296   3            tx_buf[tx_len++] = !P_KEY_10;
+ 297   3          }
+ 298   2          lastK10 = !P_KEY_10;
+ 299   2          
+C51 COMPILER V9.60.7.0   MAIN                                                              03/16/2024 15:06:40 PAGE 6   
+
+ 300   2          if (lastK11 || !P_KEY_11) {
+ 301   3            tx_buf[tx_len++] = KEY_K11;
+ 302   3            tx_buf[tx_len++] = !P_KEY_11;
+ 303   3          }
+ 304   2          lastK11 = !P_KEY_11;
+ 305   2      
+ 306   2          if (tx_len > 0) {
+ 307   3            res = NRF24L01_TxPacket((uint8_t *) tx_buf, tx_len);
+ 308   3            if (res == TX_OK) {
+ 309   4              Global_Status_Set_Status(STATUS_CONNECTED);
+ 310   4              heartBeatRetryCnt = 0;
+ 311   4            } else {
+ 312   4              heartBeatRetryCnt++;
+ 313   4              P_LED_1 = !P_LED_1;
+ 314   4              if (heartBeatRetryCnt > HEART_BEAT_RETRY_CNT) {
+ 315   5                Global_Status_Set_Status(STATUS_CONNECTING);
+ 316   5              }
+ 317   4            }
+ 318   3          } else {
+ 319   3            if (heartBeatIntervalCnt++ > HEART_BEAT_INTERVAL) {
+ 320   4              heartBeatIntervalCnt = 0;
+ 321   4              res = NRF24L01_TxPacket((uint8_t *) COMMUICATION_HEART_BEAT, HEART_BEAT_LEN);
+ 322   4              if (res == TX_OK) {
+ 323   5                heartBeatRetryCnt = 0;
+ 324   5                Global_Status_Set_Status(STATUS_CONNECTED);
+ 325   5              } else {
+ 326   5                heartBeatRetryCnt++;
+ 327   5                if (heartBeatRetryCnt > HEART_BEAT_RETRY_CNT) {
+ 328   6                  Global_Status_Set_Status(STATUS_CONNECTING);
+ 329   6                }
+ 330   5              }
+ 331   4            }
+ 332   3            
+ 333   3          }
+ 334   2          
+ 335   2          delay_ms(500);
+ 336   2        }
+ 337   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   2152    ----
+   CONSTANT SIZE    =     75    ----
+   XDATA SIZE       =   ----      81
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1      13
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----      19
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

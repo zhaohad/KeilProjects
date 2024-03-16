@@ -1,0 +1,21 @@
+".\Objects\STARTUP.obj",
+".\Objects\delay.obj",
+".\Objects\main.obj",
+".\Objects\oled12864.obj",
+".\Objects\STC8A_GPIO.obj",
+".\Objects\STC8A_NVIC.obj",
+".\Objects\STC8A_SPI.obj",
+".\Objects\STC8A_SPI_Isr.obj",
+".\Objects\uart.obj",
+".\Objects\STC8A_ADC.obj",
+".\Objects\dtos.obj",
+".\Objects\G01_S.obj",
+".\Objects\spi.obj",
+".\Objects\global_status.obj",
+".\Objects\STC8A_Timer.obj",
+".\Objects\STC8A_Timer_Isr.obj",
+".\Objects\joinstick.obj",
+".\Objects\communication_protocol.obj" 
+TO ".\Objects\multiuart" 
+PRINT(".\Listings\multiuart.m51") RAMSIZE(256) 
+DISABLEWARNING (15,16) 

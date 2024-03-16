@@ -1,0 +1,218 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              03/02/2024 17:29:30 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\
+                    -main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "stc8a8k64d4.H"
+   2          #include "stc8a_gpio.H"
+   3          #include "stc8a_spi.h"
+   4          #include "stc8a_nvic.h"
+   5          #include "typedef.h"
+   6          #include "oled12864.h"
+   7          #include "uart.h"
+   8          #include "stc8a_adc.h"
+   9          #include "stc8a_switch.h"
+  10          #include "dtos.h"
+  11          #include "G01_S.h"
+  12          #include "stc8a_adc.h"
+  13          
+  14          void OLED_GPIO_Config() {
+  15   1        GPIO_InitTypeDef conf;
+  16   1        conf.Mode = GPIO_PullUp;
+  17   1        conf.Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2;
+  18   1        GPIO_Inilize(GPIO_P0, &conf);
+  19   1      
+  20   1        conf.Mode = GPIO_PullUp;
+  21   1        conf.Pin = GPIO_Pin_7 | GPIO_Pin_6;
+  22   1        GPIO_Inilize(GPIO_P2, &conf);
+  23   1      }
+  24          
+  25          void LED_GPIO_Config() {
+  26   1        GPIO_InitTypeDef conf;
+  27   1        conf.Mode = GPIO_PullUp;
+  28   1        conf.Pin = GPIO_Pin_7;
+  29   1        GPIO_Inilize(GPIO_P1, &conf);
+  30   1      
+  31   1        conf.Mode = GPIO_PullUp;
+  32   1        conf.Pin = GPIO_Pin_5;
+  33   1        GPIO_Inilize(GPIO_P5, &conf);
+  34   1      
+  35   1        conf.Mode = GPIO_PullUp;
+  36   1        conf.Pin = GPIO_Pin_0;
+  37   1        GPIO_Inilize(GPIO_P4, &conf);
+  38   1      }
+  39          
+  40          void G01_S_GPIO_config() {
+  41   1        xdata GPIO_InitTypeDef conf;
+  42   1        conf.Mode = GPIO_PullUp;  
+  43   1        conf.Pin = GPIO_Pin_0;
+  44   1        GPIO_Inilize(GPIO_P2, &conf);
+  45   1        
+  46   1        conf.Pin = GPIO_Pin_1;
+  47   1        GPIO_Inilize(GPIO_P4, &conf);
+  48   1      
+  49   1        conf.Pin = GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7;
+  50   1        GPIO_Inilize(GPIO_P3, &conf);
+  51   1        
+  52   1        NRF24L01_Gpio_Init();
+  53   1      }
+  54          
+C51 COMPILER V9.60.7.0   MAIN                                                              03/02/2024 17:29:30 PAGE 2   
+
+  55          void RZ7899_GPIO_Config() {
+  56   1        GPIO_InitTypeDef conf;
+  57   1        conf.Mode = GPIO_PullUp;
+  58   1        conf.Pin = GPIO_Pin_4;
+  59   1        GPIO_Inilize(GPIO_P2, &conf);
+  60   1      }
+  61          
+  62          void KEY_GPIO_Config() {
+  63   1        GPIO_InitTypeDef conf;
+  64   1        conf.Mode = GPIO_PullUp;
+  65   1        conf.Pin = GPIO_Pin_3 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_5;
+  66   1        GPIO_Inilize(GPIO_P2, &conf);
+  67   1      
+  68   1        conf.Pin = GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4;
+  69   1        GPIO_Inilize(GPIO_P4, &conf);
+  70   1        
+  71   1        conf.Pin = GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6;
+  72   1        GPIO_Inilize(GPIO_P1, &conf);
+  73   1        
+  74   1        conf.Pin = GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5;
+  75   1        GPIO_Inilize(GPIO_P0, &conf);
+  76   1        
+  77   1        conf.Pin = GPIO_Pin_3;
+  78   1        GPIO_Inilize(GPIO_P3, &conf);
+  79   1      }
+  80          
+  81          void GOPI_Config() {
+  82   1        OLED_GPIO_Config();
+  83   1        
+  84   1        LED_GPIO_Config();
+  85   1      
+  86   1        G01_S_GPIO_config();
+  87   1        
+  88   1        RZ7899_GPIO_Config();
+  89   1      }
+  90          
+  91          void ADC_Init() {
+  92   1        ADC_InitTypeDef ADC_InitStructure;    //结构定义
+  93   1        ADC_InitStructure.ADC_SMPduty = 31;   //ADC 模拟信号采样时间控制, 0~31（注意： SMPDUTY 一定不能设置小于 10
+             -）
+  94   1        ADC_InitStructure.ADC_CsSetup = 0;    //ADC 通道选择时间控制 0(默认),1
+  95   1        ADC_InitStructure.ADC_CsHold = 1;   //ADC 通道选择保持时间控制 0,1(默认),2,3
+  96   1        ADC_InitStructure.ADC_Speed = ADC_SPEED_2X1T;   //设置 ADC 工作时钟频率 ADC_SPEED_2X1T~ADC_SPEED_2X16T
+  97   1        ADC_InitStructure.ADC_AdjResult = ADC_RIGHT_JUSTIFIED;  //ADC结果调整,  ADC_LEFT_JUSTIFIED,ADC_RIGHT_JUSTIF
+             -IED
+  98   1        ADC_Inilize(&ADC_InitStructure);    //初始化
+  99   1        ADC_PowerControl(ENABLE);           //ADC电源开关, ENABLE或DISABLE
+ 100   1        // NVIC_ADC_Init(DISABLE, Priority_0);    //中断使能, ENABLE/DISABLE; 优先级(低到高) Priority_0,Priority_1,
+             -Priority_2,Priority_3
+ 101   1      }
+ 102          
+ 103          void main() {
+ 104   1        bit exist;
+ 105   1        GOPI_Config();
+ 106   1      
+ 107   1        OLED_Init();
+ 108   1      
+ 109   1        OLED_ShowString(0, 0, "CHECK MODULE...");
+ 110   1        exist = NRF24L01_check();
+ 111   1        
+ 112   1        ADC_Init();
+ 113   1        
+C51 COMPILER V9.60.7.0   MAIN                                                              03/02/2024 17:29:30 PAGE 3   
+
+ 114   1        if (exist) {
+ 115   2          OLED_ShowString(0, 2, "DONE");
+ 116   2        } else {
+ 117   2          OLED_ShowString(0, 2, "NOT EXIST");
+ 118   2        }
+ 119   1        
+ 120   1        P_MOTOR = 0;
+ 121   1      
+ 122   1        while(1) {
+ 123   2          xdata u16 adc = 0;
+ 124   2          xdata float percentage;
+ 125   2          xdata u8 strP[10];
+ 126   2          xdata u8 strD[20];
+ 127   2          
+ 128   2          xdata u8 k0 = P_KEY_0 ? 1 : 0;
+ 129   2          xdata u8 k1 = P_KEY_1 ? 1 : 0;
+ 130   2          xdata u8 k2 = P_KEY_2 ? 1 : 0;
+ 131   2          xdata u8 k3 = P_KEY_3 ? 1 : 0;
+ 132   2          
+ 133   2          /*adc = Get_ADCResult(CHANEL_ADC0);
+ 134   2          percentage = adc / 4096.f * 100.f;
+ 135   2          floatToSS(percentage, strP, 10, 2);
+ 136   2          sprintf(strD, "CHANEL1: %s", strP);
+ 137   2          OLED_ShowString(0, 0, strD);
+ 138   2          
+ 139   2          adc = Get_ADCResult(CHANEL_ADC1);
+ 140   2          percentage = adc / 4096.f * 100.f;
+ 141   2          floatToSS(percentage, strP, 10, 2);
+ 142   2          sprintf(strD, "CHANEL1: %s", strP);
+ 143   2          OLED_ShowString(0, 2, strD);
+ 144   2          
+ 145   2          adc = Get_ADCResult(CHANEL_ADC2);
+ 146   2          percentage = adc / 4096.f * 100.f;
+ 147   2          floatToSS(percentage, strP, 10, 2);
+ 148   2          sprintf(strD, "CHANEL1: %s", strP);
+ 149   2          OLED_ShowString(0, 4, strD);
+ 150   2          
+ 151   2          adc = Get_ADCResult(CHANEL_ADC3);
+ 152   2          percentage = adc / 4096.f * 100.f;
+ 153   2          floatToSS(percentage, strP, 10, 2);
+ 154   2          sprintf(strD, "CHANEL1: %s", strP);
+ 155   2          OLED_ShowString(0, 6, strD);*/
+ 156   2          sprintf(strD, "K0:0 K1:0 K2:0");
+ 157   2          strD[3] = P_KEY_0 ? '1' : '0';
+ 158   2          strD[8] = P_KEY_1 ? '1' : '0';
+ 159   2          strD[13] = P_KEY_2 ? '1' : '0';
+ 160   2          OLED_ShowString(0, 0, strD);
+ 161   2      
+ 162   2          sprintf(strD, "K3:0 K4:0 K5:0");
+ 163   2          strD[3] = P_KEY_3 ? '1' : '0';
+ 164   2          strD[8] = P_KEY_4 ? '1' : '0';
+ 165   2          strD[13] = P_KEY_5 ? '1' : '0';
+ 166   2          OLED_ShowString(0, 2, strD);
+ 167   2          
+ 168   2          sprintf(strD, "K6:0 K7:0 K8:0");
+ 169   2          strD[3] = P_KEY_6 ? '1' : '0';
+ 170   2          strD[8] = P_KEY_7 ? '1' : '0';
+ 171   2          strD[13] = P_KEY_8 ? '1' : '0';
+ 172   2          OLED_ShowString(0, 4, strD);
+ 173   2          
+ 174   2          sprintf(strD, "K9:0 KA:0 KB:0");
+ 175   2          strD[3] = P_KEY_9 ? '1' : '0';
+C51 COMPILER V9.60.7.0   MAIN                                                              03/02/2024 17:29:30 PAGE 4   
+
+ 176   2          strD[8] = P_KEY_10 ? '1' : '0';
+ 177   2          strD[13] = P_KEY_11 ? '1' : '0';
+ 178   2          OLED_ShowString(0, 6, strD);
+ 179   2          
+ 180   2          P_LED_1 = P_KEY_YG0;
+ 181   2          P_LED_2 = P_KEY_YG1;
+ 182   2        }
+ 183   1      }
+*** WARNING C280 IN LINE 124 OF src\main.c: 'percentage': unreferenced local variable
+*** WARNING C280 IN LINE 125 OF src\main.c: 'strP': unreferenced local variable
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    676    ----
+   CONSTANT SIZE    =     91    ----
+   XDATA SIZE       =   ----      42
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      13
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  2 WARNING(S),  0 ERROR(S)
