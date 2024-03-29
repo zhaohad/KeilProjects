@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   OLED12864                                                         07/09/2023 14:26:16 PAGE 1   
+C51 COMPILER V9.60.7.0   OLED12864                                                         03/24/2024 17:14:56 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE OLED12864
@@ -62,7 +62,7 @@ line level    source
   52   2        } else { 
   53   2          OLED_DC_Clr();
   54   2        }   
-C51 COMPILER V9.60.7.0   OLED12864                                                         07/09/2023 14:26:16 PAGE 2   
+C51 COMPILER V9.60.7.0   OLED12864                                                         03/24/2024 17:14:56 PAGE 2   
 
   55   1        OLED_CS_Clr();
   56   1        for(i = 0; i < 8; i++) {
@@ -126,7 +126,7 @@ line level    source
  114   2          OLED_WR_Byte(F8X16[c * 16 + i], OLED_DATA);
  115   2        }
  116   1        OLED_Set_Pos(x, y + 1);
-C51 COMPILER V9.60.7.0   OLED12864                                                         07/09/2023 14:26:16 PAGE 3   
+C51 COMPILER V9.60.7.0   OLED12864                                                         03/24/2024 17:14:56 PAGE 3   
 
  117   1        for (i = 0; i < 8; ++i) {
  118   2          OLED_WR_Byte(F8X16[c * 16 + i + 8], OLED_DATA);
@@ -190,7 +190,7 @@ line level    source
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
    CODE SIZE        =    733    ----
-C51 COMPILER V9.60.7.0   OLED12864                                                         07/09/2023 14:26:16 PAGE 4   
+C51 COMPILER V9.60.7.0   OLED12864                                                         03/24/2024 17:14:56 PAGE 4   
 
    CONSTANT SIZE    =   2072    ----
    XDATA SIZE       =   ----    ----

@@ -1,0 +1,140 @@
+C51 COMPILER V9.60.7.0   SERVO                                                             01/01/2024 14:09:25 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE SERVO
+OBJECT MODULE PLACED IN .\Objects\servo.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\servo.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings
+                    -\servo.lst) TABS(2) OBJECT(.\Objects\servo.obj)
+
+line level    source
+
+   1          #include "servo.h"
+   2          #include "stc8a_timer.h"
+   3          #include "stc8a_nvic.h"
+   4          
+   5          #define PERIODIC 20000
+   6          
+   7          u8 g_timer_step = 0;
+   8          
+   9          u16 g_timer_vs[CNT_SERVOS];
+  10          u16 g_remain_timer = 0;
+  11          
+  12          // 30.000 MHz 16bit auto load. 10 um
+  13          void Timer_config() {
+  14   1        TIM_InitTypeDef TIM_InitStructure;            //结构定义
+  15   1        TIM_InitStructure.TIM_Mode = TIM_16Bit; //指定工作模式,   TIM_16BitAutoReload,TIM_16Bit,TIM_8BitAutoReloa
+             -d,TIM_16BitAutoReloadNoMask
+  16   1        TIM_InitStructure.TIM_ClkSource = TIM_CLOCK_12T;    //指定时钟源,     TIM_CLOCK_1T,TIM_CLOCK_12T,TIM_CLOCK_
+             -Ext
+  17   1        TIM_InitStructure.TIM_ClkOut = DISABLE;       //是否输出高速脉冲, ENABLE或DISABLE
+  18   1        TIM_InitStructure.TIM_Run = ENABLE;         //是否初始化后启动定时器, ENABLE或DISABLE
+  19   1        Timer_Inilize(Timer0, &TIM_InitStructure);          //初始化Timer0    Timer0,Timer1,Timer2,Timer3,Timer4
+  20   1        TL0 = 0xB0;
+  21   1        TH0 = 0x3C;
+  22   1        NVIC_Timer0_Init(ENABLE, Priority_0);   //中断使能, ENABLE/DISABLE; 优先级(低到高) Priority_0,Priority_1,P
+             -riority_2,Priority_3
+  23   1        
+  24   1        EA = 1;
+  25   1      }
+  26          
+  27          
+  28          // Unit: um
+  29          u16 Cal_Degree(u8 d) {
+  30   1        return (u16) 100 * (u16) d / 9u + (u16) 500;
+  31   1      }
+  32          
+  33          // 30.000 MHz 16bit auto load. 10 um
+  34          void Reset_Timer(u16 um) {
+  35   1        u16 thtl = (u16) (65536 - (um / 2 * 5));
+  36   1        TL0 = thtl % 256;
+  37   1        TH0 = thtl / 256;
+  38   1      }
+  39          
+  40          void Servo_Init() {
+  41   1        xdata int angles[CNT_SERVOS] = {90, 90, 135, 135, 0, 0};
+  42   1        Timer_config();
+  43   1        Servo_Set_Target_Degree(angles);
+  44   1      }
+  45          
+  46          void Servo_Set_Target_Degree(int tds[CNT_SERVOS]) {
+  47   1        u8 i;
+  48   1        for (i = 0; i < CNT_SERVOS; ++i) {
+  49   2          g_timer_vs[i] = Cal_Degree(tds[i]);
+  50   2        }
+  51   1      }
+C51 COMPILER V9.60.7.0   SERVO                                                             01/01/2024 14:09:25 PAGE 2   
+
+  52          
+  53          void Servo_Timer_Callback() {
+  54   1        switch (g_timer_step) {
+  55   2          case 0:
+  56   2            SET_CONTROL1(1);
+  57   2            Reset_Timer(g_timer_vs[0]);
+  58   2            g_remain_timer = g_remain_timer - g_timer_vs[0];
+  59   2            g_timer_step = 1;
+  60   2            break;
+  61   2          case 1:
+  62   2            SET_CONTROL1(0);
+  63   2      
+  64   2            SET_CONTROL2(1);
+  65   2            Reset_Timer(g_timer_vs[1]);
+  66   2            g_remain_timer = g_remain_timer - g_timer_vs[1];
+  67   2            g_timer_step = 2;
+  68   2            break;
+  69   2          case 2:
+  70   2            SET_CONTROL2(0);
+  71   2          
+  72   2            SET_CONTROL3(1);
+  73   2            Reset_Timer(g_timer_vs[2]);
+  74   2            g_remain_timer = g_remain_timer - g_timer_vs[2];
+  75   2            g_timer_step = 3;
+  76   2            break;
+  77   2          case 3:
+  78   2            SET_CONTROL3(0); 
+  79   2      
+  80   2            SET_CONTROL4(1);
+  81   2            Reset_Timer(g_timer_vs[3]);
+  82   2            g_remain_timer = g_remain_timer - g_timer_vs[3];
+  83   2            g_timer_step = 4;
+  84   2            break;
+  85   2          case 4:
+  86   2            SET_CONTROL4(0);
+  87   2      
+  88   2            SET_CONTROL5(1);
+  89   2            Reset_Timer(g_timer_vs[4]);
+  90   2            g_remain_timer = g_remain_timer - g_timer_vs[4];
+  91   2            g_timer_step = 5;
+  92   2            break;
+  93   2          case 5:
+  94   2            SET_CONTROL5(0);
+  95   2            
+  96   2            SET_CONTROL6(1);
+  97   2            Reset_Timer(g_timer_vs[5]);
+  98   2            g_remain_timer = g_remain_timer - g_timer_vs[5];
+  99   2            g_timer_step = 6;
+ 100   2            break;
+ 101   2          case 6:
+ 102   2            SET_CONTROL6(0);
+ 103   2            Reset_Timer(g_remain_timer);
+ 104   2            g_timer_step = 0;
+ 105   2            g_remain_timer = PERIODIC;
+ 106   2            break;
+ 107   2            
+ 108   2        }
+ 109   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    393    ----
+C51 COMPILER V9.60.7.0   SERVO                                                             01/01/2024 14:09:25 PAGE 3   
+
+   CONSTANT SIZE    =     12    ----
+   XDATA SIZE       =   ----      12
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     15      10
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

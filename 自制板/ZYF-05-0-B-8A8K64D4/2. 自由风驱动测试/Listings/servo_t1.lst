@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   SERVO_T1                                                          03/16/2024 19:22:00 PAGE 1   
+C51 COMPILER V9.60.7.0   SERVO_T1                                                          03/24/2024 17:36:24 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE SERVO_T1
@@ -62,7 +62,7 @@ line level    source
   49          void Servo_T1_Set_Target_Degree(u8 tds[CNT_SERVOS]) {
   50   1        xdata u8 i;
   51   1        for (i = 0; i < CNT_SERVOS; ++i) {
-C51 COMPILER V9.60.7.0   SERVO_T1                                                          03/16/2024 19:22:00 PAGE 2   
+C51 COMPILER V9.60.7.0   SERVO_T1                                                          03/24/2024 17:36:24 PAGE 2   
 
   52   2          g_degree_t1[i] = tds[i];
   53   2          g_timer_vs_target_t1[i] = Cal_Degree_T1(tds[i]);
@@ -126,7 +126,7 @@ line level    source
  111   2            break;
  112   2          case 3:
  113   2            SET_CONTROL9(0); 
-C51 COMPILER V9.60.7.0   SERVO_T1                                                          03/16/2024 19:22:00 PAGE 3   
+C51 COMPILER V9.60.7.0   SERVO_T1                                                          03/24/2024 17:36:24 PAGE 3   
 
  114   2      
  115   2            SET_CONTROL10(1);

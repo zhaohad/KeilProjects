@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   ACTION                                                            03/16/2024 19:22:00 PAGE 1   
+C51 COMPILER V9.60.7.0   ACTION                                                            03/24/2024 17:36:25 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE ACTION
@@ -62,7 +62,7 @@ line level    source
   51   3          }
   52   2          case ACTION_TO_INIT: {
   53   3            g_cur_action = ACT_TO_INIT;
-C51 COMPILER V9.60.7.0   ACTION                                                            03/16/2024 19:22:00 PAGE 2   
+C51 COMPILER V9.60.7.0   ACTION                                                            03/24/2024 17:36:25 PAGE 2   
 
   54   3            g_cur_action_max_step = CNT_ACTION_TO_INIT;
   55   3            break;
@@ -126,7 +126,7 @@ line level    source
  113   3          } else if (g_action_cmd_next != ACTION_NONE) {
  114   3            g_action_cmd = g_action_cmd_next;
  115   3            g_action_cmd_v = g_action_cmd_v_next;
-C51 COMPILER V9.60.7.0   ACTION                                                            03/16/2024 19:22:00 PAGE 3   
+C51 COMPILER V9.60.7.0   ACTION                                                            03/24/2024 17:36:25 PAGE 3   
 
  116   3          } else {
  117   3            g_action_cmd = ACTION_TO_INIT;

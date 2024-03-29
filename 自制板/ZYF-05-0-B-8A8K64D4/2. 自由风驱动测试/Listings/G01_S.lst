@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   G01_S                                                             03/16/2024 19:22:01 PAGE 1   
+C51 COMPILER V9.60.7.0   G01_S                                                             03/24/2024 17:36:25 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE G01_S
@@ -62,7 +62,7 @@ line level    source
   52          
   53          /**
   54            * @brief :NRF24L01写指定长度的数据
-C51 COMPILER V9.60.7.0   G01_S                                                             03/16/2024 19:22:01 PAGE 2   
+C51 COMPILER V9.60.7.0   G01_S                                                             03/24/2024 17:36:25 PAGE 2   
 
   55            * @param :
   56            *     @reg:地址
@@ -126,7 +126,7 @@ line level    source
  114   1                                   | (1 << PWR_UP)); //开启设备
  115   1        NRF24L01_Write_Reg(EN_AA, (1 << ENAA_P0)); //通道0自动应答
  116   1        NRF24L01_Write_Reg(EN_RXADDR, (1 << ERX_P0)); //通道0接收
-C51 COMPILER V9.60.7.0   G01_S                                                             03/16/2024 19:22:01 PAGE 3   
+C51 COMPILER V9.60.7.0   G01_S                                                             03/24/2024 17:36:25 PAGE 3   
 
  117   1        NRF24L01_Write_Reg(SETUP_AW, AW_5BYTES); //地址宽度 5个字节
  118   1        NRF24L01_Write_Reg(SETUP_RETR, ARD_4000US
@@ -190,7 +190,7 @@ line level    source
  176            * @brief :NRF24L01读寄存器
  177            * @param :
  178                     @Addr:寄存器地址
-C51 COMPILER V9.60.7.0   G01_S                                                             03/16/2024 19:22:01 PAGE 4   
+C51 COMPILER V9.60.7.0   G01_S                                                             03/24/2024 17:36:25 PAGE 4   
 
  179            * @note  :地址在设备中有效
  180            * @retval:读取的数据
@@ -254,7 +254,7 @@ line level    source
  238            * @brief :NRF24L01发送一次数据
  239            * @param :
  240            *     @txbuf:待发送数据首地址
-C51 COMPILER V9.60.7.0   G01_S                                                             03/16/2024 19:22:01 PAGE 5   
+C51 COMPILER V9.60.7.0   G01_S                                                             03/24/2024 17:36:25 PAGE 5   
 
  241            *     @Length:发送数据长度
  242            * @note  :无
@@ -318,7 +318,7 @@ line level    source
  300   2          delay_ms(100);
  301   2      
  302   2          if(30 == l_100MsTimes++) { //3s没接收过数据，重新初始化模块
-C51 COMPILER V9.60.7.0   G01_S                                                             03/16/2024 19:22:01 PAGE 6   
+C51 COMPILER V9.60.7.0   G01_S                                                             03/24/2024 17:36:25 PAGE 6   
 
  303   3            NRF24L01_Gpio_Init();
  304   3            RF24L01_Init();

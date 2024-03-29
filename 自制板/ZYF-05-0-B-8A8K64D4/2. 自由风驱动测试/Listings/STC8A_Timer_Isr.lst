@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   STC8A_TIMER_ISR                                                   03/16/2024 19:21:59 PAGE 1   
+C51 COMPILER V9.60.7.0   STC8A_TIMER_ISR                                                   03/24/2024 17:36:23 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE STC8A_TIMER_ISR
@@ -62,7 +62,7 @@ line level    source
   52   1      }
   53          
   54          //========================================================================
-C51 COMPILER V9.60.7.0   STC8A_TIMER_ISR                                                   03/16/2024 19:21:59 PAGE 2   
+C51 COMPILER V9.60.7.0   STC8A_TIMER_ISR                                                   03/24/2024 17:36:23 PAGE 2   
 
   55          // º¯Êý: Timer3_ISR_Handler
   56          // ÃèÊö: Timer3ÖÐ¶Ïº¯Êý.
