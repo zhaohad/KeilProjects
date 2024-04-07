@@ -111,6 +111,7 @@ void main() {
 		xdata u8 backwardV = 0;
 		bit turnLeft = 0;
 		bit turnRight = 0;
+		bit actAssemble = 0;
 		bit actDance = 0;
 		bit actRock = 0;
 		bit actWangtian = 0;
@@ -144,6 +145,9 @@ void main() {
 					case KEY_K4:
 						actWangtian = v;
 						break;
+					case KEY_K9:
+						actAssemble = v;
+						break;
 				}
 			}
 		}
@@ -164,6 +168,9 @@ void main() {
 			g_action_cmd_next = ACTION_WANGTIAN;
 		}	else if (actDance) {
 			g_action_cmd_next = ACTION_DANCE;
+		}	else if (actAssemble) {
+			OLED_ShowString(0, 0, "123");
+			g_action_cmd_next = ACTION_TO_ASSEMBLE;
 		} else {
 			g_action_cmd_next = ACTION_NONE;
 			g_action_cmd_v_next = 0;

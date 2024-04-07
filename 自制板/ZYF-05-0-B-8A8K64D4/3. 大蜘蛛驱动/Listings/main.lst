@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              03/30/2024 00:58:38 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              04/07/2024 16:47:01 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -62,7 +62,7 @@ line level    source
   52   1        GPIO_Inilize(GPIO_P0, &conf);
   53   1      
   54   1        conf.Pin = GPIO_Pin_7 | GPIO_Pin_2;
-C51 COMPILER V9.60.7.0   MAIN                                                              03/30/2024 00:58:38 PAGE 2   
+C51 COMPILER V9.60.7.0   MAIN                                                              04/07/2024 16:47:01 PAGE 2   
 
   55   1        GPIO_Inilize(GPIO_P3, &conf);
   56   1        
@@ -123,82 +123,89 @@ line level    source
  111   2          xdata u8 backwardV = 0;
  112   2          bit turnLeft = 0;
  113   2          bit turnRight = 0;
- 114   2          bit actDance = 0;
- 115   2          bit actRock = 0;
- 116   2          bit actWangtian = 0;
-C51 COMPILER V9.60.7.0   MAIN                                                              03/30/2024 00:58:38 PAGE 3   
+ 114   2          bit actAssemble = 0;
+ 115   2          bit actDance = 0;
+ 116   2          bit actRock = 0;
+C51 COMPILER V9.60.7.0   MAIN                                                              04/07/2024 16:47:01 PAGE 3   
 
- 117   2      
- 118   2          xdata uint8_t rx;
- 119   2          xdata uint8_t g_rece[MAX_INTERACTIVE_CNT * 3];
- 120   2          rx = NRF24L01_RxPacket(g_rece); //接收字节
- 121   2          
- 122   2          if (rx >= 2) {
- 123   3            xdata u8 i;
- 124   3            for (i = 0; i < rx; ++i) {
- 125   4              u8 cmd = g_rece[i];
- 126   4              xdata v = g_rece[i + 1];
- 127   4              ++i;
- 128   4              switch (cmd) {
- 129   5                case KEY_JOINSTICK_LEFT_V:
- 130   5                  if (v > 90) { forwardV = 5; } else if (v > 80) { forwardV = 4; } else if (v > 70) { forwardV = 3; } 
+ 117   2          bit actWangtian = 0;
+ 118   2      
+ 119   2          xdata uint8_t rx;
+ 120   2          xdata uint8_t g_rece[MAX_INTERACTIVE_CNT * 3];
+ 121   2          rx = NRF24L01_RxPacket(g_rece); //接收字节
+ 122   2          
+ 123   2          if (rx >= 2) {
+ 124   3            xdata u8 i;
+ 125   3            for (i = 0; i < rx; ++i) {
+ 126   4              u8 cmd = g_rece[i];
+ 127   4              xdata v = g_rece[i + 1];
+ 128   4              ++i;
+ 129   4              switch (cmd) {
+ 130   5                case KEY_JOINSTICK_LEFT_V:
+ 131   5                  if (v > 90) { forwardV = 5; } else if (v > 80) { forwardV = 4; } else if (v > 70) { forwardV = 3; } 
              -else if (v > 60) { forwardV = 2; } else if (v > 50) { forwardV = 1; } else if (v < 10) { backwardV = 5; } else if (v < 2
              -0) { backwardV = 4; } else if (v < 30) { backwardV = 3; } else if (v < 40) { backwardV = 2; } else if (v < 50) { backwar
              -dV = 1; }
- 131   5                  break;
- 132   5                case KEY_K5:
- 133   5                  turnLeft = v;
- 134   5                  break;
- 135   5                case KEY_K7:
- 136   5                  turnRight = v;
- 137   5                  break;
- 138   5                case KEY_K10:
- 139   5                  actRock = v;
- 140   5                  break;
- 141   5                case KEY_K11:
- 142   5                  actDance = v;
- 143   5                  break;
- 144   5                case KEY_K4:
- 145   5                  actWangtian = v;
- 146   5                  break;
- 147   5              }
- 148   4            }
- 149   3          }
- 150   2            
- 151   2          if (forwardV) {
- 152   3            g_action_cmd_next = ACTION_FORWARD;
- 153   3            g_action_cmd_v_next = forwardV;
- 154   3          } else if (backwardV) {
- 155   3            g_action_cmd_next = ACTION_BACKWARD;
- 156   3            g_action_cmd_v_next = backwardV;
- 157   3          } else if (turnLeft) {
- 158   3            g_action_cmd_next = ACTION_TURN_LEFT;
- 159   3          } else if (turnRight) {
- 160   3            g_action_cmd_next = ACTION_TURN_RIGHT;
- 161   3          } else if (actRock) {
- 162   3            g_action_cmd_next = ACTION_ROCK;
- 163   3          } else if (actWangtian) {
- 164   3            g_action_cmd_next = ACTION_WANGTIAN;
- 165   3          } else if (actDance) {
- 166   3            g_action_cmd_next = ACTION_DANCE;
- 167   3          } else {
- 168   3            g_action_cmd_next = ACTION_NONE;
- 169   3            g_action_cmd_v_next = 0;
- 170   3          }
- 171   2        }
- 172   1      }
+ 132   5                  break;
+ 133   5                case KEY_K5:
+ 134   5                  turnLeft = v;
+ 135   5                  break;
+ 136   5                case KEY_K7:
+ 137   5                  turnRight = v;
+ 138   5                  break;
+ 139   5                case KEY_K10:
+ 140   5                  actRock = v;
+ 141   5                  break;
+ 142   5                case KEY_K11:
+ 143   5                  actDance = v;
+ 144   5                  break;
+ 145   5                case KEY_K4:
+ 146   5                  actWangtian = v;
+ 147   5                  break;
+ 148   5                case KEY_K9:
+ 149   5                  actAssemble = v;
+ 150   5                  break;
+ 151   5              }
+ 152   4            }
+ 153   3          }
+ 154   2            
+ 155   2          if (forwardV) {
+ 156   3            g_action_cmd_next = ACTION_FORWARD;
+ 157   3            g_action_cmd_v_next = forwardV;
+ 158   3          } else if (backwardV) {
+ 159   3            g_action_cmd_next = ACTION_BACKWARD;
+ 160   3            g_action_cmd_v_next = backwardV;
+ 161   3          } else if (turnLeft) {
+ 162   3            g_action_cmd_next = ACTION_TURN_LEFT;
+ 163   3          } else if (turnRight) {
+ 164   3            g_action_cmd_next = ACTION_TURN_RIGHT;
+ 165   3          } else if (actRock) {
+ 166   3            g_action_cmd_next = ACTION_ROCK;
+ 167   3          } else if (actWangtian) {
+ 168   3            g_action_cmd_next = ACTION_WANGTIAN;
+ 169   3          } else if (actDance) {
+ 170   3            g_action_cmd_next = ACTION_DANCE;
+ 171   3          } else if (actAssemble) {
+ 172   3            OLED_ShowString(0, 0, "123");
+ 173   3            g_action_cmd_next = ACTION_TO_ASSEMBLE;
+ 174   3          } else {
+ 175   3            g_action_cmd_next = ACTION_NONE;
+C51 COMPILER V9.60.7.0   MAIN                                                              04/07/2024 16:47:01 PAGE 4   
+
+ 176   3            g_action_cmd_v_next = 0;
+ 177   3          }
+ 178   2        }
+ 179   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-C51 COMPILER V9.60.7.0   MAIN                                                              03/30/2024 00:58:38 PAGE 4   
-
-   CODE SIZE        =    806    ----
-   CONSTANT SIZE    =   ----    ----
+   CODE SIZE        =    855    ----
+   CONSTANT SIZE    =      4    ----
    XDATA SIZE       =   ----      68
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----       2
    IDATA SIZE       =   ----    ----
-   BIT SIZE         =   ----       6
+   BIT SIZE         =   ----       7
 END OF MODULE INFORMATION.
 
 

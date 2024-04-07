@@ -79,6 +79,11 @@ void Action_Timer_Callback() {
 			g_cur_action_max_step = CNT_ACTION_WANGTIAN;
 			break;
 		}
+		case ACTION_TO_ASSEMBLE: {
+			g_cur_action = ACT_TO_ASSEMBLE;
+			g_cur_action_max_step = CNT_ACTION_TO_ASSEMBLE;
+			break;
+		}
 		default: {
 			g_cur_action = NULL;
 			g_action_cmd = g_action_cmd_next;
@@ -92,7 +97,7 @@ void Action_Timer_Callback() {
 		return;
 	}
 
-	if (stride == 0) {
+	if (stride == 0 || stride > g_cur_action[g_cur_step][ACTION_STRIDE_INDEX]) {
 		stride = g_cur_action[g_cur_step][ACTION_STRIDE_INDEX];
 	}
 	++g_timer_cnt;
