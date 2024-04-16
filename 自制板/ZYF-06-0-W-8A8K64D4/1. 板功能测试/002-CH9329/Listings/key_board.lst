@@ -1,0 +1,107 @@
+C51 COMPILER V9.60.7.0   KEY_BOARD                                                         04/15/2024 22:16:15 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE KEY_BOARD
+OBJECT MODULE PLACED IN .\Objects\key_board.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\key_board.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\List
+                    -ings\key_board.lst) TABS(2) OBJECT(.\Objects\key_board.obj)
+
+line level    source
+
+   1          #include "key_board.h"
+   2          #include "74HC595.h"
+   3          #include "STC8A_UART.h"
+   4          #include "CH9239.h"
+   5          
+   6          xdata KeyBoardStatus g_KeyBoardStatus;
+   7          
+   8          #define BUF_LEN_595 2
+   9          xdata u8 g_buf_595[BUF_LEN_595];
+  10          
+  11          void turn_led_on_off(u8 led, bit on) {
+  12   1        if (on) {
+  13   2          g_buf_595[1] = g_buf_595[1] & ~led;
+  14   2        } else {
+  15   2          g_buf_595[1] = g_buf_595[1] | led;
+  16   2        }
+  17   1      }
+  18          
+  19          void sys_info_led() {
+  20   1        turn_led_on_off(0x01, g_KeyBoardStatus.isNumLockOn);
+  21   1        turn_led_on_off(0x08, g_KeyBoardStatus.isCapsLockOn);
+  22   1        key_board_refresh_led();
+  23   1      }
+  24          
+  25          void key_board_resolve_ch9239(u8 * buf, u8 buf_l) {
+  26   1        switch (buf[CH9239_INDEX_CMD]) {
+  27   2          case CH9239_CMD_SYS_INFO: {
+  28   3            g_KeyBoardStatus.version = buf[5];
+  29   3            g_KeyBoardStatus.isConnected = buf[6];
+  30   3            g_KeyBoardStatus.isNumLockOn = buf[7] & 0x01;
+  31   3            g_KeyBoardStatus.isCapsLockOn = buf[7] & 0x02;
+  32   3            g_KeyBoardStatus.isScrollLockOn = buf[7] & 0x04;
+  33   3            sys_info_led();
+  34   3            break;
+  35   3          }
+  36   2        }
+  37   1      }
+*** WARNING C280 IN LINE 25 OF src\key_board.c: 'buf_l': unreferenced local variable
+  38          
+  39          void key_board_led_off() {
+  40   1        g_buf_595[0] = 0xff;
+  41   1        g_buf_595[1] = 0xff;
+  42   1        key_board_refresh_led();
+  43   1      }
+  44          
+  45          void key_board_refresh_led() {
+  46   1        write_byte_595(g_buf_595[0]);
+  47   1        write_byte_595(g_buf_595[1]);
+  48   1        flush_595();
+  49   1      }
+  50          
+  51          void key_board_get_sys_info() {
+  52   1        xdata u8 cmd_get_info[6] = {0x57, 0xAB, 0x00, 0x01, 0x00, 0x03};
+  53   1        TX1_write2buffs(cmd_get_info, 6);
+C51 COMPILER V9.60.7.0   KEY_BOARD                                                         04/15/2024 22:16:15 PAGE 2   
+
+  54   1      }
+  55          
+  56          xdata u8 cmd_key_general_data[14] = {0};
+  57          
+  58          void key_board_key_down(u8 fun_keys, u8 norm_key[MAX_NORM_KEY], u8 norm_key_len) {
+  59   1        xdata u8 i;
+  60   1        // xdata u8 cmd_key_general_data[14] = {0x57, 0xAB, 0x00, 0x02, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  61   1        cmd_key_general_data[0] = 0x57;
+  62   1        cmd_key_general_data[1] = 0xAB;
+  63   1        cmd_key_general_data[2] = 0;
+  64   1        cmd_key_general_data[3] = 0x02;
+  65   1        cmd_key_general_data[4] = 8;
+  66   1        cmd_key_general_data[5] = fun_keys;
+  67   1        cmd_key_general_data[6] = 0;
+  68   1        cmd_key_general_data[7] = 0;
+  69   1        cmd_key_general_data[8] = 0;
+  70   1        cmd_key_general_data[9] = 0;
+  71   1        cmd_key_general_data[10] = 0;
+  72   1        cmd_key_general_data[11] = 0;
+  73   1        cmd_key_general_data[12] = 0;
+  74   1        cmd_key_general_data[13] = 0;
+  75   1        for (i = 0; i < norm_key_len && i < MAX_NORM_KEY; ++i) {
+  76   2          cmd_key_general_data[7 + i] = norm_key[i];
+  77   2        }
+  78   1        cmd_key_general_data[13] = ch9239_sum(cmd_key_general_data, 13);
+  79   1        TX1_write2buffs(cmd_key_general_data, 14);
+  80   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    305    ----
+   CONSTANT SIZE    =      6    ----
+   XDATA SIZE       =     21       7
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

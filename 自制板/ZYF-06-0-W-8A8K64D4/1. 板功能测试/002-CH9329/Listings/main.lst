@@ -1,0 +1,273 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              04/15/2024 22:16:12 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\
+                    -main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "stc8a8k64d4.H"
+   2          #include "stc8a_gpio.H"
+   3          #include "stc8a_spi.h"
+   4          #include "stc8a_nvic.h"
+   5          #include "typedef.h"
+   6          #include "oled12864.h"
+   7          #include "74HC165.h"
+   8          #include "STC8A_UART.h"
+   9          #include "STC8A_Switch.h"
+  10          #include "CH9239.h"
+  11          #include "key_board.h"
+  12          
+  13          void OLED_GPIO_Config() {
+  14   1        GPIO_InitTypeDef conf;
+  15   1        conf.Mode = GPIO_OUT_PP;
+  16   1        conf.Pin = GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7;
+  17   1        GPIO_Inilize(GPIO_P0, &conf);
+  18   1      }
+  19          
+  20          void OLED_12864_Init() {
+  21   1        OLED_GPIO_Config();
+  22   1        OLED_Init();
+  23   1      }
+  24          
+  25          void LED_GPIO_Init() {
+  26   1        GPIO_InitTypeDef conf;
+  27   1        conf.Mode = GPIO_OUT_PP;
+  28   1        conf.Pin = GPIO_Pin_0;
+  29   1        GPIO_Inilize(GPIO_P0, &conf);
+  30   1      }
+  31          
+  32          void C595_GPIO_Config() {
+  33   1        GPIO_InitTypeDef conf;
+  34   1        conf.Mode = GPIO_OUT_PP;
+  35   1        conf.Pin = GPIO_Pin_2 | GPIO_Pin_3;
+  36   1        GPIO_Inilize(GPIO_P3, &conf);
+  37   1        
+  38   1        
+  39   1        conf.Pin = GPIO_Pin_0;
+  40   1        GPIO_Inilize(GPIO_P4, &conf);
+  41   1        
+  42   1        
+  43   1        conf.Pin = GPIO_Pin_4 | GPIO_Pin_5;
+  44   1        GPIO_Inilize(GPIO_P5, &conf);
+  45   1      }
+  46          
+  47          void C165_GPIO_Config() {
+  48   1        GPIO_InitTypeDef conf;
+  49   1        conf.Mode = GPIO_PullUp;
+  50   1        conf.Pin = GPIO_Pin_7;
+  51   1        GPIO_Inilize(GPIO_P1, &conf);
+  52   1      
+  53   1        conf.Mode = GPIO_OUT_PP;
+  54   1        conf.Pin = GPIO_Pin_5 | GPIO_Pin_6;
+C51 COMPILER V9.60.7.0   MAIN                                                              04/15/2024 22:16:12 PAGE 2   
+
+  55   1        GPIO_Inilize(GPIO_P1, &conf);
+  56   1        
+  57   1        
+  58   1        conf.Pin = GPIO_Pin_4;
+  59   1        GPIO_Inilize(GPIO_P4, &conf);
+  60   1      }
+  61          
+  62          void  UART_config() {
+  63   1        COMx_InitDefine COMx_InitStructure; //结构定义
+  64   1        // UART1_SW(UART1_SW_P30_P31);
+  65   1        UART1_SW(UART1_SW_P36_P37);
+  66   1        COMx_InitStructure.UART_Mode = UART_8bit_BRTx; //模式,   UART_ShiftRight,UART_8bit_BRTx,UART_9bit,UART_9b
+             -it_BRTx
+  67   1        COMx_InitStructure.UART_BRT_Use = BRT_Timer1; //使用波特率, BRT_Timer1, BRT_Timer2 (注意: 串口2固定使用BR
+             -T_Timer2)
+  68   1        COMx_InitStructure.UART_BaudRate = 9600ul; //波特率,     110 ~ 115200
+  69   1        COMx_InitStructure.UART_RxEnable = ENABLE; //接收允许,   ENABLE或DISABLE
+  70   1        UART_Configuration(UART1, &COMx_InitStructure); //初始化串口2 USART1,USART2,USART3,USART4
+  71   1        NVIC_UART1_Init(ENABLE,Priority_1); //中断使能, ENABLE/DISABLE; 优先级(低到高) Priority_0,Priority_1,Prio
+             -rity_2,Priority_3
+  72   1        EA = 1;
+  73   1      }
+  74          
+  75          void UART_GPIO_Config() {
+  76   1        GPIO_InitTypeDef GPIO_InitStructure;
+  77   1        GPIO_InitStructure.Pin = GPIO_Pin_6 | GPIO_Pin_7;
+  78   1        GPIO_InitStructure.Mode = GPIO_PullUp;
+  79   1        GPIO_Inilize(GPIO_P3, &GPIO_InitStructure);
+  80   1      }
+  81          
+  82          void on_UART_Rec_1Byte(u8 d) {
+  83   1        bit a = ch9239_uart_stream(d);
+  84   1        if (a/*ch9239_uart_stream(d)*/) {   
+  85   2          key_board_resolve_ch9239(g_9329_rec, g_9329_rec_len);
+  86   2            //OLED_Clear();
+  87   2      
+  88   2          {
+  89   3            
+  90   3            {
+  91   4              u8 s[6] = {0,0,0,0,0,0};
+  92   4              s[0] = g_KeyBoardStatus.version;
+  93   4              s[1] = g_KeyBoardStatus.isConnected;
+  94   4              s[2] = g_9329_rec_len;
+  95   4              s[3] = g_9329_cmd_len;
+  96   4              s[4] = g_state_9329_rec;
+  97   4              s[5] = a;
+  98   4              OLED_ShowHexBuf8(0, 0, s, 6);
+  99   4            }
+ 100   3      
+ 101   3            {
+ 102   4              u8 * b = g_9329_rec;
+ 103   4              u8 l = g_9329_rec_len;
+ 104   4              u8 sl = 1;
+ 105   4              while (l > 8) {
+ 106   5                OLED_ShowHexBuf8(0, sl, b, 8);
+ 107   5                b += 8;
+ 108   5                l -= 8;
+ 109   5                sl += 1;
+ 110   5              }
+ 111   4              OLED_ShowHexBuf8(0, sl, b, l);
+ 112   4            }
+ 113   3          }
+C51 COMPILER V9.60.7.0   MAIN                                                              04/15/2024 22:16:12 PAGE 3   
+
+ 114   2      
+ 115   2          {
+ 116   3            u8 * b = cmd_key_general_data;
+ 117   3            u8 l = 14;
+ 118   3            u8 sl = 3;
+ 119   3            while (l > 8) {
+ 120   4              OLED_ShowHexBuf8(0, sl, b, 8);
+ 121   4              b += 8;
+ 122   4              l -= 8;
+ 123   4              sl += 1;
+ 124   4            }
+ 125   3            OLED_ShowHexBuf8(0, sl, b, l);
+ 126   3            
+ 127   3            {
+ 128   4              u8 s[5] = {0,0,0,0,0};
+ 129   4              s[0] = g_KeyBoardStatus.version;
+ 130   4              s[1] = g_KeyBoardStatus.isConnected;
+ 131   4              s[2] = g_KeyBoardStatus.isNumLockOn;
+ 132   4              s[3] = g_KeyBoardStatus.isCapsLockOn;
+ 133   4              s[4] = g_KeyBoardStatus.isScrollLockOn;
+ 134   4              OLED_ShowHexBuf8(0, 0, s, 5);
+ 135   4            }
+ 136   3          }
+ 137   2        }
+ 138   1      }
+ 139          
+ 140          void send_keys(u8 * keys, u8 l) {
+ 141   1        xdata u8 lasti, lastl;
+ 142   1        xdata u8 i = 0;
+ 143   1        {
+ 144   2          u8 s[] = {1, 1};
+ 145   2          s[0] = i;
+ 146   2          s[1] = l;
+ 147   2          OLED_ShowHexBuf8(0, 7, s, 2);
+ 148   2        }
+ 149   1        for (i = 4; i < l; ++i) {
+ 150   2          xdata u8 k[1];
+ 151   2          xdata u8 n[1] = {0};
+ 152   2          k[0] = keys[i];
+ 153   2          key_board_key_down(0, k, 1);
+ 154   2          delay_ms(200);
+ 155   2          /*n[0] = 0;
+ 156   2          key_board_key_down(0, n, 1);
+ 157   2          delay_ms(200);*/
+ 158   2          if (i > 13) {
+ 159   3            xdata u8 s[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+ 160   3            s[0] = i;
+ 161   3            s[1] = l;
+ 162   3            OLED_ShowHexBuf8(0, 6, s, 8);
+ 163   3            P00 = 0;
+ 164   3            while (1) {
+ 165   4            }
+ 166   3      
+ 167   3          } else if (l != 13) {
+ 168   3            xdata u8 s[] = {1, 2, 1, 1, 1};
+ 169   3            s[0] = i;
+ 170   3            s[1] = l;
+ 171   3            s[2] = 13;
+ 172   3            s[3] = lasti;
+ 173   3            s[4] = lastl;
+ 174   3            OLED_ShowHexBuf8(0, 6, s, 5);
+ 175   3            P00 = 0;
+C51 COMPILER V9.60.7.0   MAIN                                                              04/15/2024 22:16:12 PAGE 4   
+
+ 176   3            while (1) {
+ 177   4            }
+ 178   3          } else {
+ 179   3            lasti = i;
+ 180   3            lastl = l;
+ 181   3          }
+ 182   2        }
+ 183   1      }
+ 184          
+ 185          
+ 186          void main() {
+ 187   1        xdata last_sent = 1;
+ 188   1        xdata last_not_sent = 0;
+ 189   1      
+ 190   1        LED_GPIO_Init();
+ 191   1        C595_GPIO_Config();
+ 192   1        C165_GPIO_Config(); 
+ 193   1        
+ 194   1        OLED_12864_Init();
+ 195   1      
+ 196   1        g_onURAT_1Byte_CB = on_UART_Rec_1Byte;
+ 197   1        UART_GPIO_Config();
+ 198   1        UART_config();
+ 199   1        key_board_get_sys_info();
+ 200   1      
+ 201   1        key_board_led_off();
+ 202   1        
+ 203   1      
+ 204   1        while(1) {
+ 205   2          u8 buf[] = {0xfe, 0x12, 0};
+ 206   2          bit key_down = 0;
+ 207   2          load_data_165();
+ 208   2          buf[0] = read_byte_165();
+ 209   2          buf[1] = read_byte_165();
+ 210   2          
+ 211   2          buf[2] = ~(buf[1]) & 0x0f;
+ 212   2          if (buf[2]) {
+ 213   3            u8 s[] = {1};
+ 214   3            s[0] = 1;
+ 215   3            OLED_ShowHexBuf8(0, 5, s, 1);
+ 216   3            if (last_sent) {
+ 217   4              u8 k1[] = {0x04, 0x12, 0x0D, 0x0C, 0x04, 0x12, 0x0B, 0x04, 0x11, 0x1A, 0x08, 0x0C, 0x28};
+ 218   4              send_keys(k1, 13);
+ 219   4              // P00 = 0;
+ 220   4            }
+ 221   3            last_not_sent = 1;
+ 222   3            last_sent = 0;
+ 223   3          } else {
+ 224   3            u8 s[] = {0};
+ 225   3            s[0] = 2;
+ 226   3            OLED_ShowHexBuf8(0, 5, s, 1);
+ 227   3            last_sent = 1;
+ 228   3            // P00 = 1;
+ 229   3            if (last_not_sent) {
+ 230   4              u8 k[] = {0x00};
+ 231   4              key_board_key_down(0, k, 1);
+ 232   4              last_not_sent = 0;
+ 233   4            }
+ 234   3          }
+ 235   2      
+ 236   2          // OLED_ShowHexBuf8(0, 4, buf, 3);
+ 237   2        }
+C51 COMPILER V9.60.7.0   MAIN                                                              04/15/2024 22:16:12 PAGE 5   
+
+ 238   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1074    ----
+   CONSTANT SIZE    =     49    ----
+   XDATA SIZE       =   ----      25
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      52
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       2
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

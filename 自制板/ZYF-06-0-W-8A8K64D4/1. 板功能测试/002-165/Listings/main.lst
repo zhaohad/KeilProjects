@@ -1,0 +1,112 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              04/13/2024 08:41:42 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\
+                    -main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "stc8a8k64d4.H"
+   2          #include "stc8a_gpio.H"
+   3          #include "stc8a_spi.h"
+   4          #include "stc8a_nvic.h"
+   5          #include "typedef.h"
+   6          #include "oled12864.h"
+   7          #include "uart.h"
+   8          #include "74HC595.h"
+   9          #include "74HC165.h"
+  10          
+  11          #define BUF_LEN_595 2
+  12          u8 g_buf_595[BUF_LEN_595];
+  13          
+  14          void OLED_GPIO_Config() {
+  15   1        GPIO_InitTypeDef conf;
+  16   1        conf.Mode = GPIO_OUT_PP;
+  17   1        conf.Pin = GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7;
+  18   1        GPIO_Inilize(GPIO_P0, &conf);
+  19   1      }
+  20          
+  21          void OLED_12864_Init() {
+  22   1        OLED_GPIO_Config();
+  23   1        OLED_Init();
+  24   1      }
+  25          
+  26          void LED_GPIO_Init() {
+  27   1        GPIO_InitTypeDef conf;
+  28   1        conf.Mode = GPIO_OUT_PP;
+  29   1        conf.Pin = GPIO_Pin_7;
+  30   1        GPIO_Inilize(GPIO_P0, &conf);
+  31   1      }
+  32          
+  33          void C595_GPIO_Config() {
+  34   1        GPIO_InitTypeDef conf;
+  35   1        conf.Mode = GPIO_OUT_PP;
+  36   1        conf.Pin = GPIO_Pin_2 | GPIO_Pin_3;
+  37   1        GPIO_Inilize(GPIO_P3, &conf);
+  38   1        
+  39   1        
+  40   1        conf.Pin = GPIO_Pin_0;
+  41   1        GPIO_Inilize(GPIO_P4, &conf);
+  42   1        
+  43   1        
+  44   1        conf.Pin = GPIO_Pin_4 | GPIO_Pin_5;
+  45   1        GPIO_Inilize(GPIO_P5, &conf);
+  46   1      }
+  47          
+  48          void C165_GPIO_Config() {
+  49   1        GPIO_InitTypeDef conf;
+  50   1        conf.Mode = GPIO_PullUp;
+  51   1        conf.Pin = GPIO_Pin_7;
+  52   1        GPIO_Inilize(GPIO_P1, &conf);
+  53   1      
+  54   1        conf.Mode = GPIO_OUT_PP;
+C51 COMPILER V9.60.7.0   MAIN                                                              04/13/2024 08:41:42 PAGE 2   
+
+  55   1        conf.Pin = GPIO_Pin_5 | GPIO_Pin_6;
+  56   1        GPIO_Inilize(GPIO_P1, &conf);
+  57   1        
+  58   1        
+  59   1        conf.Pin = GPIO_Pin_4;
+  60   1        GPIO_Inilize(GPIO_P4, &conf);
+  61   1      }
+  62          
+  63          void main() {
+  64   1        u8 buf[] = {0xfe, 0x12};
+  65   1      
+  66   1        LED_GPIO_Init();
+  67   1        C595_GPIO_Config();
+  68   1        C165_GPIO_Config(); 
+  69   1        
+  70   1        OLED_12864_Init();
+  71   1      
+  72   1        g_buf_595[0] = 0xff;
+  73   1        g_buf_595[1] = 0xff;
+  74   1        
+  75   1        write_byte_595(g_buf_595[0]);
+  76   1        write_byte_595(g_buf_595[1]);
+  77   1        flush_595();
+  78   1        
+  79   1      
+  80   1        while(1) {
+  81   2          load_data_165();
+  82   2          buf[0] = read_byte_165();
+  83   2          buf[1] = read_byte_165();
+  84   2          OLED_ShowHexBuf8(0, 0, buf, 2);
+  85   2        }
+  86   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    212    ----
+   CONSTANT SIZE    =      2    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2      10
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
