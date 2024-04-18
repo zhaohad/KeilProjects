@@ -68,9 +68,10 @@ bit ch9239_uart_stream(u8 d) {
 }
 
 u8 ch9239_sum(u8 * buf, u8 l) {
-	xdata u8 sum = 0;
-	for (; l > 0;) {
-		sum += buf[--l];
+	u8 sum = 0;
+	u8 i;
+	for (i = 0; i < l; i++) {
+		sum = (u8) sum + *(buf + i);
 	}
 	return sum;
 }

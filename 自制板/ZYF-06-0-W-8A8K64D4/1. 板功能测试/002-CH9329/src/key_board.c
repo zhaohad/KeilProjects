@@ -53,12 +53,12 @@ void key_board_get_sys_info() {
 	TX1_write2buffs(cmd_get_info, 6);
 }
 
-xdata u8 cmd_key_general_data[14] = {0};
+// xdata u8 cmd_key_general_data[14] = {0};
 
 void key_board_key_down(u8 fun_keys, u8 norm_key[MAX_NORM_KEY], u8 norm_key_len) {
 	xdata u8 i;
-	// xdata u8 cmd_key_general_data[14] = {0x57, 0xAB, 0x00, 0x02, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-	cmd_key_general_data[0] = 0x57;
+	xdata u8 cmd_key_general_data[14] = {0x57, 0xAB, 0x00, 0x02, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+	/*cmd_key_general_data[0] = 0x57;
 	cmd_key_general_data[1] = 0xAB;
 	cmd_key_general_data[2] = 0;
 	cmd_key_general_data[3] = 0x02;
@@ -73,8 +73,8 @@ void key_board_key_down(u8 fun_keys, u8 norm_key[MAX_NORM_KEY], u8 norm_key_len)
 	cmd_key_general_data[12] = 0;
 	cmd_key_general_data[13] = 0;
 	for (i = 0; i < norm_key_len && i < MAX_NORM_KEY; ++i) {
-		cmd_key_general_data[7 + i] = norm_key[i];
-	}
-	cmd_key_general_data[13] = ch9239_sum(cmd_key_general_data, 13);
+ 		cmd_key_general_data[7 + i] = norm_key[i];
+	}*/
+	/*cmd_key_general_data[13] = */ch9239_sum(cmd_key_general_data, 13);
 	TX1_write2buffs(cmd_key_general_data, 14);
 }

@@ -61,8 +61,8 @@ void C165_GPIO_Config() {
 
 void	UART_config() {
 	COMx_InitDefine COMx_InitStructure; //结构定义
-	// UART1_SW(UART1_SW_P30_P31);
 	UART1_SW(UART1_SW_P36_P37);
+	// UART1_SW(UART1_SW_P30_P31);
 	COMx_InitStructure.UART_Mode = UART_8bit_BRTx; //模式,   UART_ShiftRight,UART_8bit_BRTx,UART_9bit,UART_9bit_BRTx
 	COMx_InitStructure.UART_BRT_Use = BRT_Timer1; //使用波特率, BRT_Timer1, BRT_Timer2 (注意: 串口2固定使用BRT_Timer2)
 	COMx_InitStructure.UART_BaudRate = 9600ul; //波特率,     110 ~ 115200
@@ -80,26 +80,13 @@ void UART_GPIO_Config() {
 }
 
 void on_UART_Rec_1Byte(u8 d) {
-	bit a = ch9239_uart_stream(d);
-	if (a/*ch9239_uart_stream(d)*/) {		
-		key_board_resolve_ch9239(g_9329_rec, g_9329_rec_len);
+	if (/*ch9239_uart_stream(d)*/1) {		
+		// key_board_resolve_ch9239(g_9329_rec, g_9329_rec_len);
 			//OLED_Clear();
 
-		{
-			
+		
 			{
-				u8 s[6] = {0,0,0,0,0,0};
-				s[0] = g_KeyBoardStatus.version;
-				s[1] = g_KeyBoardStatus.isConnected;
-				s[2] = g_9329_rec_len;
-				s[3] = g_9329_cmd_len;
-				s[4] = g_state_9329_rec;
-				s[5] = a;
-				OLED_ShowHexBuf8(0, 0, s, 6);
-			}
-
-			{
-				u8 * b = g_9329_rec;
+				/*u8 * b = g_9329_rec;
 				u8 l = g_9329_rec_len;
 				u8 sl = 1;
 				while (l > 8) {
@@ -108,14 +95,16 @@ void on_UART_Rec_1Byte(u8 d) {
 					l -= 8;
 					sl += 1;
 				}
-				OLED_ShowHexBuf8(0, sl, b, l);
+				OLED_ShowHexBuf8(0, sl, b, l);*/
+				// OLED_ShowHexBuf8(0, 0, g_9329_rec, 8);
+				// OLED_ShowHexBuf8(0, 1, cmd_key_general_data, 8);
+				// OLED_ShowHexBuf8(0, 2, cmd_key_general_data + 8, 6);
 			}
-		}
 
-		{
+		/*{
 			u8 * b = cmd_key_general_data;
 			u8 l = 14;
-			u8 sl = 3;
+			u8 sl = 1;
 			while (l > 8) {
 				OLED_ShowHexBuf8(0, sl, b, 8);
 				b += 8;
@@ -123,62 +112,23 @@ void on_UART_Rec_1Byte(u8 d) {
 				sl += 1;
 			}
 			OLED_ShowHexBuf8(0, sl, b, l);
-			
-			{
-				u8 s[5] = {0,0,0,0,0};
-				s[0] = g_KeyBoardStatus.version;
-				s[1] = g_KeyBoardStatus.isConnected;
-				s[2] = g_KeyBoardStatus.isNumLockOn;
-				s[3] = g_KeyBoardStatus.isCapsLockOn;
-				s[4] = g_KeyBoardStatus.isScrollLockOn;
-				OLED_ShowHexBuf8(0, 0, s, 5);
-			}
-		}
+		}*/
 	}
 }
 
 void send_keys(u8 * keys, u8 l) {
-	xdata u8 lasti, lastl;
 	xdata u8 i = 0;
-	{
-		u8 s[] = {1, 1};
-		s[0] = i;
-		s[1] = l;
-		OLED_ShowHexBuf8(0, 7, s, 2);
-	}
-	for (i = 4; i < l; ++i) {
+	for (i = 0; i < l; ++i) {
 		xdata u8 k[1];
 		xdata u8 n[1] = {0};
 		k[0] = keys[i];
-		key_board_key_down(0, k, 1);
+		OLED_ShowHexBuf8(0, 4, keys, 8);
+		OLED_ShowHexBuf8(0, 5, keys + 8, 5);
+		// key_board_key_down(0, k, 1);
 		delay_ms(200);
-		/*n[0] = 0;
+		n[0] = 0;
 		key_board_key_down(0, n, 1);
-		delay_ms(200);*/
-		if (i > 13) {
-			xdata u8 s[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-			s[0] = i;
-			s[1] = l;
-			OLED_ShowHexBuf8(0, 6, s, 8);
-			P00 = 0;
-			while (1) {
-			}
-
-		} else if (l != 13) {
-			xdata u8 s[] = {1, 2, 1, 1, 1};
-			s[0] = i;
-			s[1] = l;
-			s[2] = 13;
-			s[3] = lasti;
-			s[4] = lastl;
-			OLED_ShowHexBuf8(0, 6, s, 5);
-			P00 = 0;
-			while (1) {
-			}
-		} else {
-			lasti = i;
-			lastl = l;
-		}
+		delay_ms(200);
 	}
 }
 
@@ -210,29 +160,19 @@ void main() {
 		
 		buf[2] = ~(buf[1]) & 0x0f;
 		if (buf[2]) {
-			u8 s[] = {1};
-			s[0] = 1;
-			OLED_ShowHexBuf8(0, 5, s, 1);
 			if (last_sent) {
-				u8 k1[] = {0x04, 0x12, 0x0D, 0x0C, 0x04, 0x12, 0x0B, 0x04, 0x11, 0x1A, 0x08, 0x0C, 0x28};
-				send_keys(k1, 13);
-				// P00 = 0;
+				xdata u8 k111111111[] = {0x04, 0x12, 0x0D, 0x0C, 0x04, 0x12, 0x0B, 0x04, 0x11, 0x1A, 0x08, 0x0C, 0x28};
+				send_keys(k111111111, 13);
 			}
 			last_not_sent = 1;
 			last_sent = 0;
 		} else {
-			u8 s[] = {0};
-			s[0] = 2;
-			OLED_ShowHexBuf8(0, 5, s, 1);
 			last_sent = 1;
-			// P00 = 1;
 			if (last_not_sent) {
 				u8 k[] = {0x00};
 				key_board_key_down(0, k, 1);
 				last_not_sent = 0;
 			}
 		}
-
-		// OLED_ShowHexBuf8(0, 4, buf, 3);
 	}
 }
