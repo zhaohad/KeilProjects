@@ -12,6 +12,7 @@
 
 #include "STC8A_UART.h"
 #include "typedef.h"
+#include "main.h"
 
 //========================================================================
 // º¯Êý: UART1_ISR_Handler
@@ -36,9 +37,7 @@ void UART1_ISR_Handler (void) interrupt UART1_VECTOR
 			COM1.RX_TimeOut = TimeOutSet1;
 		}*/
 		buf = SBUF;
-		if (g_onURAT_1Byte_CB != NULL) {
-			g_onURAT_1Byte_CB(buf);
-		}
+		on_UART_Rec_1Byte(buf);
 	}
 
 	if(TI)
@@ -109,7 +108,7 @@ void UART3_ISR_Handler (void) interrupt UART3_VECTOR
 		CLR_RI3();
 		buf = S3BUF;
 		if (g_onURAT_1Byte_CB != NULL) {
-			g_onURAT_1Byte_CB(buf);
+			(* g_onURAT_1Byte_CB) (buf);
 		}
 		/*CLR_RI3();
 		if(COM3.B_RX_OK == 0)

@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   74HC595                                                           04/16/2024 21:00:25 PAGE 1   
+C51 COMPILER V9.60.7.0   74HC595                                                           04/18/2024 10:58:28 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE 74HC595
@@ -62,7 +62,7 @@ line level    source
   52          void flush_595() {
   53   1        P_595_RCK = 0;
   54   1        P_595_SCLR = 1;
-C51 COMPILER V9.60.7.0   74HC595                                                           04/16/2024 21:00:25 PAGE 2   
+C51 COMPILER V9.60.7.0   74HC595                                                           04/18/2024 10:58:28 PAGE 2   
 
   55   1        P_595_G = 0;
   56   1        P_595_RCK = 1;
