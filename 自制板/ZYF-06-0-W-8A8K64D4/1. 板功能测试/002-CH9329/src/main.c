@@ -9,6 +9,7 @@
 #include "STC8A_Switch.h"
 #include "CH9239.h"
 #include "key_board.h"
+#include "main.h"
 
 void OLED_GPIO_Config() {
 	GPIO_InitTypeDef conf;
@@ -80,13 +81,13 @@ void UART_GPIO_Config() {
 }
 
 void on_UART_Rec_1Byte(u8 d) {
-	if (/*ch9239_uart_stream(d)*/1) {		
-		// key_board_resolve_ch9239(g_9329_rec, g_9329_rec_len);
-			//OLED_Clear();
+	if (ch9239_uart_stream(d)) {		
+		key_board_resolve_ch9239(g_9329_rec, g_9329_rec_len);
+			// OLED_Clear();
 
 		
 			{
-				/*u8 * b = g_9329_rec;
+				u8 * b = g_9329_rec;
 				u8 l = g_9329_rec_len;
 				u8 sl = 1;
 				while (l > 8) {
@@ -95,7 +96,7 @@ void on_UART_Rec_1Byte(u8 d) {
 					l -= 8;
 					sl += 1;
 				}
-				OLED_ShowHexBuf8(0, sl, b, l);*/
+				OLED_ShowHexBuf8(0, sl, b, l);
 				// OLED_ShowHexBuf8(0, 0, g_9329_rec, 8);
 				// OLED_ShowHexBuf8(0, 1, cmd_key_general_data, 8);
 				// OLED_ShowHexBuf8(0, 2, cmd_key_general_data + 8, 6);
@@ -124,11 +125,11 @@ void send_keys(u8 * keys, u8 l) {
 		k[0] = keys[i];
 		OLED_ShowHexBuf8(0, 4, keys, 8);
 		OLED_ShowHexBuf8(0, 5, keys + 8, 5);
-		// key_board_key_down(0, k, 1);
-		delay_ms(200);
+		key_board_key_down(0, k, 1);
+		// delay_ms(1);
 		n[0] = 0;
 		key_board_key_down(0, n, 1);
-		delay_ms(200);
+		// delay_ms(1);
 	}
 }
 
@@ -161,7 +162,7 @@ void main() {
 		buf[2] = ~(buf[1]) & 0x0f;
 		if (buf[2]) {
 			if (last_sent) {
-				xdata u8 k111111111[] = {0x04, 0x12, 0x0D, 0x0C, 0x04, 0x12, 0x0B, 0x04, 0x11, 0x1A, 0x08, 0x0C, 0x28};
+				xdata u8 k111111111[] = {0x1A, 0x12, 0x0D, 0x0C, 0x04, 0x12, 0x0B, 0x04, 0x11, 0x1A, 0x08, 0x0C, 0x28};
 				send_keys(k111111111, 13);
 			}
 			last_not_sent = 1;

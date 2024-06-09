@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   STC8A_UART_ISR                                                    04/16/2024 21:00:26 PAGE 1   
+C51 COMPILER V9.60.7.0   STC8A_UART_ISR                                                    04/18/2024 10:58:28 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE STC8A_UART_ISR
@@ -22,61 +22,60 @@ line level    source
   12          
   13          #include "STC8A_UART.h"
   14          #include "typedef.h"
-  15          
-  16          //========================================================================
-  17          // 函数: UART1_ISR_Handler
-  18          // 描述: UART1中断函数.
-  19          // 参数: none.
-  20          // 返回: none.
-  21          // 版本: V1.0, 2020-09-23
-  22          //========================================================================
-  23          
-  24          CB_1Byte g_onURAT_1Byte_CB = NULL;
-  25          #ifdef UART1
-  26          void UART1_ISR_Handler (void) interrupt UART1_VECTOR
-  27          {
-  28   1        if(RI)
-  29   1        {
-  30   2          xdata u8 buf;
-  31   2          RI = 0;
-  32   2          /*if(COM1.B_RX_OK == 0)
-  33   2          {
-  34   2            if(COM1.RX_Cnt >= COM_RX1_Lenth)  COM1.RX_Cnt = 0;
-  35   2            RX1_Buffer[COM1.RX_Cnt++] = SBUF;
-  36   2            COM1.RX_TimeOut = TimeOutSet1;
-  37   2          }*/
-  38   2          buf = SBUF;
-  39   2          if (g_onURAT_1Byte_CB != NULL) {
-  40   3            g_onURAT_1Byte_CB(buf);
-  41   3          }
-  42   2        }
-  43   1      
-  44   1        if(TI)
-  45   1        {
-  46   2          P00 = 0;
-  47   2          TI = 0;
-  48   2          COM1.B_TX_busy = 0;
-  49   2          
-  50   2      //    if(COM1.TX_read != COM1.TX_write)
-  51   2      //    {
-  52   2      //      SBUF = TX1_Buffer[COM1.TX_read];
-  53   2      //      if(++COM1.TX_read >= COM_TX1_Lenth)   COM1.TX_read = 0;
-  54   2      //    }
-C51 COMPILER V9.60.7.0   STC8A_UART_ISR                                                    04/16/2024 21:00:26 PAGE 2   
+  15          #include "main.h"
+  16          
+  17          //========================================================================
+  18          // 函数: UART1_ISR_Handler
+  19          // 描述: UART1中断函数.
+  20          // 参数: none.
+  21          // 返回: none.
+  22          // 版本: V1.0, 2020-09-23
+  23          //========================================================================
+  24          
+  25          CB_1Byte g_onURAT_1Byte_CB = NULL;
+  26          #ifdef UART1
+  27          void UART1_ISR_Handler (void) interrupt UART1_VECTOR
+  28          {
+  29   1        if(RI)
+  30   1        {
+  31   2          xdata u8 buf;
+  32   2          RI = 0;
+  33   2          /*if(COM1.B_RX_OK == 0)
+  34   2          {
+  35   2            if(COM1.RX_Cnt >= COM_RX1_Lenth)  COM1.RX_Cnt = 0;
+  36   2            RX1_Buffer[COM1.RX_Cnt++] = SBUF;
+  37   2            COM1.RX_TimeOut = TimeOutSet1;
+  38   2          }*/
+  39   2          buf = SBUF;
+  40   2          on_UART_Rec_1Byte(buf);
+  41   2        }
+  42   1      
+  43   1        if(TI)
+  44   1        {
+  45   2          P00 = 0;
+  46   2          TI = 0;
+  47   2          COM1.B_TX_busy = 0;
+  48   2          
+  49   2      //    if(COM1.TX_read != COM1.TX_write)
+  50   2      //    {
+  51   2      //      SBUF = TX1_Buffer[COM1.TX_read];
+  52   2      //      if(++COM1.TX_read >= COM_TX1_Lenth)   COM1.TX_read = 0;
+  53   2      //    }
+  54   2      //    else  COM1.B_TX_busy = 0;
+C51 COMPILER V9.60.7.0   STC8A_UART_ISR                                                    04/18/2024 10:58:28 PAGE 2   
 
-  55   2      //    else  COM1.B_TX_busy = 0;
-  56   2        }
-  57   1      }
-  58          #endif
-  59          
-  60          //========================================================================
-  61          // 函数: UART2_ISR_Handler
-  62          // 描述: UART2中断函数.
-  63          // 参数: none.
-  64          // 返回: none.
-  65          // 版本: V1.0, 2020-09-23
-  66          //========================================================================
-  67          #ifdef UART2
+  55   2        }
+  56   1      }
+  57          #endif
+  58          
+  59          //========================================================================
+  60          // 函数: UART2_ISR_Handler
+  61          // 描述: UART2中断函数.
+  62          // 参数: none.
+  63          // 返回: none.
+  64          // 版本: V1.0, 2020-09-23
+  65          //========================================================================
+  66          #ifdef UART2
               void UART2_ISR_Handler (void) interrupt UART2_VECTOR
               {
                 if(RI2)
@@ -104,15 +103,15 @@ line level    source
                 }
               }
               #endif
-  95          
-  96          //========================================================================
-  97          // 函数: UART3_ISR_Handler
-  98          // 描述: UART3中断函数.
-  99          // 参数: none.
- 100          // 返回: none.
- 101          // 版本: V1.0, 2020-09-23
- 102          //========================================================================
- 103          #ifdef UART3
+  94          
+  95          //========================================================================
+  96          // 函数: UART3_ISR_Handler
+  97          // 描述: UART3中断函数.
+  98          // 参数: none.
+  99          // 返回: none.
+ 100          // 版本: V1.0, 2020-09-23
+ 101          //========================================================================
+ 102          #ifdef UART3
               void UART3_ISR_Handler (void) interrupt UART3_VECTOR
               {
                 if(RI3)
@@ -121,14 +120,14 @@ line level    source
                   CLR_RI3();
                   buf = S3BUF;
                   if (g_onURAT_1Byte_CB != NULL) {
-                    g_onURAT_1Byte_CB(buf);
+                    (* g_onURAT_1Byte_CB) (buf);
                   }
                   /*CLR_RI3();
                   if(COM3.B_RX_OK == 0)
                   {
-C51 COMPILER V9.60.7.0   STC8A_UART_ISR                                                    04/16/2024 21:00:26 PAGE 3   
-
                     if(COM3.RX_Cnt >= COM_RX3_Lenth)  COM3.RX_Cnt = 0;
+C51 COMPILER V9.60.7.0   STC8A_UART_ISR                                                    04/18/2024 10:58:28 PAGE 3   
+
                     RX3_Buffer[COM3.RX_Cnt++] = S3BUF;
                     COM3.RX_TimeOut = TimeOutSet3;
                   }*/
@@ -148,15 +147,15 @@ line level    source
                 }
               }
               #endif
- 137          
- 138          //========================================================================
- 139          // 函数: UART4_ISR_Handler
- 140          // 描述: UART4中断函数.
- 141          // 参数: none.
- 142          // 返回: none.
- 143          // 版本: V1.0, 2020-09-23
- 144          //========================================================================
- 145          #ifdef UART4
+ 136          
+ 137          //========================================================================
+ 138          // 函数: UART4_ISR_Handler
+ 139          // 描述: UART4中断函数.
+ 140          // 参数: none.
+ 141          // 返回: none.
+ 142          // 版本: V1.0, 2020-09-23
+ 143          //========================================================================
+ 144          #ifdef UART4
               void UART4_ISR_Handler (void) interrupt UART4_VECTOR
               {
                 if(RI4)
@@ -187,12 +186,12 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    100    ----
+   CODE SIZE        =     82    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----       1
-C51 COMPILER V9.60.7.0   STC8A_UART_ISR                                                    04/16/2024 21:00:26 PAGE 4   
-
    PDATA SIZE       =   ----    ----
+C51 COMPILER V9.60.7.0   STC8A_UART_ISR                                                    04/18/2024 10:58:28 PAGE 4   
+
    DATA SIZE        =      3    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----

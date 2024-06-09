@@ -56,7 +56,7 @@ bit ch9239_uart_stream(u8 d) {
 		g_9329_rec[g_9329_rec_len++] = d;
 		if (finish) {
 			u8 sum = ch9239_sum(g_9329_rec, g_9329_rec_len - 1);
-			if (d != sum) {
+			if (1 || d != sum) {
 				g_state_9329_rec = 0;
 				g_9329_cmd_len = 0;
 				g_9329_rec_len = 0;
