@@ -1,0 +1,116 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              05/05/2024 11:10:09 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\
+                    -main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "stc8a8k64d4.H"
+   2          #include "stc8a_gpio.h"
+   3          #include "STC8A_UART.h"
+   4          #include "STC8A_Switch.h"
+   5          #include "STC8A_NVIC.h"
+   6          #include "delay.h"
+   7          
+   8          #include "typedef.h"
+   9          #include "74HC595.h"
+  10          #include "74HC165.h"
+  11          
+  12          void UART_Debuging_Config() {
+  13   1        COMx_InitDefine COMx_InitStructure; //结构定义
+  14   1        UART1_SW(UART1_SW_P30_P31);
+  15   1        COMx_InitStructure.UART_Mode = UART_8bit_BRTx; //模式,   UART_ShiftRight,UART_8bit_BRTx,UART_9bit,UART_9b
+             -it_BRTx
+  16   1        COMx_InitStructure.UART_BRT_Use = BRT_Timer1; //使用波特率, BRT_Timer1, BRT_Timer2 (注意: 串口2固定使用BR
+             -T_Timer2)
+  17   1        COMx_InitStructure.UART_BaudRate = 9600ul; //波特率,     110 ~ 115200
+  18   1        COMx_InitStructure.UART_RxEnable = ENABLE; //接收允许,   ENABLE或DISABLE
+  19   1        UART_Configuration(UART1, &COMx_InitStructure); //初始化串口2 USART1,USART2,USART3,USART4
+  20   1        NVIC_UART1_Init(ENABLE,Priority_1); //中断使能, ENABLE/DISABLE; 优先级(低到高) Priority_0,Priority_1,Prio
+             -rity_2,Priority_3
+  21   1        EA = 1;
+  22   1      }
+  23          
+  24          void OLED_GPIO_Config() {
+  25   1        GPIO_InitTypeDef conf;
+  26   1        conf.Mode = GPIO_OUT_PP;
+  27   1        conf.Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4;
+  28   1        GPIO_Inilize(GPIO_P4, &conf);
+  29   1      }
+  30          
+  31          void C595_GPIO_Config() {
+  32   1        GPIO_InitTypeDef conf;
+  33   1        conf.Mode = GPIO_PullUp;
+  34   1        
+  35   1        conf.Pin = GPIO_Pin_5;
+  36   1        GPIO_Inilize(GPIO_P5, &conf);
+  37   1      
+  38   1        conf.Pin = GPIO_Pin_6 | GPIO_Pin_7;
+  39   1        GPIO_Inilize(GPIO_P3, &conf);
+  40   1        
+  41   1        conf.Pin = GPIO_Pin_1;
+  42   1        GPIO_Inilize(GPIO_P4, &conf);
+  43   1        
+  44   1        conf.Pin = GPIO_Pin_0;
+  45   1        GPIO_Inilize(GPIO_P2, &conf);
+  46   1      }
+  47          
+  48          void C165_GPIO_Config() {
+  49   1        GPIO_InitTypeDef conf;
+  50   1        conf.Mode = GPIO_PullUp;
+  51   1      
+C51 COMPILER V9.60.7.0   MAIN                                                              05/05/2024 11:10:09 PAGE 2   
+
+  52   1        conf.Pin = GPIO_Pin_2;
+  53   1        GPIO_Inilize(GPIO_P4, &conf); 
+  54   1        
+  55   1        conf.Pin = GPIO_Pin_1 | GPIO_Pin_2;
+  56   1        GPIO_Inilize(GPIO_P2, &conf);
+  57   1        
+  58   1        conf.Pin = GPIO_Pin_2;
+  59   1        GPIO_Inilize(GPIO_P0, &conf);
+  60   1      }
+  61          
+  62          void main() {
+  63   1        u8 led, ledg, ledb, ledr;
+  64   1        u8 keys;
+  65   1        UART_Debuging_Config();
+  66   1      
+  67   1        C595_GPIO_Config();
+  68   1        C165_GPIO_Config();
+  69   1        
+  70   1        ledg = 0x7f;
+  71   1        ledr = 0xbf;
+  72   1        ledb = 0xdf;
+  73   1        led = ledr & ledb & ledg;
+  74   1      
+  75   1        stop_595();
+  76   1        clear_595();
+  77   1        keep_595();
+  78   1        
+  79   1        write_byte_595(led);
+  80   1        flush_595();
+  81   1      
+  82   1        while(1) {
+  83   2          load_data_165();
+  84   2          keys = read_byte_165();
+  85   2          TX1_write2buff(keys);
+  86   2        }
+  87   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    207    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      17
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

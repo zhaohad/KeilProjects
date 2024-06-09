@@ -1,0 +1,13 @@
+".\Objects\STARTUP.obj",
+".\Objects\delay.obj",
+".\Objects\main.obj",
+".\Objects\oled12864.obj",
+".\Objects\STC8A_GPIO.obj",
+".\Objects\STC8A_NVIC.obj",
+".\Objects\STC8A_SPI.obj",
+".\Objects\STC8A_SPI_Isr.obj",
+".\Objects\uart.obj",
+".\Objects\74HC595.obj" 
+TO ".\Objects\595" 
+PRINT(".\Listings\595.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

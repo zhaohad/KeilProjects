@@ -1,0 +1,189 @@
+C51 COMPILER V9.60.7.0   CH9239                                                            06/03/2024 22:31:21 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE CH9239
+OBJECT MODULE PLACED IN .\Objects\CH9239.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\CH9239.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listing
+                    -s\CH9239.lst) TABS(2) OBJECT(.\Objects\CH9239.obj)
+
+line level    source
+
+   1          #include "CH9239.h"
+   2          #include "STC8A_UART.h"
+   3          
+   4          xdata u8 g_ready;
+   5          xdata u8 g_9329_cmd_len = 0;
+   6          xdata u8 g_state_9329_rec = 0;
+   7          xdata u8 g_9329_rec_len = 0;
+   8          xdata u8 g_9329_rec[MAX_REC_LEN];
+   9          xdata KeyBoardStatus g_KeyBoardStatus;
+  10          
+  11          void ch9239_resolve(u8 * buf, u8 buf_l) {
+  12   1        switch (buf[D_9329_CMD_CODE]) {
+  13   2          case CH9239_CMD_SYS_INFO: {
+  14   3            g_KeyBoardStatus.version = buf[5];
+  15   3            g_KeyBoardStatus.isConnected = buf[6];
+  16   3            g_KeyBoardStatus.isNumLockOn = buf[7] & 0x01;
+  17   3            g_KeyBoardStatus.isCapsLockOn = buf[7] & 0x02;
+  18   3            g_KeyBoardStatus.isScrollLockOn = buf[7] & 0x04;
+  19   3            break;
+  20   3          }
+  21   2        }
+  22   1      }
+*** WARNING C280 IN LINE 11 OF src\CH9239.c: 'buf_l': unreferenced local variable
+  23          
+  24          bit ch9239_uart_stream(u8 d) {
+  25   1        bit err = 0;
+  26   1        bit finish = 0;
+  27   1      
+  28   1        g_ready = 0;
+  29   1        switch (g_state_9329_rec) {
+  30   2          case D_9239_HEAD_57: // HEAD 0x57
+  31   2            err = (d != 0x57);
+  32   2            g_state_9329_rec = D_9239_HEAD_AB;
+  33   2            g_9329_rec_len = 0;
+  34   2            break;
+  35   2          case D_9239_HEAD_AB: // HEAD 0xAB
+  36   2            err = (d != 0xAB);
+  37   2            g_state_9329_rec = D_9239_ADDR_CODE;
+  38   2            break;
+  39   2          case D_9239_ADDR_CODE: // ADDR CODE
+  40   2            g_state_9329_rec = D_9329_CMD_CODE;
+  41   2            err = 0;
+  42   2            break;
+  43   2          case D_9329_CMD_CODE: // CMD CODE
+  44   2            g_state_9329_rec = D_9329_LEN;
+  45   2            err = 0;
+  46   2            break;
+  47   2          case D_9329_LEN: // DATA LEN
+  48   2            g_state_9329_rec = D_9329_DATA;
+  49   2            g_9329_cmd_len = d;
+  50   2            err = 0;
+  51   2            break;
+  52   2          case D_9329_DATA:
+  53   2            err = 0;
+C51 COMPILER V9.60.7.0   CH9239                                                            06/03/2024 22:31:21 PAGE 2   
+
+  54   2            --g_9329_cmd_len;
+  55   2            if (g_9329_cmd_len == 0) {
+  56   3              g_state_9329_rec = D_9329_SUM;
+  57   3            }
+  58   2            break;
+  59   2          case D_9329_SUM:
+  60   2            g_state_9329_rec = D_9239_HEAD_57;
+  61   2            finish = 1;
+  62   2            err = 0;
+  63   2            break;
+  64   2          default:
+  65   2            err = 1;
+  66   2            break;
+  67   2        }
+  68   1      
+  69   1        if (err) {
+  70   2          g_state_9329_rec = 0;
+  71   2          g_9329_cmd_len = 0;
+  72   2          g_9329_rec_len = 0;
+  73   2          g_ready = 1;
+  74   2        } else {
+  75   2          g_9329_rec[g_9329_rec_len++] = d;
+  76   2          if (finish) {
+  77   3            u8 sum = ch9239_sum(g_9329_rec, g_9329_rec_len - 1);
+  78   3            if (d != sum) {
+  79   4              g_state_9329_rec = 0;
+  80   4              g_9329_cmd_len = 0;
+  81   4              g_9329_rec_len = 0;
+  82   4              finish = 0;
+  83   4            }
+  84   3            ch9239_resolve(g_9329_rec, g_9329_rec_len);
+  85   3            g_ready = 1;
+  86   3          }
+  87   2        }
+  88   1        return finish;
+  89   1      }
+  90          
+  91          bit ch9239_ready() {
+  92   1        return g_ready;
+  93   1      }
+  94          
+  95          u8 ch9239_sum(u8 * buf, u8 l) {
+  96   1        u8 sum = 0;
+  97   1        u8 i;
+  98   1        for (i = 0; i < l; i++) {
+  99   2          sum = sum + buf[i];
+ 100   2        }
+ 101   1        return sum;
+ 102   1      }
+ 103          
+ 104          void ch9239_get_sys_info() {
+ 105   1        TX2_write2buff(0x57);
+ 106   1        TX2_write2buff(0xAB);
+ 107   1        TX2_write2buff(0x0);
+ 108   1        TX2_write2buff(0x01);
+ 109   1        TX2_write2buff(0x00);
+ 110   1        TX2_write2buff(0x03);
+ 111   1        g_ready = 0;
+ 112   1      }
+ 113          
+ 114          void ch9239_key_down(u8 fun_keys, u8 norm_key[MAX_NORM_KEY], u8 norm_key_len) {
+ 115   1        xdata u8 i;
+C51 COMPILER V9.60.7.0   CH9239                                                            06/03/2024 22:31:21 PAGE 3   
+
+ 116   1        xdata u8 cmd_key_general_data[14];
+ 117   1        cmd_key_general_data[0] = 0x57;
+ 118   1        cmd_key_general_data[1] = 0xAB;
+ 119   1        cmd_key_general_data[2] = 0;
+ 120   1        cmd_key_general_data[3] = 0x02;
+ 121   1        cmd_key_general_data[4] = 8;
+ 122   1        cmd_key_general_data[5] = fun_keys;
+ 123   1        cmd_key_general_data[6] = 0;
+ 124   1        cmd_key_general_data[7] = 0;
+ 125   1        cmd_key_general_data[8] = 0;
+ 126   1        cmd_key_general_data[9] = 0;
+ 127   1        cmd_key_general_data[10] = 0;
+ 128   1        cmd_key_general_data[11] = 0;
+ 129   1        cmd_key_general_data[12] = 0;
+ 130   1        for (i = 0; i < norm_key_len && i < MAX_NORM_KEY; ++i) {
+ 131   2          cmd_key_general_data[7 + i] = norm_key[i];
+ 132   2        }
+ 133   1        cmd_key_general_data[13] = ch9239_sum(cmd_key_general_data, 13);
+ 134   1        TX2_write2buffs(cmd_key_general_data, 14);
+ 135   1        g_ready = 0;
+ 136   1      }
+ 137          
+ 138          void ch9239_one_key_down(u8 norm_key) {
+ 139   1        xdata u8 keys[1];
+ 140   1        keys[0] = norm_key;
+ 141   1        ch9239_key_down(0, keys, 1);
+ 142   1      }
+ 143          
+ 144          void ch9239_all_key_up() {
+ 145   1        TX2_write2buff(0x57);
+ 146   1        TX2_write2buff(0xAB);
+ 147   1        TX2_write2buff(0x0);
+ 148   1        TX2_write2buff(0x02);
+ 149   1        TX2_write2buff(0x08);
+ 150   1        TX2_write2buff(0x0);
+ 151   1        TX2_write2buff(0x0);
+ 152   1        TX2_write2buff(0x0);
+ 153   1        TX2_write2buff(0x0);
+ 154   1        TX2_write2buff(0x0);
+ 155   1        TX2_write2buff(0x0);
+ 156   1        TX2_write2buff(0x0);
+ 157   1        TX2_write2buff(0x0);
+ 158   1        TX2_write2buff(0x0C);
+ 159   1        g_ready = 0;
+ 160   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    621    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =    109      16
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      11
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       2
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

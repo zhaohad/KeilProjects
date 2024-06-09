@@ -1,0 +1,14 @@
+".\Objects\STARTUP.obj",
+".\Objects\delay.obj",
+".\Objects\main.obj",
+".\Objects\STC8A_GPIO.obj",
+".\Objects\74HC595.obj",
+".\Objects\STC8A_UART.obj",
+".\Objects\STC8A_UART_Isr.obj",
+".\Objects\STC8A_NVIC.obj",
+".\Objects\74HC165.obj",
+".\Objects\key_board.obj",
+".\Objects\CH9239.obj" 
+TO ".\Objects\9239" 
+PRINT(".\Listings\9239.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 
