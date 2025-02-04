@@ -23,8 +23,8 @@ void OLED12864_Init() {
 
 void MOTOR_GPIO_Config() {
 	GPIO_InitTypeDef conf;
-	// conf.Mode = GPIO_OUT_PP;
-	conf.Mode = GPIO_PullUp;
+	conf.Mode = GPIO_OUT_PP;
+	//conf.Mode = GPIO_PullUp;
 	conf.Pin = GPIO_Pin_All;
 	GPIO_Inilize(GPIO_P6, &conf);
 	
@@ -46,12 +46,19 @@ void main() {
 	OLED_ShowHexBuf8(0, 4, buf, 8);
 	
 	MOTOR_GPIO_Config();
-	P_VM2_RZ7899_I1 = 1;
-	P_VM2_RZ7899_I2 = 0;
-	P_VM2_DRV8833_I1 = 1;
-	P_VM2_DRV8833_I2 = 0;
-	P_VM2_DRV8833_I3 = 1;
-	P_VM2_DRV8833_I4 = 0;
+	P_VM2_RZ7899_I1 = 0;
+	P_VM2_RZ7899_I2 = 1;
+	P_VM2_DRV8833_I1 = 0;
+	P_VM2_DRV8833_I2 = 1;
+	P_VM2_DRV8833_I3 = 0;
+	P_VM2_DRV8833_I4 = 1;
+	
+	P_VM1_RZ7899_I1 = 0;
+	P_VM1_RZ7899_I2 = 1;
+	P_VM1_DRV8833_I1 = 0;
+	P_VM1_DRV8833_I2 = 1;
+	P_VM1_DRV8833_I3 = 0;
+	P_VM1_DRV8833_I4 = 1;
 
 	while(1) {
 	}

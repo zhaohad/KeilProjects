@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   74HC165                                                           06/03/2024 22:31:21 PAGE 1   
+C51 COMPILER V9.60.7.0   74HC165                                                           08/10/2024 15:21:10 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE 74HC165
@@ -62,7 +62,7 @@ line level    source
   52   1        P_165_CP = 0;
   53   1        d |= P_165_Q7;
   54   1        d <<= 1;
-C51 COMPILER V9.60.7.0   74HC165                                                           06/03/2024 22:31:21 PAGE 2   
+C51 COMPILER V9.60.7.0   74HC165                                                           08/10/2024 15:21:10 PAGE 2   
 
   55   1        P_165_CP = 1;
   56   1      

@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   UART                                                              03/16/2024 15:06:42 PAGE 1   
+C51 COMPILER V9.60.7.0   UART                                                              01/12/2025 23:07:28 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE UART
@@ -62,7 +62,7 @@ line level    source
   52   1        if (TI) {
   53   2          TI = 0;
   54   2          busyT = 0;
-C51 COMPILER V9.60.7.0   UART                                                              03/16/2024 15:06:42 PAGE 2   
+C51 COMPILER V9.60.7.0   UART                                                              01/12/2025 23:07:28 PAGE 2   
 
   55   2        }
   56   1      }

@@ -10,7 +10,7 @@
 #include "dtos.h"
 #include "G01_S.h"
 
-bit g_Rec = 0;
+bit g_Rec = 1;
 u8 outL = 0;
 
 void OLED_GPIO_Config() {

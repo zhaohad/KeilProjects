@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   G01_S                                                             06/23/2023 17:33:55 PAGE 1   
+C51 COMPILER V9.60.7.0   G01_S                                                             01/12/2025 22:53:32 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE G01_S
@@ -62,7 +62,7 @@ line level    source
   52   1         
   53   1        while(cnt--) {
   54   2          uint8_t i;
-C51 COMPILER V9.60.7.0   G01_S                                                             06/23/2023 17:33:55 PAGE 2   
+C51 COMPILER V9.60.7.0   G01_S                                                             01/12/2025 22:53:32 PAGE 2   
 
   55   2          NRF24L01_Write_Buf(TX_ADDR, buf, 5); //写入5个字节的地址
   56   2          NRF24L01_Read_Buf(TX_ADDR, read_buf, 5); //读出写入的地址  
@@ -126,7 +126,7 @@ line level    source
  114   1      }
  115          
  116           /**
-C51 COMPILER V9.60.7.0   G01_S                                                             06/23/2023 17:33:55 PAGE 3   
+C51 COMPILER V9.60.7.0   G01_S                                                             01/12/2025 22:53:32 PAGE 3   
 
  117            * @brief :RF24L01模块初始化
  118            * @param :无
@@ -190,7 +190,7 @@ line level    source
  176   1        RF24L01_SET_CSN_LOW(); //片选
  177   1        Status = spi_read_write_byte(NRF_READ_REG + STATUS); //读状态寄存器
  178   1        RF24L01_SET_CSN_HIGH(); //取消片选
-C51 COMPILER V9.60.7.0   G01_S                                                             06/23/2023 17:33:55 PAGE 4   
+C51 COMPILER V9.60.7.0   G01_S                                                             01/12/2025 22:53:32 PAGE 4   
 
  179   1        return Status;
  180   1      }
@@ -254,7 +254,7 @@ line level    source
  238          
  239           /**
  240            * @brief :设置模式
-C51 COMPILER V9.60.7.0   G01_S                                                             06/23/2023 17:33:55 PAGE 5   
+C51 COMPILER V9.60.7.0   G01_S                                                             01/12/2025 22:53:32 PAGE 5   
 
  241            * @param :
  242            *     @Mode:模式发送模式或接收模式
@@ -318,7 +318,7 @@ line level    source
  300   1        return 0xFF;  //其他原因发送失败
  301   1      }
  302          
-C51 COMPILER V9.60.7.0   G01_S                                                             06/23/2023 17:33:55 PAGE 6   
+C51 COMPILER V9.60.7.0   G01_S                                                             01/12/2025 22:53:32 PAGE 6   
 
  303          /**
  304            * @brief :NRF24L01接收数据

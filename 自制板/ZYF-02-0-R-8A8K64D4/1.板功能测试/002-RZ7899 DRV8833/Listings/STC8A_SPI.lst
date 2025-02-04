@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   STC8A_SPI                                                         06/12/2023 14:54:47 PAGE 1   
+C51 COMPILER V9.60.7.0   STC8A_SPI                                                         01/19/2025 11:11:03 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE STC8A_SPI
@@ -62,7 +62,7 @@ line level    source
   52   1        {
   53   2          SPCTL &= ~(1<<4); //重新设置为从机待机
   54   2          SPCTL &= ~(1<<7); //SS引脚确定主从
-C51 COMPILER V9.60.7.0   STC8A_SPI                                                         06/12/2023 14:54:47 PAGE 2   
+C51 COMPILER V9.60.7.0   STC8A_SPI                                                         01/19/2025 11:11:03 PAGE 2   
 
   55   2        }
   56   1        else

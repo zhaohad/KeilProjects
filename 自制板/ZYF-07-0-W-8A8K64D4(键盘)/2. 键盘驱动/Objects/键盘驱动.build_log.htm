@@ -5,10 +5,10 @@
 <h2>Tool Versions:</h2>
 IDE-Version: ¦ÌVision V5.38.0.0
 Copyright (C) 2022 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: HAN WEI, XiaoMi, LIC=P6PLD-8MUAY-WVH1D-8EB85-VPY1I-LRZ5R
+License Information: Han Wei, Xiaomi, LIC=VG6CK-Z7RHN-GVA1T-R00PA-YPS1G-LIZ7U
  
 Tool Versions:
-Toolchain:       MDK51 Professional  Version: 9.60.7.0
+Toolchain:       PK51 Prof. Developers Kit  Version: 9.60.7.0
 Toolchain Path:  D:\Keil_v5\C51\BIN
 C Compiler:      C51.exe V9.60.7.0
 Assembler:       A51.exe V8.2.7.0
@@ -19,17 +19,13 @@ CPU DLL:         S8051.DLL V3.125.1.0
 Dialog DLL:      DP51.DLL V2.69.0.0 
 <h2>Project:</h2>
 D:\hw\KeilProjects\×ÔÖÆ°å\ZYF-07-0-W-8A8K64D4(¼üÅÌ)\2. ¼üÅÌÇý¶¯\multiuart.uvproj
-Project File Date:  05/05/2024
+Project File Date:  08/10/2024
 
 <h2>Output:</h2>
 Rebuild target 'Target 1'
 assembling STARTUP.A51...
 compiling delay.c...
 compiling main.c...
-src\main.c(134): warning C280: 'keys_l': unreferenced local variable
-src\main.c(134): warning C280: 'keys': unreferenced local variable
-src\main.c(134): warning C280: 'last_keys_l': unreferenced local variable
-src\main.c(134): warning C280: 'last_keys': unreferenced local variable
 compiling STC8A_GPIO.c...
 compiling 74HC595.c...
 compiling STC8A_UART.c...
@@ -39,10 +35,14 @@ compiling 74HC165.c...
 compiling CH9239.c...
 src\CH9239.c(11): warning C280: 'buf_l': unreferenced local variable
 linking...
-Program Size: data=80.2 xdata=548 code=6263
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_CH9239_SUM?CH9239
+    CALLER1: ?C_C51STARTUP
+    CALLER2: ?PR?UART2_ISR_HANDLER?STC8A_UART_ISR
+Program Size: data=54.2 xdata=532 code=6230
 creating hex file from ".\Objects\¼üÅÌÇý¶¯"...
-".\Objects\¼üÅÌÇý¶¯" - 0 Error(s), 5 Warning(s).
-Build Time Elapsed:  00:00:03
+".\Objects\¼üÅÌÇý¶¯" - 0 Error(s), 2 Warning(s).
+Build Time Elapsed:  00:00:00
 </pre>
 </body>
 </html>

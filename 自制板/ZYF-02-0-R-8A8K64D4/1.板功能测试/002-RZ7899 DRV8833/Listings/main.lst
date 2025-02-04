@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              06/12/2023 14:54:46 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              01/19/2025 11:11:02 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -33,8 +33,8 @@ line level    source
   23          
   24          void MOTOR_GPIO_Config() {
   25   1        GPIO_InitTypeDef conf;
-  26   1        // conf.Mode = GPIO_OUT_PP;
-  27   1        conf.Mode = GPIO_PullUp;
+  26   1        conf.Mode = GPIO_OUT_PP;
+  27   1        //conf.Mode = GPIO_PullUp;
   28   1        conf.Pin = GPIO_Pin_All;
   29   1        GPIO_Inilize(GPIO_P6, &conf);
   30   1        
@@ -56,22 +56,29 @@ line level    source
   46   1        OLED_ShowHexBuf8(0, 4, buf, 8);
   47   1        
   48   1        MOTOR_GPIO_Config();
-  49   1        P_VM2_RZ7899_I1 = 1;
-  50   1        P_VM2_RZ7899_I2 = 0;
-  51   1        P_VM2_DRV8833_I1 = 1;
-  52   1        P_VM2_DRV8833_I2 = 0;
-  53   1        P_VM2_DRV8833_I3 = 1;
-  54   1        P_VM2_DRV8833_I4 = 0;
-C51 COMPILER V9.60.7.0   MAIN                                                              06/12/2023 14:54:46 PAGE 2   
+  49   1        P_VM2_RZ7899_I1 = 0;
+  50   1        P_VM2_RZ7899_I2 = 1;
+  51   1        P_VM2_DRV8833_I1 = 0;
+  52   1        P_VM2_DRV8833_I2 = 1;
+  53   1        P_VM2_DRV8833_I3 = 0;
+  54   1        P_VM2_DRV8833_I4 = 1;
+C51 COMPILER V9.60.7.0   MAIN                                                              01/19/2025 11:11:02 PAGE 2   
 
-  55   1      
-  56   1        while(1) {
-  57   2        }
-  58   1      }
+  55   1        
+  56   1        P_VM1_RZ7899_I1 = 0;
+  57   1        P_VM1_RZ7899_I2 = 1;
+  58   1        P_VM1_DRV8833_I1 = 0;
+  59   1        P_VM1_DRV8833_I2 = 1;
+  60   1        P_VM1_DRV8833_I3 = 0;
+  61   1        P_VM1_DRV8833_I4 = 1;
+  62   1      
+  63   1        while(1) {
+  64   2        }
+  65   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    174    ----
+   CODE SIZE        =    187    ----
    CONSTANT SIZE    =     46    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----

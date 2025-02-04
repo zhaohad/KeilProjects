@@ -1,0 +1,245 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              01/19/2025 13:06:25 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE src\main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\
+                    -main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "stc8a8k64d4.H"
+   2          #include "stc8a_gpio.H"
+   3          #include "stc8a_spi.h"
+   4          #include "stc8a_nvic.h"
+   5          #include "typedef.h"
+   6          #include "oled12864.h"
+   7          #include "uart.h"
+   8          #include "stc8a_adc.h"
+   9          #include "stc8a_switch.h"
+  10          #include "dtos.h"
+  11          #include "G01_S.h"
+  12          #include "ActionCMD.h"
+  13          
+  14          u8 outL = 0;
+  15          
+  16          void OLED_GPIO_Config() {
+  17   1        xdata GPIO_InitTypeDef conf;
+  18   1        conf.Mode = GPIO_PullUp;
+  19   1        conf.Pin = GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7;
+  20   1        GPIO_Inilize(GPIO_P1, &conf);
+  21   1        
+  22   1        conf.Pin = GPIO_Pin_4;
+  23   1        GPIO_Inilize(GPIO_P4, &conf);
+  24   1      }
+  25          
+  26          void OLED12864_Init() {
+  27   1        OLED_GPIO_Config();
+  28   1        OLED_Init();
+  29   1      }
+  30          
+  31          void MOTOR_GPIO_Config() {
+  32   1        xdata GPIO_InitTypeDef conf;
+  33   1        // conf.Mode = GPIO_OUT_PP;
+  34   1        conf.Mode = GPIO_PullUp;
+  35   1        conf.Pin = GPIO_Pin_All;
+  36   1        GPIO_Inilize(GPIO_P6, &conf);
+  37   1        
+  38   1        conf.Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3;
+  39   1        GPIO_Inilize(GPIO_P7, &conf);
+  40   1        
+  41   1        conf.Pin = GPIO_Pin_0;
+  42   1        GPIO_Inilize(GPIO_P2, &conf);
+  43   1        
+  44   1        conf.Pin = GPIO_Pin_0;
+  45   1        GPIO_Inilize(GPIO_P4, &conf);
+  46   1      }
+  47          
+  48          void KEY_GPIO_Config() {
+  49   1        xdata GPIO_InitTypeDef conf;
+  50   1        conf.Mode = GPIO_PullUp;
+  51   1        conf.Pin = GPIO_Pin_5;
+  52   1        GPIO_Inilize(GPIO_P5, &conf);
+  53   1      
+  54   1        conf.Pin = GPIO_Pin_1;
+C51 COMPILER V9.60.7.0   MAIN                                                              01/19/2025 13:06:25 PAGE 2   
+
+  55   1        GPIO_Inilize(GPIO_P4, &conf);
+  56   1      
+  57   1        conf.Pin = GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6;
+  58   1        GPIO_Inilize(GPIO_P7, &conf);
+  59   1      }
+  60          
+  61          void ADC_Init(void) {
+  62   1        xdata ADC_InitTypeDef ADC_InitStructure;    //结构定义
+  63   1        ADC_InitStructure.ADC_SMPduty = 31;   //ADC 模拟信号采样时间控制, 0#define CMD_ARM_2_UP 17~31（注意： SMPD
+             -UTY 一定不能设置小于 10）
+  64   1        ADC_InitStructure.ADC_CsSetup = 0;    //ADC 通道选择时间控制 0(默认),1
+  65   1        ADC_InitStructure.ADC_CsHold = 1;   //ADC 通道选择保持时间控制 0,1(默认),2,3
+  66   1        ADC_InitStructure.ADC_Speed = ADC_SPEED_2X1T;   //设置 ADC 工作时钟频率 ADC_SPEED_2X1T~ADC_SPEED_2X16T
+  67   1        ADC_InitStructure.ADC_AdjResult = ADC_RIGHT_JUSTIFIED;  //ADC结果调整,  ADC_LEFT_JUSTIFIED,ADC_RIGHT_JUSTIF
+             -IED
+  68   1        ADC_Inilize(&ADC_InitStructure);    //初始化
+  69   1        ADC_PowerControl(ENABLE);           //ADC电源开关, ENABLE或DISABLE
+  70   1        // NVIC_ADC_Init(DISABLE, Priority_0);    //中断使能, ENABLE/DISABLE; 优先级(低到高) Priority_0,Priority_1,
+             -Priority_2,Priority_3
+  71   1      }
+  72          
+  73          void doCmd(u8 cmd, u8 v) {
+  74   1        switch (cmd) {
+  75   2          case CMD_AWAIT:
+  76   2            P_VM1_RZ7899_I1 = 0;
+  77   2            P_VM1_RZ7899_I2 = 0;
+  78   2            P_VM1_DRV8833_I1 = 0;
+  79   2            P_VM1_DRV8833_I2 = 0;
+  80   2            P_VM1_DRV8833_I3 = 0;
+  81   2            P_VM1_DRV8833_I4 = 0;
+  82   2            P_VM2_RZ7899_I1 = 0;
+  83   2            P_VM2_RZ7899_I2 = 0;
+  84   2            P_VM2_DRV8833_I1 = 0;
+  85   2            P_VM2_DRV8833_I2 = 0;
+  86   2            P_VM2_DRV8833_I3 = 0;
+  87   2            P_VM2_DRV8833_I4 = 0;
+  88   2            break;
+  89   2          case CMD_ARM_1_UP:
+  90   2            P_VM2_DRV8833_I1 = v;
+  91   2            P_VM2_DRV8833_I2 = 0;
+  92   2            break;
+  93   2          case CMD_ARM_1_DOWN:
+  94   2            P_VM2_DRV8833_I1 = 0;
+  95   2            P_VM2_DRV8833_I2 = v;
+  96   2            break;
+  97   2          case CMD_ARM_2_UP:
+  98   2            P_VM2_DRV8833_I3 = 0;
+  99   2            P_VM2_DRV8833_I4 = v;
+ 100   2            break;
+ 101   2          case CMD_ARM_2_DOWN:
+ 102   2            P_VM2_DRV8833_I3 = v;
+ 103   2            P_VM2_DRV8833_I4 = 0;
+ 104   2            break;
+ 105   2          case CMD_ARM_3_UP:
+ 106   2            P_VM1_DRV8833_I3 = 0;
+ 107   2            P_VM1_DRV8833_I4 = v;
+ 108   2            break;
+ 109   2          case CMD_ARM_3_DOWN:
+ 110   2            P_VM1_DRV8833_I3 = v;
+ 111   2            P_VM1_DRV8833_I4 = 0;
+ 112   2            break;
+ 113   2          case CMD_PLATFORM_TURN_LEFT:
+C51 COMPILER V9.60.7.0   MAIN                                                              01/19/2025 13:06:25 PAGE 3   
+
+ 114   2            P_VM1_DRV8833_I1 = 0;
+ 115   2            P_VM1_DRV8833_I2 = v;
+ 116   2            break;
+ 117   2          case CMD_PLATFORM_TURN_RIGHT:
+ 118   2            P_VM1_DRV8833_I1 = v;
+ 119   2            P_VM1_DRV8833_I2 = 0;
+ 120   2            break;
+ 121   2          case CMD_LEFT_WHEEL:
+ 122   2            if (v > 50) {
+ 123   3              P_VM1_RZ7899_I1 = 0;
+ 124   3              P_VM1_RZ7899_I2 = 1;
+ 125   3            } else if (v < 50) {
+ 126   3              P_VM1_RZ7899_I1 = 1;
+ 127   3              P_VM1_RZ7899_I2 = 0;
+ 128   3            } else {
+ 129   3              P_VM1_RZ7899_I1 = 0;
+ 130   3              P_VM1_RZ7899_I2 = 0;
+ 131   3            }
+ 132   2            break;
+ 133   2          case CMD_RIGHT_WHEEL:
+ 134   2            if (v > 50) {
+ 135   3              P_VM2_RZ7899_I1 = 0;
+ 136   3              P_VM2_RZ7899_I2 = 1;
+ 137   3            } else if (v < 50) {
+ 138   3              P_VM2_RZ7899_I1 = 1;
+ 139   3              P_VM2_RZ7899_I2 = 0;
+ 140   3            } else {
+ 141   3              P_VM2_RZ7899_I1 = 0;
+ 142   3              P_VM2_RZ7899_I2 = 0;
+ 143   3            }
+ 144   2            break;
+ 145   2        }
+ 146   1      }
+ 147          
+ 148          void main() {
+ 149   1        int someNumber = 0;
+ 150   1        bit exist;
+ 151   1        MOTOR_GPIO_Config();
+ 152   1        
+ 153   1        OLED12864_Init();
+ 154   1      
+ 155   1        NRF24L01_GPIO_config();
+ 156   1        NRF24L01_Gpio_Init();
+ 157   1      
+ 158   1        OLED_ShowString8(0, 0, "CHECK MODULE...");
+ 159   1        exist = NRF24L01_check();
+ 160   1        
+ 161   1        exist = NRF24L01_check();
+ 162   1        if (exist) {
+ 163   2          OLED_ShowString8(0, outL, "G01-S Online");
+ 164   2        } else {
+ 165   2          OLED_ShowString8(0, outL, "G01-S Offline");
+ 166   2          while (1);
+ 167   2        }
+ 168   1        outL++;
+ 169   1        
+ 170   1        RF24L01_Init();
+ 171   1        _nop_();_nop_();_nop_();_nop_();_nop_();
+ 172   1      
+ 173   1        OLED_ShowString8(0, outL, "Set MODE_RX");
+ 174   1        RF24L01_Set_Mode(MODE_RX); //接收模式
+ 175   1        _nop_();_nop_();_nop_();_nop_();_nop_();
+C51 COMPILER V9.60.7.0   MAIN                                                              01/19/2025 13:06:25 PAGE 4   
+
+ 176   1      
+ 177   1        outL++;
+ 178   1      
+ 179   1        while(1) {
+ 180   2          u8 i;
+ 181   2          u8 outLL = outL;
+ 182   2          xdata uint8_t numStr[10];
+ 183   2          xdata uint8_t str[20];
+ 184   2          xdata uint8_t rx;
+ 185   2          xdata uint8_t g_rece[8];
+ 186   2          sprintf(str, "Receiving...");
+ 187   2          OLED_ShowString8(0, outLL, str);
+ 188   2          outLL++;
+ 189   2          rx = NRF24L01_RxPacket(g_rece); //接收字节
+ 190   2          
+ 191   2          if (rx != 0) {
+ 192   3            uintToS(rx, numStr, 10);
+ 193   3            sprintf(str, "Received: %s   ", numStr);
+ 194   3            OLED_ShowString8(0, outLL, str);
+ 195   3            outLL++;
+ 196   3            
+ 197   3            sprintf(str, "d: ");
+ 198   3            for (i = 0; i < rx; i += 2) {
+ 199   4              u8 d = g_rece[i];
+ 200   4              uintToS(d, numStr, 10);
+ 201   4              sprintf(str, "%s %s", str, numStr);
+ 202   4            }
+ 203   3            sprintf(str, "%s    ", str);
+ 204   3            OLED_ShowString8(0, outLL, str);
+ 205   3            outLL++;
+ 206   3            
+ 207   3            for (i = 0; i < rx; ++i) {
+ 208   4              doCmd(g_rece[i], g_rece[i + 1]);
+ 209   4            }
+ 210   3          }
+ 211   2        }
+ 212   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    797    ----
+   CONSTANT SIZE    =    101    ----
+   XDATA SIZE       =   ----      50
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1       5
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

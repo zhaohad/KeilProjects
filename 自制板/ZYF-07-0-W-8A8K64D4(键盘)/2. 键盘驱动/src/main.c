@@ -177,14 +177,14 @@ void main() {
 
 	t = 0;
 	while(1) {
-/*		keys_l = read_keys(keys);
+		keys_l = read_keys(keys);
 		if (ch9239_ready() && is_changed(keys, keys_l, last_keys, last_keys_l)) {
 			ch9239_key_down(0, keys, keys_l);
 			last_keys_l = keys_l;
 			copy_keys(keys, last_keys, keys_l);
-		}*/		
+		}
 		
-		load_data_165();
+		/*load_data_165();
 		t = read_byte_165();
 		TX1_write2buff(t);
 
@@ -218,6 +218,6 @@ void main() {
 		t = read_byte_165();
 		TX1_write2buff(t);
 		
-		delay();
+		delay();*/
 	}
 }

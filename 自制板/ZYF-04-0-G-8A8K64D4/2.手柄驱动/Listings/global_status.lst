@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   GLOBAL_STATUS                                                     03/16/2024 15:06:43 PAGE 1   
+C51 COMPILER V9.60.7.0   GLOBAL_STATUS                                                     01/12/2025 23:07:29 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE GLOBAL_STATUS
@@ -62,7 +62,7 @@ line level    source
   50          
   51          // 30.000 MHZ T3 12T 16位自动重载 最大周期26214us -> 26ms
   52          void Global_Status_Heart_Beat_Timer_Callback() {
-C51 COMPILER V9.60.7.0   GLOBAL_STATUS                                                     03/16/2024 15:06:43 PAGE 2   
+C51 COMPILER V9.60.7.0   GLOBAL_STATUS                                                     01/12/2025 23:07:29 PAGE 2   
 
   53   1        if (g_heart_beat) {
   54   2          g_heart_beat_cnt++;
